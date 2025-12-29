@@ -1,6 +1,6 @@
-# Nome Sito
+# Dai Vai
 
-Landing page professionale con struttura HTML5, CSS3 e JavaScript.
+Landing page professionale con effetto parallasse e design moderno.
 
 ## Struttura del Progetto
 
@@ -18,33 +18,18 @@ daivai/
 
 ## Caratteristiche
 
-- **Single Page**: Landing page con navigazione smooth scroll
+- **Effetto Parallasse**: Logo che si muove, sfoca e ingrandisce durante lo scroll
+- **Angoli Arrotondati**: Design moderno con bordi arrotondati
 - **Design Responsive**: Funziona su desktop, tablet e mobile
 - **SEO Friendly**: Meta tag e struttura semantica HTML5
-- **Accessibilità**: Navigazione via tastiera e screen reader
 - **Performance**: CSS e JavaScript ottimizzati
-- **Modulare**: Struttura organizzata per facile manutenzione
 
-## Sezioni della Landing Page
+## Effetti Speciali
 
-1. **Hero** - Introduzione principale con call-to-action
-2. **Features** - Vantaggi e servizi offerti
-3. **Chi Siamo** - Breve presentazione dell'azienda
-4. **Contatti** - Modulo di contatto e informazioni
-
-## Personalizzazione
-
-### Modificare il nome del sito
-Cerca "Nome Sito" nel file HTML e sostituiscilo con il tuo nome.
-
-### Personalizzare i colori
-Modifica i colori nel file `css/style.css`:
-- Header e footer: `#333`
-- Navigation: `#444` e `#555` (hover)
-- Hero section: gradient `#667eea` a `#764ba2`
-
-### Modificare contenuti
-Cambia direttamente il testo nelle sezioni corrispondenti in `index.html`.
+- **Parallasse Logo**: Il logo DaiVai si muove in direzione opposta allo scroll
+- **Sfocatura Progressiva**: Il logo diventa sempre più sfocato scorrendo
+- **Ingrandimento**: Il logo si ingrandisce man mano che scende
+- **Effetto Profondità**: Il logo passa dietro il chiodo durante l'animazione
 
 ## Browser Support
 
@@ -52,7 +37,3 @@ Cambia direttamente il testo nelle sezioni corrispondenti in `index.html`.
 - Firefox (ultima versione)
 - Safari (ultima versione)
 - Edge (ultima versione)
-
-## Licenza
-
-MIT License - puoi modificare e distribuire liberamente.
