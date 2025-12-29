@@ -2,6 +2,28 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Sito caricato correttamente');
     
+    // Toggle header rectangle expansion
+    const headerRectangle = document.querySelector('.header-rectangle');
+    const header = document.querySelector('header');
+    
+    if (headerRectangle) {
+        headerRectangle.addEventListener('click', function() {
+            this.classList.toggle('expanded');
+        });
+    }
+    
+    // Header visibility on scroll
+    let headerVisible = false;
+    window.addEventListener('scroll', function() {
+        if (!headerVisible && window.pageYOffset > 10) {
+            header.classList.add('visible');
+            headerVisible = true;
+        } else if (headerVisible && window.pageYOffset <= 10) {
+            header.classList.remove('visible');
+            headerVisible = false;
+        }
+    });
+    
     // Esempio di funzione per navigazione mobile
     const toggleMobileMenu = () => {
         const nav = document.querySelector('nav ul');
