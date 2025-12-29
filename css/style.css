@@ -99,7 +99,7 @@ footer {
     
     #hero-overlay .hero-image {
         max-width: 150vw !important;
-        max-height: 150vw !important;
+        max-height: 60vh !important;
     }
     
     #logo-overlay .hero-image {
@@ -234,7 +234,7 @@ html {
 
 #hero-overlay .hero-image {
     max-width: 140vw;
-    max-height: 140vw;
+    max-height: 60vh;
     object-fit: contain;
     width: auto;
     height: auto;
