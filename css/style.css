@@ -249,86 +249,6 @@ p {
     margin: 0 auto;
 }
 
-/* Header */
-header {
-    position: fixed;
-    top: 2vh;
-    left: 2vh;
-    right: 2vh;
-    z-index: 1000;
-    opacity: 0;
-    transform: translateY(-100px) scale(0.8);
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-header.visible {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-}
-
-.header-rectangle {
-    width: 100%;
-    height: 20px;
-    background: rgba(32, 32, 32, 0.747);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.header-rectangle:active,
-.header-rectangle.expanded {
-    height: calc(100vh - 4vh);
-    border-radius: 20px;
-}
-
-.header-rectangle::before,
-.header-rectangle::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 20px;
-    pointer-events: none;
-}
-
-.header-rectangle::before {
-    background: inherit;
-    filter: blur(0.5px) saturate(1.5) hue-rotate(120deg);
-    opacity: 0.1;
-    z-index: 1;
-}
-
-.header-rectangle::after {
-    background: inherit;
-    filter: blur(0.5px) saturate(1.5) hue-rotate(-120deg);
-    opacity: 0.1;
-    z-index: 2;
-    animation: chromaticAberration 3s ease-in-out infinite;
-}
-
-@keyframes chromaticAberration {
-    0%, 100% {
-        transform: translate(0, 0);
-    }
-    25% {
-        transform: translate(0.3px, 0);
-    }
-    50% {
-        transform: translate(0, 0.3px);
-    }
-    75% {
-        transform: translate(-0.3px, 0);
-    }
-}
-
 /* Navigation */
 nav ul {
     list-style: none;
@@ -640,7 +560,7 @@ section {
 
 /* Sezione Chi Siamo */
 #about {
-    background: linear-gradient(135deg, #FFC5C5 0%, rgba(251, 96, 104, 0.1) 100%);
+    background: linear-gradient(10deg, #FFC5C5 0%, #FB6068 80%);
     border-radius: 30px;
     margin: 2vh 2vh 4rem;
     padding: 4rem 2rem;
@@ -670,7 +590,7 @@ section {
 #about h2 {
     font-size: 3rem;
     font-weight: 900;
-    color: #333;
+    color: #ffffff;
     margin-bottom: 2rem;
     position: relative;
     display: inline-block;
@@ -691,7 +611,8 @@ section {
 #about p {
     font-size: 1.2rem;
     line-height: 1.8;
-    color: #444;
+    font-weight: 700;
+    color: #333333;
     margin-bottom: 2rem;
     backdrop-filter: blur(5px);
     background: rgba(255, 255, 255, 0.6);
@@ -804,13 +725,13 @@ section {
 
 @keyframes float {
     0%, 100% {
-        transform: translate(0, 0) rotate(0deg);
+        transform: translate(0, 0);
     }
     33% {
-        transform: translate(30px, -30px) rotate(120deg);
+        transform: translate(30px, -30px);
     }
     66% {
-        transform: translate(-20px, 20px) rotate(240deg);
+        transform: translate(-20px, 20px);
     }
 }
 
