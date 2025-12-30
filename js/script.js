@@ -48,22 +48,27 @@ function initParallax() {
     if (!logoOverlay) return;
     
     let ticking = false;
+    let lastScrollY = 0;
+    let scrollTimeout;
     
     function updateParallax() {
         const scrolled = window.pageYOffset;
-        const rate = scrolled * 0.5;
         
-        // Calcola sfocatura basata sullo scroll (massimo 10px)
-        const blurAmount = Math.min(scrolled * 0.02, 10);
+        // Aggiorna solo se lo scroll è cambiato significativamente
+        if (Math.abs(scrolled - lastScrollY) > 1) {
+            const rate = scrolled * 0.3;
+            
+            // Calcola sfocatura basata sullo scroll (massimo 8px)
+            const blurAmount = Math.min(scrolled * 0.015, 8);
+            
+            // Logo si muove solo verso il basso con sfocatura progressiva
+            // Rimuoviamo lo scale dinamico che causa scatti
+            logoOverlay.style.transform = `translate3d(0, ${rate}px, 0)`;
+            logoOverlay.style.filter = `blur(${blurAmount}px)`;
+            
+            lastScrollY = scrolled;
+        }
         
-        // Calcola ingrandimento basato sullo scroll (massimo 2x)
-        const scaleAmount = 1 + (scrolled * 0.001);
-        
-        // Logo si muove verso il basso, si sfoca e si ingrandisce quando si scrolla giù
-        logoOverlay.style.transform = `translateY(${rate}px) scale(${scaleAmount})`;
-        logoOverlay.style.filter = `blur(${blurAmount}px)`;
-        
-        // Chiodo rimane completamente fisso (nessuna trasformazione)
         ticking = false;
     }
     
@@ -74,9 +79,19 @@ function initParallax() {
         }
     }
     
-    window.addEventListener('scroll', requestTick);
-    // Aggiungi anche resize per migliore performance
-    window.addEventListener('resize', requestTick);
+    // Debounce per ridurre i calcoli
+    function debouncedScroll() {
+        clearTimeout(scrollTimeout);
+        requestTick();
+        
+        // Resetta il ticking dopo un timeout per evitare blocchi
+        scrollTimeout = setTimeout(() => {
+            ticking = false;
+        }, 100);
+    }
+    
+    window.addEventListener('scroll', debouncedScroll, { passive: true });
+    window.addEventListener('resize', requestTick, { passive: true });
 }
 
 // Funzione animazione UNISCITI

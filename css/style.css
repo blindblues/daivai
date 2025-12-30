@@ -528,6 +528,9 @@ html {
     border-bottom-left-radius: 50px;
     border-bottom-right-radius: 50px;
     clip-path: inset(0 0 0 0 round(0 0 50px 50px));
+    will-change: transform, filter;
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
 #hero-overlay .hero-image {
