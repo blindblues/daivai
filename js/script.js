@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Effetto parallasse
     initParallax();
+    initUniscitiAnimation();
 });
 
 // Funzione parallasse
@@ -61,6 +62,57 @@ function initParallax() {
         logoOverlay.style.filter = `blur(${blurAmount}px)`;
         
         // Chiodo rimane completamente fisso (nessuna trasformazione)
+    });
+}
+
+// Funzione animazione UNISCITI
+function initUniscitiAnimation() {
+    const uniscitiText = document.getElementById('unisciti-text');
+    const heroSection = document.getElementById('hero');
+    
+    if (!uniscitiText || !heroSection) return;
+    
+    let lastScrollY = window.pageYOffset;
+    let animationProgress = 0;
+    
+    window.addEventListener('scroll', () => {
+        const currentScrollY = window.pageYOffset;
+        const scrollDelta = currentScrollY - lastScrollY;
+        
+        // Calcola l'altezza della sezione hero
+        const heroHeight = heroSection.offsetHeight;
+        
+        // Calcola il progresso dello scroll (0 = top, 1 = bottom of hero)
+        const scrollProgress = Math.min(Math.max(currentScrollY / heroHeight, 0), 1);
+        
+        // Determina la direzione dello scroll
+        const scrollingDown = scrollDelta > 0;
+        
+        // Aggiorna il progresso dell'animazione
+        if (scrollingDown) {
+            // Scroll down: aumenta il progresso (0 -> 1)
+            animationProgress = Math.min(animationProgress + Math.abs(scrollDelta) * 0.004, 1);
+        } else {
+            // Scroll up: diminuisci il progresso (1 -> 0)
+            animationProgress = Math.max(animationProgress - Math.abs(scrollDelta) * 0.004, 0);
+        }
+        
+        // Applica l'animazione
+        // Calcola la posizione bottom basata sul progresso
+        // Quando animationProgress = 0, bottom = -20vh (fuori viewport)
+        // Quando animationProgress = 1, bottom = 5vh (posizione finale più in basso)
+        const bottomValue = -20 + (25 * animationProgress);
+        
+        // Calcola la scala basata sul progresso
+        // Quando animationProgress = 0, scale = 0.8 (più grande di prima ma non più grande della fine)
+        // Quando animationProgress = 1, scale = 1 (dimensione normale)
+        const scale = 0.8 + (0.2 * animationProgress);
+        
+        // Applica le trasformazioni in modo continuo
+        uniscitiText.style.bottom = `${bottomValue}vh`;
+        uniscitiText.style.transform = `translateX(-50%) scale(${scale})`;
+        
+        lastScrollY = currentScrollY;
     });
 }
 
