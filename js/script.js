@@ -47,7 +47,9 @@ function initParallax() {
     
     if (!logoOverlay) return;
     
-    window.addEventListener('scroll', () => {
+    let ticking = false;
+    
+    function updateParallax() {
         const scrolled = window.pageYOffset;
         const rate = scrolled * 0.5;
         
@@ -62,7 +64,19 @@ function initParallax() {
         logoOverlay.style.filter = `blur(${blurAmount}px)`;
         
         // Chiodo rimane completamente fisso (nessuna trasformazione)
-    });
+        ticking = false;
+    }
+    
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(updateParallax);
+            ticking = true;
+        }
+    }
+    
+    window.addEventListener('scroll', requestTick);
+    // Aggiungi anche resize per migliore performance
+    window.addEventListener('resize', requestTick);
 }
 
 // Funzione animazione UNISCITI
@@ -74,8 +88,9 @@ function initUniscitiAnimation() {
     
     let lastScrollY = window.pageYOffset;
     let animationProgress = 0;
+    let ticking = false;
     
-    window.addEventListener('scroll', () => {
+    function updateUniscitiAnimation() {
         const currentScrollY = window.pageYOffset;
         const scrollDelta = currentScrollY - lastScrollY;
         
@@ -113,7 +128,18 @@ function initUniscitiAnimation() {
         uniscitiText.style.transform = `translateX(-50%) scale(${scale})`;
         
         lastScrollY = currentScrollY;
-    });
+        ticking = false;
+    }
+    
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(updateUniscitiAnimation);
+            ticking = true;
+        }
+    }
+    
+    window.addEventListener('scroll', requestTick);
+    window.addEventListener('resize', requestTick);
 }
 
 // Funzioni utility
