@@ -512,8 +512,9 @@ footer {
 }
 
 #logo-overlay .hero-image {
-    max-width: 80vw;
-    max-height: 80vw;
+    max-width: 40vw;
+    /* Reduced from 80vw for desktop */
+    max-height: 40vw;
     object-fit: contain;
     width: auto;
     height: auto;
