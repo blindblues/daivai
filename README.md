@@ -1,39 +1,43 @@
-# Dai Vai
+# Astro Starter Kit: Minimal
 
-Landing page professionale con effetto parallasse e design moderno.
-
-## Struttura del Progetto
-
-```
-daivai/
-├── index.html          # Landing page completa
-├── css/
-│   └── style.css       # Foglio di stile principale
-├── js/
-│   └── script.js       # JavaScript principale
-├── images/
-│   └── README.md       # Guida per le immagini
-└── README.md           # Questo file
+```sh
+npm create astro@latest -- --template minimal
 ```
 
-## Caratteristiche
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
-- **Effetto Parallasse**: Logo che si muove, sfoca e ingrandisce durante lo scroll
-- **Angoli Arrotondati**: Design moderno con bordi arrotondati
-- **Design Responsive**: Funziona su desktop, tablet e mobile
-- **SEO Friendly**: Meta tag e struttura semantica HTML5
-- **Performance**: CSS e JavaScript ottimizzati
+## 🚀 Project Structure
 
-## Effetti Speciali
+Inside of your Astro project, you'll see the following folders and files:
 
-- **Parallasse Logo**: Il logo DaiVai si muove in direzione opposta allo scroll
-- **Sfocatura Progressiva**: Il logo diventa sempre più sfocato scorrendo
-- **Ingrandimento**: Il logo si ingrandisce man mano che scende
-- **Effetto Profondità**: Il logo passa dietro il chiodo durante l'animazione
+```text
+/
+├── public/
+├── src/
+│   └── pages/
+│       └── index.astro
+└── package.json
+```
 
-## Browser Support
+Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
 
-- Chrome (ultima versione)
-- Firefox (ultima versione)
-- Safari (ultima versione)
-- Edge (ultima versione)
+There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+
+Any static assets, like images, can be placed in the `public/` directory.
+
+## 🧞 Commands
+
+All commands are run from the root of the project, from a terminal:
+
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
+
+## 👀 Want to learn more?
+
+Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).

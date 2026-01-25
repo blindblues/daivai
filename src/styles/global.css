@@ -75,7 +75,7 @@
 @font-face {
     font-family: 'Whyte';
     src: url('../fonts/Whyte/Whyte-Thin.woff2') format('woff2'),
-         url('../fonts/Whyte/Whyte-Thin.woff') format('woff');
+        url('../fonts/Whyte/Whyte-Thin.woff') format('woff');
     font-weight: 100;
     font-style: normal;
 }
@@ -83,7 +83,7 @@
 @font-face {
     font-family: 'Whyte';
     src: url('../fonts/Whyte/Whyte-ThinItalic.woff2') format('woff2'),
-         url('../fonts/Whyte/Whyte-ThinItalic.woff') format('woff');
+        url('../fonts/Whyte/Whyte-ThinItalic.woff') format('woff');
     font-weight: 100;
     font-style: italic;
 }
@@ -91,7 +91,7 @@
 @font-face {
     font-family: 'Whyte';
     src: url('../fonts/Whyte/Whyte-ExtraLight.woff2') format('woff2'),
-         url('../fonts/Whyte/Whyte-ExtraLight.woff') format('woff');
+        url('../fonts/Whyte/Whyte-ExtraLight.woff') format('woff');
     font-weight: 200;
     font-style: normal;
 }
@@ -99,7 +99,7 @@
 @font-face {
     font-family: 'Whyte';
     src: url('../fonts/Whyte/Whyte-ExtraLightItalic.woff2') format('woff2'),
-         url('../fonts/Whyte/Whyte-ExtraLightItalic.woff') format('woff');
+        url('../fonts/Whyte/Whyte-ExtraLightItalic.woff') format('woff');
     font-weight: 200;
     font-style: italic;
 }
@@ -107,7 +107,7 @@
 @font-face {
     font-family: 'Whyte';
     src: url('../fonts/Whyte/Whyte-Light.woff2') format('woff2'),
-         url('../fonts/Whyte/Whyte-Light.woff') format('woff');
+        url('../fonts/Whyte/Whyte-Light.woff') format('woff');
     font-weight: 300;
     font-style: normal;
 }
@@ -115,7 +115,7 @@
 @font-face {
     font-family: 'Whyte';
     src: url('../fonts/Whyte/Whyte-LightItalic.woff2') format('woff2'),
-         url('../fonts/Whyte/Whyte-LightItalic.woff') format('woff');
+        url('../fonts/Whyte/Whyte-LightItalic.woff') format('woff');
     font-weight: 300;
     font-style: italic;
 }
@@ -123,7 +123,7 @@
 @font-face {
     font-family: 'Whyte';
     src: url('../fonts/Whyte/Whyte-Book.woff2') format('woff2'),
-         url('../fonts/Whyte/Whyte-Book.woff') format('woff');
+        url('../fonts/Whyte/Whyte-Book.woff') format('woff');
     font-weight: 400;
     font-style: normal;
 }
@@ -131,7 +131,7 @@
 @font-face {
     font-family: 'Whyte';
     src: url('../fonts/Whyte/Whyte-BookItalic.woff2') format('woff2'),
-         url('../fonts/Whyte/Whyte-BookItalic.woff') format('woff');
+        url('../fonts/Whyte/Whyte-BookItalic.woff') format('woff');
     font-weight: 400;
     font-style: italic;
 }
@@ -139,7 +139,7 @@
 @font-face {
     font-family: 'Whyte';
     src: url('../fonts/Whyte/Whyte-Regular.woff2') format('woff2'),
-         url('../fonts/Whyte/Whyte-Regular.woff') format('woff');
+        url('../fonts/Whyte/Whyte-Regular.woff') format('woff');
     font-weight: 500;
     font-style: normal;
 }
@@ -147,7 +147,7 @@
 @font-face {
     font-family: 'Whyte';
     src: url('../fonts/Whyte/Whyte-Italic.woff2') format('woff2'),
-         url('../fonts/Whyte/Whyte-Italic.woff') format('woff');
+        url('../fonts/Whyte/Whyte-Italic.woff') format('woff');
     font-weight: 500;
     font-style: italic;
 }
@@ -155,7 +155,7 @@
 @font-face {
     font-family: 'Whyte';
     src: url('../fonts/Whyte/Whyte-Medium.woff2') format('woff2'),
-         url('../fonts/Whyte/Whyte-Medium.woff') format('woff');
+        url('../fonts/Whyte/Whyte-Medium.woff') format('woff');
     font-weight: 600;
     font-style: normal;
 }
@@ -163,7 +163,7 @@
 @font-face {
     font-family: 'Whyte';
     src: url('../fonts/Whyte/Whyte-MediumItalic.woff2') format('woff2'),
-         url('../fonts/Whyte/Whyte-MediumItalic.woff') format('woff');
+        url('../fonts/Whyte/Whyte-MediumItalic.woff') format('woff');
     font-weight: 600;
     font-style: italic;
 }
@@ -171,7 +171,7 @@
 @font-face {
     font-family: 'Whyte';
     src: url('../fonts/Whyte/Whyte-Bold.woff2') format('woff2'),
-         url('../fonts/Whyte/Whyte-Bold.woff') format('woff');
+        url('../fonts/Whyte/Whyte-Bold.woff') format('woff');
     font-weight: 700;
     font-style: normal;
 }
@@ -179,7 +179,7 @@
 @font-face {
     font-family: 'Whyte';
     src: url('../fonts/Whyte/Whyte-BoldItalic.woff2') format('woff2'),
-         url('../fonts/Whyte/Whyte-BoldItalic.woff') format('woff');
+        url('../fonts/Whyte/Whyte-BoldItalic.woff') format('woff');
     font-weight: 700;
     font-style: italic;
 }
@@ -187,7 +187,7 @@
 @font-face {
     font-family: 'Whyte';
     src: url('../fonts/Whyte/Whyte-Black.woff2') format('woff2'),
-         url('../fonts/Whyte/Whyte-Black.woff') format('woff');
+        url('../fonts/Whyte/Whyte-Black.woff') format('woff');
     font-weight: 800;
     font-style: normal;
 }
@@ -195,7 +195,7 @@
 @font-face {
     font-family: 'Whyte';
     src: url('../fonts/Whyte/Whyte-BlackItalic.woff2') format('woff2'),
-         url('../fonts/Whyte/Whyte-BlackItalic.woff') format('woff');
+        url('../fonts/Whyte/Whyte-BlackItalic.woff') format('woff');
     font-weight: 800;
     font-style: italic;
 }
@@ -203,7 +203,7 @@
 @font-face {
     font-family: 'Whyte';
     src: url('../fonts/Whyte/Whyte-Heavy.woff2') format('woff2'),
-         url('../fonts/Whyte/Whyte-Heavy.woff') format('woff');
+        url('../fonts/Whyte/Whyte-Heavy.woff') format('woff');
     font-weight: 900;
     font-style: normal;
 }
@@ -211,7 +211,7 @@
 @font-face {
     font-family: 'Whyte';
     src: url('../fonts/Whyte/Whyte-HeavyItalic.woff2') format('woff2'),
-         url('../fonts/Whyte/Whyte-HeavyItalic.woff') format('woff');
+        url('../fonts/Whyte/Whyte-HeavyItalic.woff') format('woff');
     font-weight: 900;
     font-style: italic;
 }
@@ -222,8 +222,11 @@
     box-sizing: border-box;
 }
 
-html, body {
-    overflow-x: hidden;
+html,
+body {
+    /* overflow-x: hidden; <-- Removed AGAIN because it breaks sticky scroll */
+    /* Prevent horizontal scroll handled by width: 100% now */
+    width: 100%;
     max-width: 100%;
 }
 
@@ -236,7 +239,12 @@ body {
 }
 
 /* Applica Whyte a titoli e paragrafi */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: 'Whyte', 'Arial', sans-serif;
 }
 
@@ -274,8 +282,7 @@ nav ul li a:hover {
 }
 
 /* Main content */
-main {
-}
+main {}
 
 /* Footer */
 footer {
@@ -283,9 +290,16 @@ footer {
     color: white;
     text-align: center;
     padding: 1rem 0;
-    position: relative;
-    bottom: 0;
     width: 100%;
+    position: sticky;
+    /* Make footer sticky so it stacks too? Or just relative on top */
+    top: 0;
+    z-index: 20;
+    min-height: 100vh;
+    /* Make footer full screen to match the rhythm? Or just standard */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 /* Responsive */
@@ -293,39 +307,40 @@ footer {
     nav ul {
         flex-direction: column;
     }
-    
+
     nav ul li a {
         padding: 0.5rem 1rem;
     }
-    
+
     /* Previeni scroll orizzontale su mobile */
-    html, body {
-        overflow-x: hidden !important;
+    html,
+    body {
+        /* overflow-x: hidden !important; <-- Removed to fix sticky */
         position: relative;
         width: 100%;
         min-width: 0;
     }
-    
+
     * {
         max-width: 100%;
         box-sizing: border-box;
     }
-    
+
     img {
         max-width: 100% !important;
         height: auto !important;
     }
-    
+
     #hero-overlay .hero-image {
         max-width: 150vw !important;
         max-height: 70vh !important;
     }
-    
+
     #logo-overlay .hero-image {
         max-width: 70vw !important;
         max-height: 70vw !important;
     }
-    
+
     #hero-overlay {
         overflow: hidden !important;
     }
@@ -343,7 +358,7 @@ footer {
     background: #f9f9f9;
     padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
 }
 
@@ -351,7 +366,8 @@ footer {
     transform: translateY(-5px);
 }
 
-.contact-info, .contact-form {
+.contact-info,
+.contact-form {
     margin: 2rem 0;
     padding: 2rem;
     background: #f9f9f9;
@@ -397,14 +413,32 @@ nav ul li a.active {
 }
 
 /* Stili per la navigazione smooth scroll */
+/* Stili per la navigazione smooth scroll */
 html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
+    /* Let Lenis handle smoothing */
+    /* scroll-snap-type removed */
+}
+
+/* Ensure body takes full height for sticky context if needed, though usually automatic */
+body {
+    min-height: 100vh;
+}
+
+/* Snap alignment for major containers */
+/* Snap removed to fix jerky scroll */
+main,
+section,
+footer {
+    /* scroll-snap-align: start; */
+    /* scroll-snap-stop: always; */
 }
 
 /* Stili per la homepage */
 #hero {
     height: 100vh;
-    width: 100vw;
+    width: 100%;
+    /* Changed from 100vw to prevent scrollbar overflow */
     background: radial-gradient(ellipse at bottom, #FFC5C5 0%, #FB6068 80%);
     overflow: hidden;
     display: flex;
@@ -418,7 +452,8 @@ html {
 
 #hero-overlay {
     height: 100vh;
-    width: 100vw;
+    width: 100%;
+    /* Changed from 100vw */
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -436,7 +471,8 @@ html {
 
 #logo-overlay {
     height: 100vh;
-    width: 100vw;
+    width: 100%;
+    /* Changed from 100vw */
     overflow-x: hidden;
     display: flex;
     justify-content: center;
@@ -546,16 +582,23 @@ html {
 }
 
 section {
-    margin-bottom: 3rem;
-    padding: 4rem 0;
+    margin-bottom: 0;
+    padding: 0;
+    position: relative;
+    /* Default for non-sticky sections */
+    z-index: 1;
 }
 
 #hero-overlay {
     padding: 0 !important;
+    margin-bottom: 0 !important;
+    /* Remove margin */
 }
 
 #logo-overlay {
     padding: 0 !important;
+    margin-bottom: 0 !important;
+    /* Remove margin */
 }
 
 /* Sezione Chi Siamo */
@@ -724,15 +767,102 @@ section {
 }
 
 @keyframes float {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translate(0, 0);
     }
+
     33% {
         transform: translate(30px, -30px);
     }
+
     66% {
         transform: translate(-20px, 20px);
     }
 }
 
 /* Stili per la sezione eventi - rimossi duplicati */
+
+/* Scroll Sections */
+/* Scroll Sections */
+.scroll-section {
+    min-height: 100vh;
+    /* Full screen height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 2rem;
+    overflow: hidden;
+    margin-bottom: 0;
+    /* Remove margin between sections */
+
+    /* Sticky Effect */
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    /* Ensure they sit on top of standard content/previous sections */
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+    /* Shadow to separate stacked cards */
+}
+
+.scroll-section h2 {
+    font-size: 4rem;
+    font-weight: 900;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Base animation state */
+.animate-on-scroll {
+    opacity: 0;
+    transition: all 1s ease-out;
+}
+
+/* Fade Up */
+.animate-on-scroll.fade-up {
+    transform: translateY(50px);
+}
+
+/* Slide Right */
+.animate-on-scroll.slide-right {
+    transform: translateX(-100px);
+}
+
+/* Zoom In */
+.animate-on-scroll.zoom-in {
+    transform: scale(0.5);
+}
+
+/* Visible State */
+.animate-on-scroll.visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* Mobile Optimization for Scroll Sections */
+@media (max-width: 768px) {
+    .scroll-section {
+        min-height: 100vh;
+        /* Ensure full height on mobile too */
+        padding: 0 1.5rem;
+    }
+
+    .scroll-section h2 {
+        font-size: 2.5rem;
+        /* Smaller font on mobile */
+        letter-spacing: 1px;
+    }
+
+    /* Simplify animations on mobile to prevent overflow/layout issues */
+    .animate-on-scroll.slide-right {
+        transform: translateX(-30px);
+        /* Reduced slide distance */
+    }
+
+    .animate-on-scroll.fade-up {
+        transform: translateY(30px);
+        /* Reduced slide distance */
+    }
+}
