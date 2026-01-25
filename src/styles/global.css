@@ -603,12 +603,15 @@ section {
 
 /* Sezione Chi Siamo */
 #about {
-    background: linear-gradient(10deg, #FFC5C5 0%, #FB6068 80%);
-    border-radius: 30px;
-    margin: 2vh 2vh 4rem;
-    padding: 4rem 2rem;
-    position: relative;
-    overflow: hidden;
+    /* Background handled by inline style for alternating effect, or keep gradient if preferred but ensure full height / width */
+    /* Remove margins to fit sticky stack */
+    margin: 0;
+    padding: 0 2rem;
+    /* Match other scroll sections */
+    border-radius: 0;
+    /* Remove radius for full screen effect */
+    background: none;
+    /* Let inline style control or set specific one */
 }
 
 #about::before {
@@ -633,7 +636,8 @@ section {
 #about h2 {
     font-size: 3rem;
     font-weight: 900;
-    color: #ffffff;
+    color: #333;
+    /* Default dark text since bg is white */
     margin-bottom: 2rem;
     position: relative;
     display: inline-block;
@@ -666,11 +670,10 @@ section {
 
 /* Sezione Eventi */
 #events {
-    background: linear-gradient(135deg, rgba(245, 229, 144, 0.1) 0%, rgba(251, 96, 104, 0.1) 100%);
-    border-radius: 30px;
-    margin: 0 2vh 4rem;
-    padding: 4rem 2rem;
-    position: relative;
+    margin: 0;
+    padding: 0 2rem;
+    border-radius: 0;
+    background: none;
 }
 
 #events .container {
@@ -682,7 +685,8 @@ section {
 #events h2 {
     font-size: 3rem;
     font-weight: 900;
-    color: #333;
+    color: white;
+    /* White text on red bg */
     margin-bottom: 3rem;
     position: relative;
     display: inline-block;
