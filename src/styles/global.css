@@ -428,7 +428,6 @@ body {
 }
 
 /* Snap alignment for major containers */
-main,
 .scroll-section,
 footer {
     scroll-snap-align: start;
