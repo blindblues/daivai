@@ -1,151 +1,206 @@
 ---
-import '../styles/global.css';
+import "../styles/global.css";
+import EventCard from "../components/EventCard.astro";
+import NavbarAuth from "../components/NavbarAuth.astro";
+import { getCollection } from "astro:content";
+
+const allEvents = await getCollection("events");
 ---
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Benvenuto nel nostro sito web">
-    <meta name="keywords" content="sito web, servizi, contatti">
-    <title>Dai Vai</title>
-    
-    <!-- Favicon per tutti i browser e dispositivi -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/daivai/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/daivai/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/daivai/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/daivai/favicon/site.webmanifest">
-    <link rel="shortcut icon" href="/daivai/favicon/favicon.ico">
-    
-    <!-- Favicon SVG per browser moderni -->
-    <link rel="icon" type="image/svg+xml" href="/daivai/images/DaiVai.svg">
-    
-    <!-- Meta tag per il theme color -->
-    <meta name="theme-color" content="#FB6068">
-    
-    <!-- CSS Imported in frontmatter -->
-</head>
-<body>
-    <main>
-        <div class="container">
-            <section id="hero">
-            </section>
-            <section id="logo-overlay">
-                <img src="/daivai/images/DaiVai-Yellow.svg" alt="Daivai Logo" class="hero-image">
-            </section>
-            <section id="hero-overlay">
-                <img src="/daivai/images/chiodo.png" alt="Chiodo" class="hero-image">
-                <div id="unisciti-text" class="unisciti-text">UNISCITI!</div>
-            </section>
-        </div>
-    </main>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="Benvenuto nel nostro sito web" />
+        <meta name="keywords" content="sito web, servizi, contatti" />
+        <title>Dai Vai</title>
 
-    <section id="scroll-1" class="scroll-section" style="background-color: #f5e590; color: white;">
-        <div class="content animate-on-scroll fade-up">
-             <h2 style="color: #FB6068;">Innovazione</h2>
-        </div>
-    </section>
+        <!-- Favicon per tutti i browser e dispositivi -->
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/daivai/favicon/apple-touch-icon.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/daivai/favicon/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/daivai/favicon/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/daivai/favicon/site.webmanifest" />
+        <link rel="shortcut icon" href="/daivai/favicon/favicon.ico" />
 
-    <section id="scroll-2" class="scroll-section" style="background-color: #FFFFFF; color: #333;">
-        <div class="content animate-on-scroll slide-right">
-             <h2 style="color: #333;">Creatività</h2>
-        </div>
-    </section>
+        <!-- Favicon SVG per browser moderni -->
+        <link
+            rel="icon"
+            type="image/svg+xml"
+            href="/daivai/images/DaiVai.svg"
+        />
 
-    <section id="scroll-3" class="scroll-section" style="background-color: #FB6068; color: white;">
-        <div class="content animate-on-scroll zoom-in">
-             <h2 style="color: white;">Tecnologia</h2>
-        </div>
-    </section>
+        <!-- Meta tag per il theme color -->
+        <meta name="theme-color" content="#FB6068" />
 
-    <section id="about" class="scroll-section" style="background-color: #FFFFFF; color: #333;">
-        <div class="content animate-on-scroll fade-up">
+        <!-- CSS Imported in frontmatter -->
+    </head>
+    <body>
+        <NavbarAuth />
+        <main>
             <div class="container">
-                <h2>CHI SIAMO</h2>
-                <p>Siamo un team dedicato a fornire soluzioni innovative e di alta qualità per i nostri clienti. La nostra missione è trasformare le idee in realtà attraverso creatività e competenza tecnica.</p>
+                <section id="hero"></section>
+                <section id="logo-overlay">
+                    <img
+                        src="/daivai/images/DaiVai-Yellow.svg"
+                        alt="Daivai Logo"
+                        class="hero-image"
+                    />
+                </section>
+                <section id="hero-overlay">
+                    <img
+                        src="/daivai/images/chiodo.png"
+                        alt="Chiodo"
+                        class="hero-image"
+                    />
+                    <div id="unisciti-text" class="unisciti-text">
+                        UNISCITI!
+                    </div>
+                </section>
             </div>
-        </div>
-    </section>
+        </main>
 
-    <section id="events" class="scroll-section" style="background-color: #FB6068; color: white;">
-        <div class="content animate-on-scroll zoom-in">
-            <div class="container">
-                <h2 style="color: white;">PROSSIMI EVENTI</h2>
-                <div class="events-grid">
-                    <div class="event-card">
-                        <h3>Workshop di Design</h3>
-                        <p class="date">15 Gennaio 2025</p>
-                        <p>Un workshop intensivo sulle ultime tendenze del design digitale e用户体验.</p>
-                    </div>
-                    <div class="event-card">
-                        <h3>Conferenza Tech</h3>
-                        <p class="date">28 Febbraio 2025</p>
-                        <p>Presentazione delle nuove tecnologie emergenti nel settore dello sviluppo web.</p>
-                    </div>
-                    <div class="event-card">
-                        <h3>Meetup Creativo</h3>
-                        <p class="date">10 Marzo 2025</p>
-                        <p>Incontro tra creativi per condividere idee e collaborare a nuovi progetti.</p>
+        <section
+            id="scroll-1"
+            class="scroll-section"
+            style="background-color: #f5e590; color: white;"
+        >
+            <div class="content animate-on-scroll fade-up">
+                <h2 style="color: #FB6068;">Innovazione</h2>
+            </div>
+        </section>
+
+        <section
+            id="scroll-2"
+            class="scroll-section"
+            style="background-color: #FFFFFF; color: #333;"
+        >
+            <div class="content animate-on-scroll slide-right">
+                <h2 style="color: #333;">Creatività</h2>
+            </div>
+        </section>
+
+        <section
+            id="scroll-3"
+            class="scroll-section"
+            style="background-color: #FB6068; color: white;"
+        >
+            <div class="content animate-on-scroll zoom-in">
+                <h2 style="color: white;">Tecnologia</h2>
+            </div>
+        </section>
+
+        <section
+            id="about"
+            class="scroll-section"
+            style="background-color: #FFFFFF; color: #333;"
+        >
+            <div class="content animate-on-scroll fade-up">
+                <div class="container">
+                    <h2>CHI SIAMO</h2>
+                    <p>
+                        Siamo un team dedicato a fornire soluzioni innovative e
+                        di alta qualità per i nostri clienti. La nostra missione
+                        è trasformare le idee in realtà attraverso creatività e
+                        competenza tecnica.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section
+            id="events"
+            class="scroll-section"
+            style="background-color: #FB6068; color: white;"
+        >
+            <div class="content animate-on-scroll zoom-in">
+                <div class="container">
+                    <h2 style="color: white;">PROSSIMI EVENTI</h2>
+                    <div class="events-grid">
+                        {
+                            allEvents.map((event) => (
+                                <EventCard
+                                    title={event.data.title}
+                                    date={event.data.date}
+                                    description={event.data.description}
+                                />
+                            ))
+                        }
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Nome Sito. Tutti i diritti riservati.</p>
-            <p>
-                <a href="#hero">Home</a>
-            </p>
-        </div>
-    </footer>
+        <footer>
+            <div class="container">
+                <p>&copy; 2024 Nome Sito. Tutti i diritti riservati.</p>
+                <p>
+                    <a href="#hero">Home</a>
+                </p>
+            </div>
+        </footer>
 
-    <script src="/daivai/js/script.js" is:inline></script>
-    <script>
-        import Lenis from 'lenis';
+        <script src="/daivai/js/script.js" is:inline></script>
+        <script>
+            import Lenis from "lenis";
 
-        // Initialize Lenis
-        const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            direction: 'vertical',
-            gestureDirection: 'vertical',
-            smooth: true,
-            mouseMultiplier: 1,
-            smoothTouch: false,
-            touchMultiplier: 2,
-        });
-
-        // Get scroll value for raf context or just use auto raf
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-
-        requestAnimationFrame(raf);
-
-        // Keep IntersectionObserver for animations
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.3
-        };
-
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                } else {
-                    // Remove class when element leaves viewport to "rewind" animation for re-entry
-                    entry.target.classList.remove('visible');
-                }
+            // Initialize Lenis
+            const lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                orientation: "vertical",
+                gestureOrientation: "vertical",
+                smoothWheel: true,
+                wheelMultiplier: 1,
+                syncTouch: false,
+                touchMultiplier: 2,
             });
-        }, observerOptions);
 
-        document.querySelectorAll('.animate-on-scroll').forEach((element) => {
-            observer.observe(element);
-        });
-    </script>
-</body>
+            // Get scroll value for raf context or just use auto raf
+            function raf(time: number) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+
+            requestAnimationFrame(raf);
+
+            // Keep IntersectionObserver for animations
+            const observerOptions = {
+                root: null,
+                rootMargin: "0px",
+                threshold: 0.3,
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                    } else {
+                        // Remove class when element leaves viewport to "rewind" animation for re-entry
+                        entry.target.classList.remove("visible");
+                    }
+                });
+            }, observerOptions);
+
+            document
+                .querySelectorAll(".animate-on-scroll")
+                .forEach((element) => {
+                    observer.observe(element);
+                });
+        </script>
+    </body>
 </html>

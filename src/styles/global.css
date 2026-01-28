@@ -282,11 +282,6 @@ nav ul li a:hover {
     background: #555;
 }
 
-/* Main content */
-main {
-    /* Main content styles can be added here */
-}
-
 /* Footer */
 footer {
     background: #333;
@@ -415,22 +410,18 @@ nav ul li a.active {
     background: #666;
 }
 
-/* Stili per la navigazione smooth scroll */
-/* Stili per la navigazione smooth scroll */
+/* Stili per la navigazione smooth scroll disabilitati per non conflittare con Lenis */
+/*
 html {
     scroll-behavior: smooth;
     scroll-snap-type: y proximity;
 }
+*/
 
-/* Ensure body takes full height for sticky context if needed, though usually automatic */
-body {
-    min-height: 100vh;
-}
-
-/* Snap alignment for major containers */
+/* Snap alignment rimosso per Lenis */
 .scroll-section,
 footer {
-    scroll-snap-align: start;
+    /* scroll-snap-align: start; */
     position: relative;
 }
 

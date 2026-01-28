@@ -1,0 +1,41 @@
+---
+interface Props {
+    title: string;
+    date: string;
+    description: string;
+}
+
+const { title, date, description } = Astro.props;
+---
+
+<div class="event-card">
+    <h3>{title}</h3>
+    <p class="date">{date}</p>
+    <p>{description}</p>
+</div>
+
+<style>
+    /* Qui il tuo grafico potrà sbizzarrirsi senza rompere il resto del sito */
+    .event-card {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: transform 0.3s ease;
+    }
+
+    .event-card:hover {
+        transform: translateY(-5px);
+    }
+
+    h3 {
+        margin-top: 0;
+        font-size: 1.5rem;
+    }
+
+    .date {
+        font-weight: bold;
+        opacity: 0.8;
+        margin-bottom: 1rem;
+    }
+</style>

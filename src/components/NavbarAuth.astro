@@ -1,0 +1,141 @@
+---
+import Auth from "./Auth.astro";
+---
+
+<div class="nav-auth-wrapper">
+    <!-- Icona Profilo -->
+    <button
+        id="auth-modal-toggle"
+        class="profile-btn"
+        aria-label="Area Personale"
+    >
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle
+                cx="12"
+                cy="7"
+                r="4"></circle></svg
+        >
+    </button>
+
+    <!-- Modal/Dropdown -->
+    <div id="auth-modal" class="auth-modal hidden">
+        <div class="modal-content">
+            <button id="close-modal" class="close-btn">&times;</button>
+            <Auth />
+        </div>
+    </div>
+</div>
+
+<script>
+    const toggle = document.getElementById("auth-modal-toggle");
+    const modal = document.getElementById("auth-modal");
+    const close = document.getElementById("close-modal");
+
+    toggle?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        modal?.classList.toggle("hidden");
+    });
+
+    close?.addEventListener("click", () => {
+        modal?.classList.add("hidden");
+    });
+
+    // Chiudi se clicchi fuori
+    window.addEventListener("click", (e) => {
+        if (modal && !modal.contains(e.target as Node) && e.target !== toggle) {
+            modal.classList.add("hidden");
+        }
+    });
+</script>
+
+<style>
+    .nav-auth-wrapper {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+
+    .profile-btn {
+        background: #fb6068;
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(251, 96, 104, 0.3);
+        transition: transform 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .profile-btn:hover {
+        transform: scale(1.1);
+    }
+
+    .auth-modal {
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 350px;
+        background: transparent;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 10px;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        position: relative;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        border: none;
+        background: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #666;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    /* Adattamento per mobile */
+    @media (max-width: 480px) {
+        .auth-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 350px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    }
+</style>

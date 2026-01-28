@@ -1,0 +1,193 @@
+---
+
+---
+
+<div class="auth-container">
+    <div id="auth-form">
+        <h2 id="auth-title">Accedi</h2>
+        <form id="supabase-auth-form">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                    type="email"
+                    id="email"
+                    required
+                    placeholder="la-tua@email.it"
+                />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    required
+                    placeholder="********"
+                />
+            </div>
+            <button type="submit" id="auth-submit">Accedi</button>
+        </form>
+        <p class="toggle-text">
+            Non hai un account? <a href="#" id="toggle-auth">Registrati</a>
+        </p>
+        <div id="auth-message" class="message"></div>
+    </div>
+
+    <div id="user-profile" class="hidden">
+        <h2>Benvenuto!</h2>
+        <p id="user-email"></p>
+        <button id="sign-out">Esci</button>
+    </div>
+</div>
+
+<script>
+    import { supabase } from "../lib/supabase";
+
+    const form = document.getElementById(
+        "supabase-auth-form",
+    ) as HTMLFormElement;
+    const title = document.getElementById("auth-title");
+    const submitBtn = document.getElementById("auth-submit");
+    const toggleBtn = document.getElementById("toggle-auth");
+    const messageDiv = document.getElementById("auth-message");
+    const authContainer = document.getElementById("auth-form");
+    const profileContainer = document.getElementById("user-profile");
+    const userEmail = document.getElementById("user-email");
+    const signOutBtn = document.getElementById("sign-out");
+
+    let isSignUp = false;
+
+    // Gestione Toggle Accedi/Registrati
+    toggleBtn?.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation(); // Evita interferenze
+        isSignUp = !isSignUp;
+        if (title) title.innerText = isSignUp ? "Registrati" : "Accedi";
+        if (submitBtn)
+            submitBtn.innerText = isSignUp ? "Crea Account" : "Accedi";
+        if (toggleBtn) toggleBtn.innerText = isSignUp ? "Accedi" : "Registrati";
+        if (messageDiv) messageDiv.innerText = ""; // Pulisce messaggi precedenti
+    });
+
+    // Gestione Form
+    form?.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (messageDiv) messageDiv.innerText = "Caricamento...";
+
+        const email = (document.getElementById("email") as HTMLInputElement)
+            .value;
+        const password = (
+            document.getElementById("password") as HTMLInputElement
+        ).value;
+
+        if (isSignUp) {
+            console.log("Tentativo di registrazione per:", email);
+            const { data, error } = await supabase.auth.signUp({
+                email,
+                password,
+            });
+            if (error) {
+                console.error("Errore registrazione:", error.message);
+                if (messageDiv) messageDiv.innerText = error.message;
+            } else {
+                console.log("Registrazione avvenuta:", data);
+                if (messageDiv)
+                    messageDiv.innerText =
+                        "Controlla la tua email per confermare la registrazione!";
+            }
+        } else {
+            console.log("Tentativo di accesso per:", email);
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+            if (error) {
+                console.error("Errore accesso:", error.message);
+                if (messageDiv) messageDiv.innerText = error.message;
+            } else {
+                console.log("Accesso eseguito:", data);
+                if (messageDiv) messageDiv.innerText = "Accesso effettuato!";
+                checkUser();
+            }
+        }
+    });
+
+    // Logout
+    signOutBtn?.addEventListener("click", async () => {
+        await supabase.auth.signOut();
+        checkUser();
+    });
+
+    // Controllo Stato Utente
+    async function checkUser() {
+        const {
+            data: { user },
+        } = await supabase.auth.getUser();
+        if (user) {
+            authContainer?.classList.add("hidden");
+            profileContainer?.classList.remove("hidden");
+            if (userEmail) userEmail.innerText = user.email || "";
+        } else {
+            authContainer?.classList.remove("hidden");
+            profileContainer?.classList.add("hidden");
+        }
+    }
+
+    checkUser();
+</script>
+
+<style>
+    .auth-container {
+        max-width: 400px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        color: #333;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+        text-align: left;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+    }
+
+    button {
+        width: 100%;
+        padding: 1rem;
+        background: #fb6068;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-top: 1rem;
+    }
+
+    .toggle-text {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .message {
+        margin-top: 1rem;
+        color: #fb6068;
+        font-size: 0.9rem;
+    }
+</style>
