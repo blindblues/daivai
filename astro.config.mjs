@@ -9,4 +9,8 @@ export default defineConfig({
   site: 'https://blindblues.github.io',
   base: '/daivai',
   integrations: [react(), keystatic()],
+  output: 'static',
+  build: {
+    format: 'directory'
+  }
 });
