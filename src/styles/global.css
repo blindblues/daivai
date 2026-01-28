@@ -11,6 +11,31 @@
     font-display: swap;
 }
 
+/* Font Face per Gotham */
+@font-face {
+    font-family: 'Gotham';
+    src: url('/daivai/fonts/Gotham-Font/GothamBook.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gotham';
+    src: url('/daivai/fonts/Gotham-Font/GothamMedium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gotham';
+    src: url('/daivai/fonts/Gotham-Font/GothamBold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* Font Face per Integral CF */
 @font-face {
     font-family: 'Integral CF';
@@ -505,10 +530,11 @@ footer {
     bottom: -20vh;
     left: 50%;
     transform: translateX(-50%) scale(0.8);
+    letter-spacing: 2px;
     color: #f5e590;
-    font-size: 4rem;
-    font-weight: 800;
-    font-family: 'SCHABO-Condensed', sans-serif;
+    font-size: 8rem;
+    font-weight: 500;
+    font-family: 'Schabo', 'Bebas Neue', 'Anton', 'Whyte', 'Arial', sans-serif;
     text-transform: uppercase;
     z-index: 4;
     pointer-events: none;
@@ -804,14 +830,20 @@ section {
     padding: 0;
     margin-bottom: 0;
     /* Remove margin between sections */
-    overflow-x: hidden;
-    /* Prevent horizontal scroll */
+    overflow: hidden;
+    /* Prevent all scrolling */
 
     /* Sticky Effect */
     position: sticky;
 }
 
-.scroll-section h2.schabo-text {
+.scroll-section .content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.scroll-section .content h2.schabo-text {
 font-size: 50vw !important;
 font-weight: 500;
 color: #333;
@@ -825,11 +857,11 @@ padding: 0;
 line-height: 1;
 position: absolute;
 left: 50%;
-top: 50%;
+top: 25%;
 transform: translate(-50%, -50%);
 }
 
-.schabo-text-small {
+.scroll-section .content .schabo-text-small {
 font-family: 'Schabo', 'Bebas Neue', 'Anton', 'Whyte', 'Arial', sans-serif !important;
 color: #FB6068 !important;
 font-size: 33vw !important;
@@ -844,8 +876,27 @@ padding: 0;
 line-height: 1;
 position: absolute;
 left: 50%;
-top: calc(50% + 17vw);
+top: calc(25% + 17vw);
 transform: translateX(-50%);
+}
+
+.scroll-section .content .schabo-description {
+font-family: 'Gotham', 'Arial', sans-serif;
+color: #FB6068;
+font-size: 1.8rem;
+font-weight: 700;
+text-align: left;
+line-height: 1.4;
+display: block;
+width: 75vw;
+max-width: 75vw;
+margin: 0 auto;
+padding: 0;
+position: absolute;
+left: 50%;
+top: calc(30% + 45vw);
+transform: translateX(-50%);
+overflow: hidden;
 }
 
 .schabo-text {
@@ -876,32 +927,48 @@ color: #FB6068 !important;
 
 /* Visible State */
 .animate-on-scroll.visible {
-    opacity: 1;
-    transform: none;
+opacity: 1;
+transform: none;
 }
 
 /* Mobile Optimization for Scroll Sections */
 @media (max-width: 768px) {
-    .scroll-section {
-        height: 100vh;
-        /* Ensure full height on mobile too */
-        padding: 0 1.5rem;
-    }
+.scroll-section {
+height: 100vh;
+/* Ensure full height on mobile too */
+padding: 0 1.5rem;
+}
 
-    .scroll-section h2 {
-        font-size: 2.5rem;
-        /* Smaller font on mobile */
-        letter-spacing: 1px;
-    }
+.scroll-section h2 {
+font-size: 2.5rem;
+/* Smaller font on mobile */
+letter-spacing: 1px;
+}
 
-    /* Simplify animations on mobile to prevent overflow/layout issues */
-    .animate-on-scroll.slide-right {
-        transform: translateX(-30px);
-        /* Reduced slide distance */
-    }
+/* Keep same font sizes, moderate spacing on mobile */
+.scroll-section .content h2.schabo-text {
+font-size: 50vw !important;
+top: 20%;
+}
 
-    .animate-on-scroll.fade-up {
-        transform: translateY(30px);
-        /* Reduced slide distance */
-    }
+.scroll-section .content .schabo-text-small {
+font-size: 33vw !important;
+top: calc(20% + 20vw);
+}
+
+.scroll-section .content .schabo-description {
+font-size: 1.4rem;
+top: calc(25% + 50vw);
+}
+
+/* Simplify animations on mobile to prevent overflow/layout issues */
+.animate-on-scroll.slide-right {
+transform: translateX(-30px);
+/* Reduced slide distance */
+}
+
+.animate-on-scroll.fade-up {
+transform: translateY(30px);
+/* Reduced slide distance */
+}
 }

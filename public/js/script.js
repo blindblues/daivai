@@ -131,7 +131,7 @@ function initUniscitiAnimation() {
         }
         
         // Applica l'animazione
-        const bottomValue = -20 + (25 * animationProgress);
+        const bottomValue = -20 + (20 * animationProgress);
         const scale = 0.8 + (0.2 * animationProgress);
         
         // Applica le trasformazioni in modo continuo
