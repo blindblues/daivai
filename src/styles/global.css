@@ -508,6 +508,7 @@ footer {
     color: #f5e590;
     font-size: 4rem;
     font-weight: 800;
+    font-family: 'SCHABO-Condensed', sans-serif;
     text-transform: uppercase;
     z-index: 4;
     pointer-events: none;
