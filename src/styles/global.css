@@ -1,5 +1,16 @@
 /* Stili principali del sito */
 
+/* Font Face per Schabo */
+@font-face {
+    font-family: 'Schabo';
+    src: url('/daivai/fonts/Schabo/SCHABO-Condensed.woff2') format('woff2'),
+        url('/daivai/fonts/Schabo/SCHABO-Condensed.woff') format('woff'),
+        url('/daivai/fonts/Schabo/SCHABO-Condensed.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* Font Face per Integral CF */
 @font-face {
     font-family: 'Integral CF';
@@ -224,7 +235,8 @@
 
 html,
 body {
-    /* overflow-x: hidden; <-- Removed AGAIN because it breaks sticky scroll */
+    /* Prevent horizontal scroll */
+    overflow-x: hidden;
     /* Prevent horizontal scroll handled by width: 100% now */
     width: 100%;
     max-width: 100%;
@@ -783,29 +795,61 @@ section {
 /* Scroll Sections */
 /* Scroll Sections */
 .scroll-section {
-    min-height: 100vh;
+    height: 100vh;
     /* Full screen height */
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 2rem;
-    overflow: hidden;
+    padding: 0;
     margin-bottom: 0;
     /* Remove margin between sections */
+    overflow-x: hidden;
+    /* Prevent horizontal scroll */
 
     /* Sticky Effect */
     position: sticky;
-    top: 0;
-    z-index: 10;
-    /* Ensure they sit on top of standard content/previous sections */
 }
 
-.scroll-section h2 {
-    font-size: 4rem;
-    font-weight: 900;
-    color: #333;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+.scroll-section h2.schabo-text {
+font-size: 50vw !important;
+font-weight: 500;
+color: #333;
+text-transform: uppercase;
+letter-spacing: 5px;
+display: block;
+width: 75vw;
+max-width: 75vw;
+margin: 0 auto;
+padding: 0;
+line-height: 1;
+position: absolute;
+left: 50%;
+top: 50%;
+transform: translate(-50%, -50%);
+}
+
+.schabo-text-small {
+font-family: 'Schabo', 'Bebas Neue', 'Anton', 'Whyte', 'Arial', sans-serif !important;
+color: #FB6068 !important;
+font-size: 33vw !important;
+font-weight: 500;
+text-transform: uppercase;
+letter-spacing: 3px;
+display: block;
+width: 75vw;
+max-width: 75vw;
+margin: 0 auto;
+padding: 0;
+line-height: 1;
+position: absolute;
+left: 50%;
+top: calc(50% + 17vw);
+transform: translateX(-50%);
+}
+
+.schabo-text {
+font-family: 'Schabo', 'Bebas Neue', 'Anton', 'Whyte', 'Arial', sans-serif !important;
+color: #FB6068 !important;
 }
 
 /* Base animation state */
@@ -838,7 +882,7 @@ section {
 /* Mobile Optimization for Scroll Sections */
 @media (max-width: 768px) {
     .scroll-section {
-        min-height: 100vh;
+        height: 100vh;
         /* Ensure full height on mobile too */
         padding: 0 1.5rem;
     }
