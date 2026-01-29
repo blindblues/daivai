@@ -1,0 +1,53 @@
+---
+// Rimosso import di Auth component perché non serve più qui
+import { supabase } from "../../lib/supabase"; // Opzionale se volessimo controllare lo stato qui, ma meglio lasciarlo semplice
+---
+
+<div class="nav-auth-wrapper">
+    <!-- Icona Profilo con Link Diretto -->
+    <a href="/daivai/login" class="profile-btn" aria-label="Area Personale">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle
+                cx="12"
+                cy="7"
+                r="4"></circle></svg
+        >
+    </a>
+</div>
+
+<style>
+    .nav-auth-wrapper {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+
+    .profile-btn {
+        background: #fb6068;
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(251, 96, 104, 0.3);
+        transition: transform 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none; /* Importante per il link */
+    }
+
+    .profile-btn:hover {
+        transform: scale(1.1);
+    }
+</style>

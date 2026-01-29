@@ -1,24 +1,25 @@
 ---
 import "../styles/global.css";
-import EventCard from "../components/EventCard.astro";
-import NavbarAuth from "../components/NavbarAuth.astro";
+import EventCard from "../components/ui/EventCard.astro";
+import NavbarAuth from "../components/ui/NavbarAuth.astro";
+import { getCollection } from "astro:content";
 
 // Static events data for static build
 const allEvents = [
-  {
-    data: {
-      title: "Evento 1",
-      date: "2024-02-01",
-      description: "Descrizione evento di esempio"
-    }
-  },
-  {
-    data: {
-      title: "Evento 2", 
-      date: "2024-02-15",
-      description: "Altro evento di esempio"
-    }
-  }
+    {
+        data: {
+            title: "Evento 1",
+            date: "2024-02-01",
+            description: "Descrizione evento di esempio",
+        },
+    },
+    {
+        data: {
+            title: "Evento 2",
+            date: "2024-02-15",
+            description: "Altro evento di esempio",
+        },
+    },
 ];
 ---
 
