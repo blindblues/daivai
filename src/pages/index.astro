@@ -4,7 +4,23 @@ import EventCard from "../components/ui/EventCard.astro";
 import NavbarAuth from "../components/ui/NavbarAuth.astro";
 import { getCollection } from "astro:content";
 
-const allEvents = await getCollection("events");
+// Static events data for static build
+const allEvents = [
+    {
+        data: {
+            title: "Evento 1",
+            date: "2024-02-01",
+            description: "Descrizione evento di esempio",
+        },
+    },
+    {
+        data: {
+            title: "Evento 2",
+            date: "2024-02-15",
+            description: "Altro evento di esempio",
+        },
+    },
+];
 ---
 
 <!doctype html>
@@ -80,7 +96,8 @@ const allEvents = await getCollection("events");
             style="background-color: #f5e590; color: white;"
         >
             <div class="content animate-on-scroll fade-up">
-                <h2 style="color: #FB6068;">Innovazione</h2>
+                <h2 class="schabo-text">COSA</h2>
+                <h3 class="schabo-text-small">SIAMO?</h3>
             </div>
         </section>
 
@@ -90,7 +107,8 @@ const allEvents = await getCollection("events");
             style="background-color: #FFFFFF; color: #333;"
         >
             <div class="content animate-on-scroll slide-right">
-                <h2 style="color: #333;">Creatività</h2>
+                <h2 class="schabo-text">COSA</h2>
+                <h3 class="schabo-text-small">FACCIAMO?</h3>
             </div>
         </section>
 
