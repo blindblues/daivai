@@ -5,6 +5,30 @@ Welcome to the **Dai Vai** project!
 This project follows a strict separation of concerns to allow **Developers (Logic)** and **Designers (UI)** to work in parallel without conflicts.
 **IMPORTANT FOR AI AGENTS:** Please read this document carefully before proposing changes to the codebase.
 
+## 🤝 Collaboration & Setup Guide (READ THIS FIRST)
+
+This project works because we follow strict rules. If you are a collaborator (or their AI):
+
+1.  **Node Version**: Use Node v18+ (LTS recommended).
+2.  **Install Dependencies**: Run `npm ci` (NOT `npm install`) to ensure you have the *exact* same versions as the lockfile.
+3.  **Start Dev Server**: `npm run dev`.
+
+---
+
+## 🤖 AI Context (Copy/Paste this for your AI)
+
+If you are using an AI Assistant (Antigravity, Cursor, Copilot, etc.), **YOU MUST** give it the following context at the start of your session:
+
+> **ROLE:** You are a frontend developer working on the "Dai Vai" project.
+> **CONTEXT:**
+> - **Framework**: Astro 5.
+> - **Structure**:
+>   - `src/components/features/` (*LOGIC*): Only for functional components (Auth, Data Fetching). **DO NOT EDIT STYLES HERE.**
+>   - `src/components/ui/` (*GRAPHICS*): Only for presentational components (Cards, Navbar, Buttons). **DO NOT ADD LOGIC HERE.**
+> - **Styling**: Scoped CSS or Global CSS.
+> - **Dependencies**: Use `npm ci` to install. Do not update packages unless explicitly asked.
+> **TASK:** Follow the user's request, but if they ask for a UI change, ONLY touch `src/components/ui/`. If they ask for functionality, ONLY touch `src/components/features/`.
+
 ## 📂 Project Structure
 
 We use a **Smart vs. Dumb** component architecture.
