@@ -1,0 +1,63 @@
+---
+import Auth from "../components/features/Auth.astro";
+import NavbarAuth from "../components/ui/NavbarAuth.astro";
+import "../styles/global.css";
+---
+
+<html lang="it">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Accedi - Dai Vai</title>
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    </head>
+    <body>
+        <main class="login-page">
+            <div class="back-link">
+                <!-- Usa ./ per tornare alla root relativa del progetto -->
+                <a href="./">← Torna alla Home</a>
+            </div>
+            <Auth />
+        </main>
+    </body>
+</html>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fa;
+        font-family: inherit;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .login-page {
+        width: 100%;
+        max-width: 450px;
+        padding: 1rem;
+    }
+
+    .back-link {
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .back-link a {
+        color: #666;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .back-link a:hover {
+        color: #fb6068;
+    }
+
+    /* Override Auth container style for page context if needed */
+    :global(.auth-container) {
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08) !important;
+    }
+</style>

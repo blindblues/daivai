@@ -1,7 +1,7 @@
 ---
 import "../styles/global.css";
-import EventCard from "../components/EventCard.astro";
-import NavbarAuth from "../components/NavbarAuth.astro";
+import EventCard from "../components/ui/EventCard.astro";
+import NavbarAuth from "../components/ui/NavbarAuth.astro";
 import { getCollection } from "astro:content";
 
 const allEvents = await getCollection("events");

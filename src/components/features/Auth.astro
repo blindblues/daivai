@@ -40,7 +40,7 @@
 </div>
 
 <script>
-    import { supabase } from "../lib/supabase";
+    import { supabase } from "../../lib/supabase";
 
     const form = document.getElementById(
         "supabase-auth-form",
@@ -90,9 +90,13 @@
                 if (messageDiv) messageDiv.innerText = error.message;
             } else {
                 console.log("Registrazione avvenuta:", data);
-                if (messageDiv)
+                if (messageDiv) {
+                    messageDiv.classList.add("success");
                     messageDiv.innerText =
-                        "Controlla la tua email per confermare la registrazione!";
+                        "Registrazione avvenuta con successo! Accesso in corso...";
+                }
+                // Verifica immediata dello stato utente per switchare UI
+                checkUser();
             }
         } else {
             console.log("Tentativo di accesso per:", email);
@@ -189,5 +193,9 @@
         margin-top: 1rem;
         color: #fb6068;
         font-size: 0.9rem;
+    }
+
+    .message.success {
+        color: #28a745;
     }
 </style>
