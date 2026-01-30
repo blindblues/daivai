@@ -1,26 +1,6 @@
 ---
 import "../styles/global.css";
-import EventCard from "../components/ui/EventCard.astro";
 import NavbarAuth from "../components/ui/NavbarAuth.astro";
-import { getCollection } from "astro:content";
-
-// Static events data for static build
-const allEvents = [
-    {
-        data: {
-            title: "Evento 1",
-            date: "2024-02-01",
-            description: "Descrizione evento di esempio",
-        },
-    },
-    {
-        data: {
-            title: "Evento 2",
-            date: "2024-02-15",
-            description: "Altro evento di esempio",
-        },
-    },
-];
 ---
 
 <!doctype html>
@@ -60,6 +40,14 @@ const allEvents = [
             href="/daivai/images/DaiVai.svg"
         />
 
+        <link
+            rel="preload"
+            href="/daivai/fonts/condenso/Condenso-Regular.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin
+        />
+
         <!-- Meta tag per il theme color -->
         <meta name="theme-color" content="#FB6068" />
 
@@ -90,138 +78,82 @@ const allEvents = [
             </div>
         </main>
 
-        <section
-            id="scroll-1"
-            class="scroll-section"
-            style="background-color: #f5e590; color: white;"
-        >
-            <div class="content animate-on-scroll fade-up">
-                <h2 class="schabo-text">COSA</h2>
-                <h3 class="schabo-text-small">SIAMO?</h3>
-                <p class="schabo-description">
-                    Siamo un'associazione culturale no-profit di giovani intenzionati a creare un impatto positivo sul territorio veronese attraverso lo sport.
-                </p>
+        <section class="viewport-section">
+            <div class="text-gradient-wrapper">
+                <h2 class="condenso-text">COSA</h2>
+                <h2 class="condenso-text">SIAMO?</h2>
             </div>
         </section>
-
-        <section
-            id="scroll-2"
-            class="scroll-section"
-            style="background-color: #FFFFFF; color: #333;"
-        >
-            <div class="content animate-on-scroll slide-right">
-                <h2 class="schabo-text">COSA</h2>
-                <h3 class="schabo-text-small">FACCIAMO?</h3>
-            </div>
-        </section>
-
-        <section
-            id="scroll-3"
-            class="scroll-section"
-            style="background-color: #FB6068; color: white;"
-        >
-            <div class="content animate-on-scroll zoom-in">
-                <h2 style="color: white;">Tecnologia</h2>
-            </div>
-        </section>
-
-        <section
-            id="about"
-            class="scroll-section"
-            style="background-color: #FFFFFF; color: #333;"
-        >
-            <div class="content animate-on-scroll fade-up">
-                <div class="container">
-                    <h2>CHI SIAMO</h2>
-                    <p>
-                        Siamo un team dedicato a fornire soluzioni innovative e
-                        di alta qualità per i nostri clienti. La nostra missione
-                        è trasformare le idee in realtà attraverso creatività e
-                        competenza tecnica.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <section
-            id="events"
-            class="scroll-section"
-            style="background-color: #FB6068; color: white;"
-        >
-            <div class="content animate-on-scroll zoom-in">
-                <div class="container">
-                    <h2 style="color: white;">PROSSIMI EVENTI</h2>
-                    <div class="events-grid">
-                        {
-                            allEvents.map((event) => (
-                                <EventCard
-                                    title={event.data.title}
-                                    date={event.data.date}
-                                    description={event.data.description}
-                                />
-                            ))
-                        }
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <footer>
-            <div class="container">
-                <p>&copy; 2024 Nome Sito. Tutti i diritti riservati.</p>
-                <p>
-                    <a href="#hero">Home</a>
-                </p>
-            </div>
-        </footer>
 
         <script src="/daivai/js/script.js" is:inline></script>
         <script>
-            import Lenis from "lenis";
+            // Auto-resize Condenso text to 75% viewport width
+            function resizeCondensoText() {
+                const wrapper = document.querySelector(
+                    ".text-gradient-wrapper",
+                );
+                const elements = document.querySelectorAll(".condenso-text");
+                // Use document.documentElement.clientWidth for viewport width excluding scrollbar
+                const viewportWidth = document.documentElement.clientWidth;
+                const targetWidth = viewportWidth * 0.75;
 
-            // Initialize Lenis
-            const lenis = new Lenis({
-                duration: 1.2,
-                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-                orientation: "vertical",
-                gestureOrientation: "vertical",
-                smoothWheel: true,
-                wheelMultiplier: 1,
-                syncTouch: false,
-                touchMultiplier: 2,
-            });
+                // Calculate total height of the wrapper for the gradient
+                let wrapperHeight = 0;
+                let wrapperTop = 0;
 
-            // Get scroll value for raf context or just use auto raf
-            function raf(time: number) {
-                lenis.raf(time);
-                requestAnimationFrame(raf);
-            }
+                if (wrapper instanceof HTMLElement) {
+                    wrapperHeight = wrapper.offsetHeight;
+                    wrapperTop = wrapper.getBoundingClientRect().top;
+                }
 
-            requestAnimationFrame(raf);
+                elements.forEach((el) => {
+                    if (!(el instanceof HTMLElement)) return;
 
-            // Keep IntersectionObserver for animations
-            const observerOptions = {
-                root: null,
-                rootMargin: "0px",
-                threshold: 0.3,
-            };
+                    // Reset to a known base size to measure relative width
+                    // Using a large size minimizes rounding errors
+                    el.style.fontSize = "100px";
+                    el.style.width = "fit-content";
+                    el.style.maxWidth = "none"; // CRITICAL: prevent capping by CSS
 
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add("visible");
-                    } else {
-                        // Remove class when element leaves viewport to "rewind" animation for re-entry
-                        entry.target.classList.remove("visible");
+                    const currentWidth = el.offsetWidth;
+
+                    if (currentWidth > 0) {
+                        const ratio = targetWidth / currentWidth;
+                        const newFontSize = 100 * ratio;
+                        el.style.fontSize = `${newFontSize}px`;
+                        // Remove width override so CSS can re-apply if needed, though font-size drives it now
+                        el.style.width = "";
+                        el.style.maxWidth = "";
+                    }
+
+                    // Apply scoped gradient logic
+                    if (wrapper && wrapperHeight > 0) {
+                        const elTop = el.getBoundingClientRect().top;
+                        const relativeTop = elTop - wrapperTop;
+
+                        // Set the background size to the total height of the wrapper
+                        el.style.backgroundSize = `100% ${wrapperHeight}px`;
+
+                        // Offset the background position so it aligns with the wrapper's top
+                        el.style.backgroundPosition = `0px -${relativeTop}px`;
                     }
                 });
-            }, observerOptions);
+            }
 
-            document
-                .querySelectorAll(".animate-on-scroll")
-                .forEach((element) => {
-                    observer.observe(element);
+            window.addEventListener("resize", resizeCondensoText);
+
+            // Ensure Condenso font is loaded before resizing to avoid incorrect measurements (FOUT)
+            if (document.fonts) {
+                // Wait for the specific font to be loaded
+                document.fonts.load("1em Condenso").then(() => {
+                    resizeCondensoText();
                 });
+                // Also listen to general ready event as fallback
+                document.fonts.ready.then(resizeCondensoText);
+            } else {
+                // Flash of unstyled text might occur in older browsers, but we try anyway
+                window.addEventListener("load", resizeCondensoText);
+            }
         </script>
     </body>
 </html>

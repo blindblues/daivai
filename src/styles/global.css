@@ -11,7 +11,17 @@
     font-display: swap;
 }
 
-/* Font Face per Gotham */
+/* Font Face per Condenso */
+@font-face {
+    font-family: 'Condenso';
+    src: url('/daivai/fonts/condenso/Condenso-Regular.woff2') format('woff2'),
+        url('/daivai/fonts/condenso/Condenso-Regular.woff') format('woff'),
+        url('/daivai/fonts/condenso/Condenso-Regular.ttf') format('truetype'),
+        url('/daivai/fonts/condenso/Condenso-Regular.svg#Condenso-Regular') format('svg');
+    font-weight: 400;
+    font-style: normal;
+}
+
 @font-face {
     font-family: 'Gotham';
     src: url('/daivai/fonts/Gotham-Font/GothamBook.ttf') format('truetype');
@@ -273,7 +283,7 @@ body {
     color: #333;
     margin: 0;
     padding: 0;
-    background-color: #f5e590;
+    background-color: #FB6068;
 }
 
 /* Applica Whyte a titoli e paragrafi */
@@ -533,7 +543,7 @@ footer {
     letter-spacing: 2px;
     color: #f5e590;
     font-size: 8rem;
-    font-weight: 500;
+    font-weight: 400;
     font-family: 'Schabo', 'Bebas Neue', 'Anton', 'Whyte', 'Arial', sans-serif;
     text-transform: uppercase;
     z-index: 4;
@@ -632,174 +642,7 @@ section {
     /* Remove margin */
 }
 
-/* Sezione Chi Siamo */
-#about {
-    /* Background handled by inline style for alternating effect, or keep gradient if preferred but ensure full height / width */
-    /* Remove margins to fit sticky stack */
-    margin: 0;
-    padding: 0 2rem;
-    /* Match other scroll sections */
-    border-radius: 0;
-    /* Remove radius for full screen effect */
-    background: none;
-    /* Let inline style control or set specific one */
-}
 
-#about::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(245, 229, 144, 0.1) 0%, transparent 70%);
-    animation: float 20s ease-in-out infinite;
-}
-
-#about .container {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-#about h2 {
-    font-size: 3rem;
-    font-weight: 900;
-    color: #333;
-    /* Default dark text since bg is white */
-    margin-bottom: 2rem;
-    position: relative;
-    display: inline-block;
-}
-
-#about h2::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 4px;
-    background: linear-gradient(90deg, #FB6068, #f5e590);
-    border-radius: 2px;
-}
-
-#about p {
-    font-size: 1.2rem;
-    line-height: 1.8;
-    font-weight: 700;
-    color: #333333;
-    margin-bottom: 2rem;
-    backdrop-filter: blur(5px);
-    background: rgba(255, 255, 255, 0.6);
-    padding: 2rem;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-/* Sezione Eventi */
-#events {
-    margin: 0;
-    padding: 0 2rem;
-    border-radius: 0;
-    background: none;
-}
-
-#events .container {
-    text-align: center;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-#events h2 {
-    font-size: 3rem;
-    font-weight: 900;
-    color: white;
-    /* White text on red bg */
-    margin-bottom: 3rem;
-    position: relative;
-    display: inline-block;
-}
-
-#events h2::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 4px;
-    background: linear-gradient(90deg, #f5e590, #FB6068);
-    border-radius: 2px;
-}
-
-.events-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.event-card {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    padding: 2.5rem;
-    border-radius: 25px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(251, 96, 104, 0.1);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-.event-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #FB6068, #f5e590);
-    transform: scaleX(0);
-    transition: transform 0.4s ease;
-}
-
-.event-card:hover {
-    transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 15px 40px rgba(251, 96, 104, 0.2);
-}
-
-.event-card:hover::before {
-    transform: scaleX(1);
-}
-
-.event-card h3 {
-    color: #333;
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-    font-weight: 600;
-}
-
-.event-card .date {
-    color: #FB6068;
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin-bottom: 1.5rem;
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background: rgba(251, 96, 104, 0.1);
-    border-radius: 20px;
-    border: 1px solid rgba(251, 96, 104, 0.2);
-}
-
-.event-card p {
-    color: #555;
-    line-height: 1.6;
-    font-size: 1rem;
-}
 
 @keyframes float {
 
@@ -819,156 +662,65 @@ section {
 
 /* Stili per la sezione eventi - rimossi duplicati */
 
-/* Scroll Sections */
-/* Scroll Sections */
-.scroll-section {
+
+.viewport-section {
+    width: 100vw;
     height: 100vh;
-    /* Full screen height */
+    background: linear-gradient(to bottom, #FB6068, 90%, #f5e590);
+    /* Gradient from Red to Yellow */
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
-    padding: 0;
-    margin-bottom: 0;
-    /* Remove margin between sections */
-    overflow: hidden;
-    /* Prevent all scrolling */
-
-    /* Sticky Effect */
-    position: sticky;
-}
-
-.scroll-section .content {
+    padding-top: 1vh;
+    /* Reduced top padding to move text higher */
     position: relative;
-    width: 100%;
-    height: 100%;
+    overflow: hidden;
 }
 
-.scroll-section .content h2.schabo-text {
-font-size: 50vw !important;
-font-weight: 500;
-color: #333;
-text-transform: uppercase;
-letter-spacing: 5px;
-display: block;
-width: 75vw;
-max-width: 75vw;
-margin: 0 auto;
-padding: 0;
-line-height: 1;
-position: absolute;
-left: 50%;
-top: 25%;
-transform: translate(-50%, -50%);
+.condenso-text {
+    font-family: 'Condenso', 'Bebas Neue', 'Anton', 'Whyte', 'Arial', sans-serif !important;
+    /* font-size handled by JS */
+    margin: 0;
+    padding: 0;
+    /* line-height: 1 prevents clipping, negative margin restores tight spacing */
+    line-height: 1;
+    margin-bottom: -0.32em;
+    padding-top: 0.1em;
+    white-space: nowrap;
+
+    /* Continuous Gradient text effect */
+    background: linear-gradient(to top, #FB6068, 50%, #f5e590);
+    background-repeat: no-repeat;
+    /* background-attachment removed - handled by JS for scoped effect */
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 400;
+    font-style: normal;
+    -webkit-text-stroke: 0.6px #f5e590;
 }
 
-.scroll-section .content .schabo-text-small {
-font-family: 'Schabo', 'Bebas Neue', 'Anton', 'Whyte', 'Arial', sans-serif !important;
-color: #FB6068 !important;
-font-size: 33vw !important;
-font-weight: 500;
-text-transform: uppercase;
-letter-spacing: 3px;
-display: block;
-width: 75vw;
-max-width: 75vw;
-margin: 0 auto;
-padding: 0;
-line-height: 1;
-position: absolute;
-left: 50%;
-top: calc(25% + 17vw);
-transform: translateX(-50%);
+.text-gradient-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Removed background causing invisibility */
 }
 
-.scroll-section .content .schabo-description {
-font-family: 'Gotham', 'Arial', sans-serif;
-color: #FB6068;
-font-size: 1.8rem;
-font-weight: 700;
-text-align: left;
-line-height: 1.4;
-display: block;
-width: 75vw;
-max-width: 75vw;
-margin: 0 auto;
-padding: 0;
-position: absolute;
-left: 50%;
-top: calc(30% + 45vw);
-transform: translateX(-50%);
-overflow: hidden;
+.viewport-section h2.condenso-text {
+    position: relative;
+    /* Removed absolute positioning */
+    /* Width will be set by JS logic targeting .condenso-text */
 }
 
-.schabo-text {
-font-family: 'Schabo', 'Bebas Neue', 'Anton', 'Whyte', 'Arial', sans-serif !important;
-color: #FB6068 !important;
-}
+/* Scroll Sections */
+/* Scroll Sections */
+
+
+
 
 /* Base animation state */
-.animate-on-scroll {
-    opacity: 0;
-    transition: all 1s ease-out;
-}
 
-/* Fade Up */
-.animate-on-scroll.fade-up {
-    transform: translateY(50px);
-}
-
-/* Slide Right */
-.animate-on-scroll.slide-right {
-    transform: translateX(-100px);
-}
-
-/* Zoom In */
-.animate-on-scroll.zoom-in {
-    transform: scale(0.5);
-}
-
-/* Visible State */
-.animate-on-scroll.visible {
-opacity: 1;
-transform: none;
-}
 
 /* Mobile Optimization for Scroll Sections */
-@media (max-width: 768px) {
-.scroll-section {
-height: 100vh;
-/* Ensure full height on mobile too */
-padding: 0 1.5rem;
-}
-
-.scroll-section h2 {
-font-size: 2.5rem;
-/* Smaller font on mobile */
-letter-spacing: 1px;
-}
-
-/* Keep same font sizes, moderate spacing on mobile */
-.scroll-section .content h2.schabo-text {
-font-size: 50vw !important;
-top: 20%;
-}
-
-.scroll-section .content .schabo-text-small {
-font-size: 33vw !important;
-top: calc(20% + 20vw);
-}
-
-.scroll-section .content .schabo-description {
-font-size: 1.4rem;
-top: calc(25% + 50vw);
-}
-
-/* Simplify animations on mobile to prevent overflow/layout issues */
-.animate-on-scroll.slide-right {
-transform: translateX(-30px);
-/* Reduced slide distance */
-}
-
-.animate-on-scroll.fade-up {
-transform: translateY(30px);
-/* Reduced slide distance */
-}
-}
