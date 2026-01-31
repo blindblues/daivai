@@ -625,6 +625,7 @@ section {
 #hero-overlay {
     padding: 0 !important;
     margin-bottom: 0 !important;
+    overflow: hidden !important;
     /* Remove margin */
 }
 
@@ -844,15 +845,11 @@ section {
     z-index: 4;
     pointer-events: none;
     white-space: nowrap;
-    max-width: 75vw;
 
     /* Override condenso-text gradient styles */
     background: none !important;
-    -webkit-text-stroke: 0 !important;
-    -webkit-background-clip: border-box !important;
     background-clip: border-box !important;
     -webkit-background-clip: border-box !important;
-    background-clip: border-box !important;
     color: var(--secondary-color) !important;
 }
 

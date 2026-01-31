@@ -132,6 +132,7 @@ function initUniscitiAnimation() {
 
         // Applica l'animazione - range: da -30vh a -5vh
         const bottomValue = -30 + (25 * animationProgress);
+        // Start smaller and grow slightly
         const scale = 0.8 + (0.2 * animationProgress);
 
         // Applica le trasformazioni in modo continuo
@@ -234,11 +235,13 @@ function resizeCondensoText() {
 
         // Save original styles to restore later if needed
         const originalWhiteSpace = el.style.whiteSpace;
+        const originalTransform = el.style.transform;
 
-        // Force single line for measurement
+        // Force single line for measurement and remove transform
         el.style.whiteSpace = "nowrap";
         el.style.width = "auto";
         el.style.display = "inline-block";
+        el.style.transform = "none"; // CRITICAL: measure without scale
         el.style.fontSize = "100px"; // Baseline for calculation
 
         const currentWidth = el.getBoundingClientRect().width;
@@ -253,6 +256,7 @@ function resizeCondensoText() {
             el.style.whiteSpace = originalWhiteSpace;
             el.style.width = "";
             el.style.display = "";
+            el.style.transform = originalTransform;
         }
     });
 }
