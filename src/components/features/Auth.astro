@@ -27,7 +27,8 @@
             <button type="submit" id="auth-submit">Accedi</button>
         </form>
         <p class="toggle-text">
-            Non hai un account? <a href="#" id="toggle-auth">Registrati</a>
+            <span id="toggle-prompt">Non hai un account?</span>
+            <a href="#" id="toggle-auth">Registrati</a>
         </p>
         <div id="auth-message" class="message"></div>
     </div>
@@ -48,6 +49,7 @@
     const title = document.getElementById("auth-title");
     const submitBtn = document.getElementById("auth-submit");
     const toggleBtn = document.getElementById("toggle-auth");
+    const togglePrompt = document.getElementById("toggle-prompt");
     const messageDiv = document.getElementById("auth-message");
     const authContainer = document.getElementById("auth-form");
     const profileContainer = document.getElementById("user-profile");
@@ -64,6 +66,10 @@
         if (title) title.innerText = isSignUp ? "Registrati" : "Accedi";
         if (submitBtn)
             submitBtn.innerText = isSignUp ? "Crea Account" : "Accedi";
+        if (togglePrompt)
+            togglePrompt.innerText = isSignUp
+                ? "Hai un account?"
+                : "Non hai un account?";
         if (toggleBtn) toggleBtn.innerText = isSignUp ? "Accedi" : "Registrati";
         if (messageDiv) messageDiv.innerText = ""; // Pulisce messaggi precedenti
     });
