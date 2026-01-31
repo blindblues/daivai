@@ -212,8 +212,11 @@ function validateContactForm() {
 // RESIZE CONDENSO TEXT
 // ==========================================
 // Auto-resize Condenso text to 75% viewport width
+// ==========================================
+// RESIZE CONDENSO TEXT
+// ==========================================
+// Auto-resize Condenso text to viewport width percentage
 function resizeCondensoText() {
-    const wrapper = document.querySelector(".text-gradient-wrapper");
     const elements = document.querySelectorAll(".condenso-text");
 
     // Check if elements exist to avoid errors
@@ -221,26 +224,35 @@ function resizeCondensoText() {
 
     // Use document.documentElement.clientWidth for viewport width excluding scrollbar
     const viewportWidth = document.documentElement.clientWidth;
-    const targetWidth = viewportWidth * 0.75;
+    // On mobile (less than 768px), take up more space (90%), otherwise 75%
+    const isMobile = viewportWidth < 768;
+    const targetPercentage = isMobile ? 0.9 : 0.75;
+    const targetWidth = viewportWidth * targetPercentage;
 
     elements.forEach((el) => {
         if (!(el instanceof HTMLElement)) return;
 
-        // Reset to a known base size to measure relative width
-        // Using a large size minimizes rounding errors
-        el.style.fontSize = "100px";
-        el.style.width = "fit-content";
-        el.style.maxWidth = "none"; // CRITICAL: prevent capping by CSS
+        // Save original styles to restore later if needed
+        const originalWhiteSpace = el.style.whiteSpace;
 
-        const currentWidth = el.offsetWidth;
+        // Force single line for measurement
+        el.style.whiteSpace = "nowrap";
+        el.style.width = "auto";
+        el.style.display = "inline-block";
+        el.style.fontSize = "100px"; // Baseline for calculation
+
+        const currentWidth = el.getBoundingClientRect().width;
 
         if (currentWidth > 0) {
             const ratio = targetWidth / currentWidth;
-            const newFontSize = 100 * ratio;
+            const newFontSize = 100 * ratio; // 100 * (Target / Current at 100px)
+
             el.style.fontSize = `${newFontSize}px`;
-            // Remove width override so CSS can re-apply if needed
+
+            // Clean up temporary measurement styles
+            el.style.whiteSpace = originalWhiteSpace;
             el.style.width = "";
-            el.style.maxWidth = "";
+            el.style.display = "";
         }
     });
 }
@@ -320,13 +332,31 @@ function initReflectionFix() {
 }
 
 // Initialize new functions
-document.addEventListener("DOMContentLoaded", () => {
+function initScripts() {
+    console.log("Initializing scripts...");
+
+    // Initial run
     resizeCondensoText();
     initReflectionFix();
 
     // Resize events
-    window.addEventListener("resize", resizeCondensoText);
+    window.addEventListener("resize", () => {
+        resizeCondensoText();
+    });
+
+    // Font loading
     if (document.fonts) {
-        document.fonts.ready.then(resizeCondensoText);
+        document.fonts.ready.then(() => {
+            console.log("Fonts loaded, resizing...");
+            resizeCondensoText();
+            // Re-run reflection fix as positions might change
+            setTimeout(initReflectionFix, 100);
+        });
     }
-});
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initScripts);
+} else {
+    initScripts();
+}
