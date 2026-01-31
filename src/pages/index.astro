@@ -71,7 +71,7 @@ import NavbarAuth from "../components/ui/NavbarAuth.astro";
                         alt="Chiodo"
                         class="hero-image"
                     />
-                    <div id="unisciti-text" class="unisciti-text">
+                    <div id="unisciti-text" class="unisciti-text condenso-text">
                         UNISCITI!
                     </div>
                 </section>
@@ -80,10 +80,24 @@ import NavbarAuth from "../components/ui/NavbarAuth.astro";
 
         <section class="viewport-section">
             <div class="text-gradient-wrapper">
-                <h2 class="condenso-text">COSA</h2>
-                <h2 class="condenso-text">SIAMO?</h2>
+                <div class="gradient-text-group">
+                    <h2 class="condenso-text">COSA</h2>
+                    <h2 class="condenso-text">SIAMO?</h2>
+                </div>
+                <img
+                    src="/daivai/images/Freccia.svg"
+                    alt="Freccia giù"
+                    class="arrow-icon"
+                />
+                <p class="info-paragraph">
+                    Siamo un'associazione culturale no-profit di giovani
+                    intenzionati a creare un impatto positivo sul territorio
+                    veronese attraverso lo sport.
+                </p>
             </div>
         </section>
+
+        <section class="viewport-section-mirrored"></section>
 
         <script src="/daivai/js/script.js" is:inline></script>
         <script>
@@ -125,34 +139,49 @@ import NavbarAuth from "../components/ui/NavbarAuth.astro";
                         el.style.width = "";
                         el.style.maxWidth = "";
                     }
-
-                    // Apply scoped gradient logic
-                    if (wrapper && wrapperHeight > 0) {
-                        const elTop = el.getBoundingClientRect().top;
-                        const relativeTop = elTop - wrapperTop;
-
-                        // Set the background size to the total height of the wrapper
-                        el.style.backgroundSize = `100% ${wrapperHeight}px`;
-
-                        // Offset the background position so it aligns with the wrapper's top
-                        el.style.backgroundPosition = `0px -${relativeTop}px`;
-                    }
                 });
             }
 
-            window.addEventListener("resize", resizeCondensoText);
+            // Function to apply gradient based on the text group height
+            function applyGradient() {
+                const textGroup = document.querySelector(
+                    ".gradient-text-group",
+                );
+                const elements = document.querySelectorAll(".condenso-text");
 
-            // Ensure Condenso font is loaded before resizing to avoid incorrect measurements (FOUT)
-            if (document.fonts) {
-                // Wait for the specific font to be loaded
-                document.fonts.load("1em Condenso").then(() => {
-                    resizeCondensoText();
+                if (!(textGroup instanceof HTMLElement)) return;
+
+                const groupHeight = textGroup.offsetHeight;
+                const groupTop = textGroup.getBoundingClientRect().top;
+
+                elements.forEach((el) => {
+                    if (!(el instanceof HTMLElement)) return;
+
+                    const elTop = el.getBoundingClientRect().top;
+                    const relativeTop = elTop - groupTop;
+
+                    // Set the background size to the total height of the group
+                    el.style.backgroundSize = `100% ${groupHeight}px`;
+
+                    // Offset the background position so it aligns with the group's top
+                    el.style.backgroundPosition = `0px -${relativeTop}px`;
                 });
-                // Also listen to general ready event as fallback
-                document.fonts.ready.then(resizeCondensoText);
-            } else {
-                // Flash of unstyled text might occur in older browsers, but we try anyway
-                window.addEventListener("load", resizeCondensoText);
+            }
+
+            window.addEventListener("resize", () => {
+                resizeCondensoText();
+                applyGradient();
+            });
+            window.addEventListener("load", () => {
+                resizeCondensoText();
+                // Small timeout to ensure layout is settled
+                setTimeout(applyGradient, 50);
+            });
+            if (document.fonts) {
+                document.fonts.ready.then(() => {
+                    resizeCondensoText();
+                    setTimeout(applyGradient, 50);
+                });
             }
         </script>
     </body>
