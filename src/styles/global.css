@@ -652,7 +652,7 @@ section {
 .viewport-section {
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(to bottom, #FB6068, 90%, #f5e590);
+    /* background: linear-gradient(to bottom, #FB6068, 90%, #f5e590); */
     /* Gradient from Red to Yellow */
     display: flex;
     flex-direction: column;
@@ -667,7 +667,7 @@ section {
 .viewport-section-mirrored {
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(to bottom, #f5e590, 30%, #FB6068);
+    /* background: linear-gradient(to bottom, #f5e590, 30%, #FB6068); */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -707,6 +707,11 @@ section {
     font-weight: 400;
     font-style: normal;
     -webkit-text-stroke: 0.6px #f5e590;
+}
+
+/* Increased spacing for FACCIAMO section */
+.condenso-text.spaced-title {
+    margin-bottom: -0.28em;
 }
 
 .text-gradient-wrapper {
@@ -833,4 +838,47 @@ section {
     background-position-y: calc(var(--scroll-y, 0) * 1px - var(--element-top, 0) * 1px) !important;
     will-change: background-position;
     /* Optimize performance */
+}
+
+/* Footer Styles */
+.site-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 1rem;
+    padding-bottom: 4rem;
+    background: transparent;
+    min-height: auto;
+    height: auto;
+}
+
+.footer-logo {
+    height: 30px !important;
+    width: auto;
+    max-width: 100%;
+}
+
+.social-icons {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.social-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f5e590;
+    transition: color 0.3s ease, transform 0.2s ease;
+    text-decoration: none;
+}
+
+.social-icons a:hover {
+    transform: scale(1.1);
+}
+
+.social-icons svg {
+    width: 28px;
+    height: 28px;
 }
