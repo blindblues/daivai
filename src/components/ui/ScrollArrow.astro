@@ -1,0 +1,88 @@
+---
+const { class: className } = Astro.props;
+---
+
+<svg
+    id="scroll-arrow"
+    class={`scroll-arrow ${className || ""}`}
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 1920 1920"
+>
+    <defs>
+        <linearGradient id="fill-gradient" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop id="stop-solid" offset="0%" stop-color="#f5e590"></stop>
+            <stop
+                id="stop-transparent"
+                offset="0%"
+                stop-color="#FB6068"
+                stop-opacity="1"></stop>
+        </linearGradient>
+    </defs>
+    <!-- Initial stroke preserved as per original SVG -->
+    <!-- path d copied from original file -->
+    <path
+        class="arrow-path"
+        d="M1086.64,1600.74l427.78-427.99c67.61-69.25,67-180.09-1.44-248.72l-87.68-87.48-314.9,314.9V266.86h-300.76v884.59l-314.9-314.9-87.69,87.48c-69.04,69.25-69.04,181.11,0,250.36l426.35,426.34c69.87,69.87,183.16,69.87,253.23,0Z"
+        fill="url(#fill-gradient)"
+        stroke="#f5e590"
+        stroke-width="25px"></path>
+</svg>
+
+<style>
+    .scroll-arrow {
+        display: block;
+        width: 60px; /* Default width match global.css */
+        height: auto;
+        overflow: visible; /* Ensure stroke isn't clipped */
+    }
+</style>
+
+<script>
+    function initArrowScroll() {
+        const stopSolid = document.getElementById("stop-solid");
+        const stopTransparent = document.getElementById("stop-transparent");
+        const arrowSvg = document.getElementById("scroll-arrow");
+
+        if (!stopSolid || !stopTransparent || !arrowSvg) return;
+
+        const updateGradient = () => {
+            const rect = arrowSvg.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+
+            // Starts filling when arrow enters from bottom (rect.top < windowHeight)
+            // Ends filling when arrow is higher up
+            const start = windowHeight;
+            const end = windowHeight * 0.4;
+
+            // Raw progress calculation without clamping yet
+            const rawProgress = (start - rect.top) / (start - end);
+
+            // Remap 0..1 to -0.5..1.5 (roughly) to ensuring gradient fully exits/enters
+            // Center point of the gradient window
+            const center = rawProgress * 200 - 50;
+
+            // Create soft edge by separating stops
+            const spread = 50; // Half-width of gradient
+
+            const solidOffset = Math.max(0, Math.min(100, center - spread));
+            const transparentOffset = Math.max(
+                0,
+                Math.min(100, center + spread),
+            );
+
+            stopSolid.setAttribute("offset", `${solidOffset}%`);
+            stopTransparent.setAttribute("offset", `${transparentOffset}%`);
+        };
+
+        window.addEventListener("scroll", () => {
+            requestAnimationFrame(updateGradient);
+        });
+
+        // Initial call
+        updateGradient();
+    }
+
+    // Run on load and on Astro page transitions if any
+    initArrowScroll();
+    document.addEventListener("astro:page-load", initArrowScroll);
+</script>
