@@ -130,8 +130,8 @@ function initUniscitiAnimation() {
             animationProgress = Math.max(animationProgress - Math.abs(scrollDelta) * animationSpeed, 0);
         }
 
-        // Applica l'animazione
-        const bottomValue = -20 + (28 * animationProgress);
+        // Applica l'animazione - range: da -30vh a -5vh
+        const bottomValue = -30 + (25 * animationProgress);
         const scale = 0.8 + (0.2 * animationProgress);
 
         // Applica le trasformazioni in modo continuo
