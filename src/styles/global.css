@@ -664,6 +664,28 @@ section {
     overflow: hidden;
 }
 
+/* Combined section for mobile compatibility */
+.viewport-section.combined-section {
+    height: auto;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    overflow: visible;
+}
+
+.section-spacer {
+    margin-top: 8rem;
+}
+
+@media (max-width: 768px) {
+    .section-spacer {
+        margin-top: 6rem;
+    }
+
+    .viewport-section.combined-section {
+        padding: 3rem 1rem;
+    }
+}
+
 .viewport-section-mirrored {
     width: 100vw;
     height: 100vh;

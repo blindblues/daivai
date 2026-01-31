@@ -79,7 +79,7 @@ import ScrollArrow from "../components/ui/ScrollArrow.astro";
             </div>
         </main>
 
-        <section class="viewport-section">
+        <section class="viewport-section combined-section">
             <div class="text-gradient-wrapper">
                 <div class="gradient-text-group">
                     <h2 class="condenso-text shine-reflection">COSA</h2>
@@ -91,12 +91,8 @@ import ScrollArrow from "../components/ui/ScrollArrow.astro";
                     intenzionati a creare un impatto positivo sul territorio
                     veronese attraverso lo sport.
                 </p>
-            </div>
-        </section>
 
-        <section class="viewport-section">
-            <div class="text-gradient-wrapper">
-                <div class="gradient-text-group">
+                <div class="gradient-text-group section-spacer">
                     <h2 class="condenso-text shine-reflection spaced-title">
                         COSA
                     </h2>
@@ -222,18 +218,25 @@ import ScrollArrow from "../components/ui/ScrollArrow.astro";
         </script>
 
         <script>
-            // iOS Reflection Fix
-            // Detect iOS and apply manual background positioning
-            function isIOS() {
-                return (
+            // Mobile Reflection Fix (iOS & Firefox Android)
+            // Detect mobile browsers that don't support background-attachment: fixed with background-clip: text
+            function needsReflectionFix() {
+                // iOS detection
+                const isIOS =
                     /iPad|iPhone|iPod/.test(navigator.userAgent) ||
                     (navigator.platform === "MacIntel" &&
-                        navigator.maxTouchPoints > 1)
-                );
+                        navigator.maxTouchPoints > 1);
+
+                // Firefox Android detection
+                const isFirefoxAndroid =
+                    /Firefox/.test(navigator.userAgent) &&
+                    /Android/.test(navigator.userAgent);
+
+                return isIOS || isFirefoxAndroid;
             }
 
             function initReflectionFix() {
-                if (isIOS()) {
+                if (needsReflectionFix()) {
                     document.documentElement.classList.add("is-ios");
 
                     // Get all elements that need the fix
