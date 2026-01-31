@@ -82,11 +82,11 @@ import ScrollArrow from "../components/ui/ScrollArrow.astro";
         <section class="viewport-section">
             <div class="text-gradient-wrapper">
                 <div class="gradient-text-group">
-                    <h2 class="condenso-text">COSA</h2>
-                    <h2 class="condenso-text">SIAMO?</h2>
+                    <h2 class="condenso-text shine-reflection">COSA</h2>
+                    <h2 class="condenso-text shine-reflection">SIAMO?</h2>
                 </div>
                 <ScrollArrow class="arrow-icon" />
-                <p class="info-paragraph">
+                <p class="info-paragraph shine-reflection">
                     Siamo un'associazione culturale no-profit di giovani
                     intenzionati a creare un impatto positivo sul territorio
                     veronese attraverso lo sport.
@@ -150,6 +150,99 @@ import ScrollArrow from "../components/ui/ScrollArrow.astro";
                 document.fonts.ready.then(() => {
                     resizeCondensoText();
                 });
+            }
+        </script>
+
+        <script>
+            // iOS Reflection Fix
+            // Detect iOS and apply manual background positioning
+            function isIOS() {
+                return (
+                    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                    (navigator.platform === "MacIntel" &&
+                        navigator.maxTouchPoints > 1)
+                );
+            }
+
+            function initReflectionFix() {
+                if (isIOS()) {
+                    document.documentElement.classList.add("is-ios");
+
+                    // Get all elements that need the fix
+                    const reflectiveElements = [
+                        ...document.querySelectorAll(".condenso-text"),
+                        ...document.querySelectorAll(".info-paragraph"),
+                        ...document.querySelectorAll(".arrow-fill-mask"),
+                    ];
+
+                    // Function to update element tops
+                    function updateElementTops() {
+                        reflectiveElements.forEach((el) => {
+                            if (el instanceof HTMLElement) {
+                                const rect = el.getBoundingClientRect();
+                                const scrollTop =
+                                    window.pageYOffset ||
+                                    document.documentElement.scrollTop;
+                                const elementTop = rect.top + scrollTop;
+                                el.style.setProperty(
+                                    "--element-top",
+                                    elementTop.toString(),
+                                );
+                            }
+                        });
+                    }
+
+                    // Function to update scroll position
+                    function updateScrollY() {
+                        const scrollY =
+                            window.pageYOffset ||
+                            document.documentElement.scrollTop;
+                        document.documentElement.style.setProperty(
+                            "--scroll-y",
+                            scrollY.toString(),
+                        );
+                    }
+
+                    // Initial setup
+                    updateElementTops();
+                    updateScrollY();
+
+                    // Update on scroll (throttled for performance)
+                    let ticking = false;
+                    window.addEventListener(
+                        "scroll",
+                        () => {
+                            if (!ticking) {
+                                requestAnimationFrame(() => {
+                                    updateScrollY();
+                                    ticking = false;
+                                });
+                                ticking = true;
+                            }
+                        },
+                        { passive: true },
+                    );
+
+                    // Update element positions on resize
+                    window.addEventListener("resize", updateElementTops);
+
+                    // Update after fonts load
+                    if (document.fonts) {
+                        document.fonts.ready.then(() => {
+                            setTimeout(updateElementTops, 100);
+                        });
+                    }
+                }
+            }
+
+            // Initialize after DOM is ready
+            if (document.readyState === "loading") {
+                document.addEventListener(
+                    "DOMContentLoaded",
+                    initReflectionFix,
+                );
+            } else {
+                initReflectionFix();
             }
         </script>
     </body>
