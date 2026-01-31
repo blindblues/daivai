@@ -140,44 +140,15 @@ import ScrollArrow from "../components/ui/ScrollArrow.astro";
             }
 
             // Function to apply gradient based on the text group height
-            function applyGradient() {
-                const textGroup = document.querySelector(
-                    ".gradient-text-group",
-                );
-                const elements = document.querySelectorAll(".condenso-text");
-
-                if (!(textGroup instanceof HTMLElement)) return;
-
-                const groupHeight = textGroup.offsetHeight;
-                const groupTop = textGroup.getBoundingClientRect().top;
-
-                elements.forEach((el) => {
-                    if (!(el instanceof HTMLElement)) return;
-
-                    const elTop = el.getBoundingClientRect().top;
-                    const relativeTop = elTop - groupTop;
-
-                    // Set the background size to the total height of the group
-                    el.style.backgroundSize = `100% ${groupHeight}px`;
-
-                    // Offset the background position so it aligns with the group's top
-                    el.style.backgroundPosition = `0px -${relativeTop}px`;
-                });
-            }
-
             window.addEventListener("resize", () => {
                 resizeCondensoText();
-                applyGradient();
             });
             window.addEventListener("load", () => {
                 resizeCondensoText();
-                // Small timeout to ensure layout is settled
-                setTimeout(applyGradient, 50);
             });
             if (document.fonts) {
                 document.fonts.ready.then(() => {
                     resizeCondensoText();
-                    setTimeout(applyGradient, 50);
                 });
             }
         </script>

@@ -535,29 +535,7 @@ footer {
     height: auto;
 }
 
-.unisciti-text {
-    position: absolute;
-    bottom: -20vh;
-    left: 50%;
-    transform: translateX(-50%) scale(0.8);
-    letter-spacing: 2px;
-    color: #f5e590;
-    font-size: 8rem;
-    font-weight: 400;
-    font-family: 'Condenso', 'Bebas Neue', 'Anton', 'Whyte', 'Arial', sans-serif;
-    text-transform: uppercase;
-    z-index: 4;
-    pointer-events: none;
-    white-space: nowrap;
-    max-width: 75vw;
 
-    /* Override condenso-text gradient styles */
-    background: none !important;
-    -webkit-text-stroke: 0 !important;
-    -webkit-background-clip: border-box !important;
-    background-clip: border-box !important;
-    color: #f5e590 !important;
-}
 
 #logo-overlay .hero-image {
     max-width: 40vw;
@@ -711,13 +689,20 @@ section {
     padding-top: 0.1em;
     white-space: nowrap;
 
-    /* Continuous Gradient text effect */
-    background: linear-gradient(to top, #FB6068, 50%, #f5e590);
-    background-repeat: no-repeat;
-    /* background-attachment removed - handled by JS for scoped effect */
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    /* Fixed viewport gradient reflection - Raised slightly */
+    background: linear-gradient(to bottom,
+            rgba(245, 229, 144, 0) 40%,
+            rgba(245, 229, 144, 1) 80%,
+            rgba(245, 229, 144, 1) 100%) !important;
+    background-attachment: fixed !important;
+    background-size: 100% 100vh !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+
     font-weight: 400;
     font-style: normal;
     -webkit-text-stroke: 0.6px #f5e590;
@@ -751,11 +736,11 @@ section {
 
     0%,
     100% {
-        transform: translateY(0);
+        top: 0;
     }
 
     50% {
-        transform: translateY(-15px);
+        top: -15px;
     }
 }
 
@@ -764,6 +749,8 @@ section {
     height: auto;
     margin-top: 4.5rem;
     display: block;
+    position: relative;
+    /* Needed for top animation */
     animation: float-vertical 3s ease-in-out infinite;
 }
 
@@ -790,4 +777,29 @@ section {
     margin-top: 2rem;
     font-size: 1.6rem;
     line-height: 1.4;
+}
+
+/* Moved here to override .condenso-text */
+.unisciti-text {
+    position: absolute;
+    bottom: -20vh;
+    left: 50%;
+    transform: translateX(-50%) scale(0.8);
+    letter-spacing: 2px;
+    color: #f5e590;
+    font-size: 8rem;
+    font-weight: 400;
+    font-family: 'Condenso', 'Bebas Neue', 'Anton', 'Whyte', 'Arial', sans-serif;
+    text-transform: uppercase;
+    z-index: 4;
+    pointer-events: none;
+    white-space: nowrap;
+    max-width: 75vw;
+
+    /* Override condenso-text gradient styles */
+    background: none !important;
+    -webkit-text-stroke: 0 !important;
+    -webkit-background-clip: border-box !important;
+    background-clip: border-box !important;
+    color: #f5e590 !important;
 }
