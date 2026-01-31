@@ -1,4 +1,10 @@
 /* Stili principali del sito */
+:root {
+    --primary-color: #FB6068;
+    --secondary-color: #f5e590;
+    --font-heading: 'Condenso', sans-serif;
+    --font-body: 'Integral CF', sans-serif;
+}
 
 /* Font Face per Schabo */
 @font-face {
@@ -283,7 +289,7 @@ body {
     color: #333;
     margin: 0;
     padding: 0;
-    background-color: #FB6068;
+    background-color: var(--primary-color);
 }
 
 /* Applica Whyte a titoli e paragrafi */
@@ -477,7 +483,7 @@ footer {
     height: 100vh;
     width: 100%;
     /* Changed from 100vw to prevent scrollbar overflow */
-    background: radial-gradient(ellipse at bottom, #ffd7a3 0%, #FB6068 80%);
+    background: radial-gradient(ellipse at bottom, #ffd7a3 0%, var(--primary-color) 80%);
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -652,7 +658,7 @@ section {
 .viewport-section {
     width: 100vw;
     height: 100vh;
-    /* background: linear-gradient(to bottom, #FB6068, 90%, #f5e590); */
+    /* background: linear-gradient(to bottom, var(--primary-color), 90%, var(--secondary-color)); */
     /* Gradient from Red to Yellow */
     display: flex;
     flex-direction: column;
@@ -689,7 +695,7 @@ section {
 .viewport-section-mirrored {
     width: 100vw;
     height: 100vh;
-    /* background: linear-gradient(to bottom, #f5e590, 30%, #FB6068); */
+    /* background: linear-gradient(to bottom, var(--secondary-color), 30%, var(--primary-color)); */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -728,7 +734,7 @@ section {
 
     font-weight: 400;
     font-style: normal;
-    -webkit-text-stroke: 0.6px #f5e590;
+    -webkit-text-stroke: 0.6px var(--secondary-color);
 }
 
 /* Increased spacing for FACCIAMO section */
@@ -802,7 +808,7 @@ section {
     width: 75%;
     text-align: left;
     /* remove static color, handled by gradient */
-    /* color: #f5e590; */
+    /* color: var(--secondary-color); */
     margin-top: 2rem;
     font-size: 1.6rem;
     line-height: 1.4;
@@ -830,7 +836,7 @@ section {
     left: 50%;
     transform: translateX(-50%) scale(0.8);
     letter-spacing: 2px;
-    color: #f5e590;
+    color: var(--secondary-color);
     font-size: 8rem;
     font-weight: 400;
     font-family: 'Condenso', 'Bebas Neue', 'Anton', 'Whyte', 'Arial', sans-serif;
@@ -847,7 +853,7 @@ section {
     background-clip: border-box !important;
     -webkit-background-clip: border-box !important;
     background-clip: border-box !important;
-    color: #f5e590 !important;
+    color: var(--secondary-color) !important;
 }
 
 /* iOS Fix for fixed background reflection */
@@ -891,7 +897,7 @@ section {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #f5e590;
+    color: var(--secondary-color);
     transition: color 0.3s ease, transform 0.2s ease;
     text-decoration: none;
 }

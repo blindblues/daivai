@@ -207,3 +207,126 @@ function validateContactForm() {
 
     return true;
 }
+
+// ==========================================
+// RESIZE CONDENSO TEXT
+// ==========================================
+// Auto-resize Condenso text to 75% viewport width
+function resizeCondensoText() {
+    const wrapper = document.querySelector(".text-gradient-wrapper");
+    const elements = document.querySelectorAll(".condenso-text");
+
+    // Check if elements exist to avoid errors
+    if (elements.length === 0) return;
+
+    // Use document.documentElement.clientWidth for viewport width excluding scrollbar
+    const viewportWidth = document.documentElement.clientWidth;
+    const targetWidth = viewportWidth * 0.75;
+
+    elements.forEach((el) => {
+        if (!(el instanceof HTMLElement)) return;
+
+        // Reset to a known base size to measure relative width
+        // Using a large size minimizes rounding errors
+        el.style.fontSize = "100px";
+        el.style.width = "fit-content";
+        el.style.maxWidth = "none"; // CRITICAL: prevent capping by CSS
+
+        const currentWidth = el.offsetWidth;
+
+        if (currentWidth > 0) {
+            const ratio = targetWidth / currentWidth;
+            const newFontSize = 100 * ratio;
+            el.style.fontSize = `${newFontSize}px`;
+            // Remove width override so CSS can re-apply if needed
+            el.style.width = "";
+            el.style.maxWidth = "";
+        }
+    });
+}
+
+// ==========================================
+// MOBILE REFLECTION FIX (iOS & Firefox Android)
+// ==========================================
+// Detect mobile browsers that don't support background-attachment: fixed with background-clip: text
+function needsReflectionFix() {
+    // iOS detection
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+    // Firefox Android detection
+    const isFirefoxAndroid = /Firefox/.test(navigator.userAgent) && /Android/.test(navigator.userAgent);
+
+    return isIOS || isFirefoxAndroid;
+}
+
+function initReflectionFix() {
+    if (needsReflectionFix()) {
+        document.documentElement.classList.add("is-ios");
+
+        // Get all elements that need the fix
+        const reflectiveElements = [
+            ...document.querySelectorAll(".condenso-text"),
+            ...document.querySelectorAll(".info-paragraph"),
+            ...document.querySelectorAll(".arrow-fill-mask"),
+        ];
+
+        if (reflectiveElements.length === 0) return;
+
+        // Function to update element tops
+        function updateElementTops() {
+            reflectiveElements.forEach((el) => {
+                if (el instanceof HTMLElement) {
+                    const rect = el.getBoundingClientRect();
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    const elementTop = rect.top + scrollTop;
+                    el.style.setProperty("--element-top", elementTop.toString());
+                }
+            });
+        }
+
+        // Function to update scroll position
+        function updateScrollY() {
+            const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+            document.documentElement.style.setProperty("--scroll-y", scrollY.toString());
+        }
+
+        // Initial setup
+        updateElementTops();
+        updateScrollY();
+
+        // Update on scroll (throttled for performance)
+        let ticking = false;
+        window.addEventListener("scroll", () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    updateScrollY();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+
+        // Update element positions on resize
+        window.addEventListener("resize", updateElementTops);
+
+        // Update after fonts load
+        if (document.fonts) {
+            document.fonts.ready.then(() => {
+                setTimeout(updateElementTops, 100);
+            });
+        }
+    }
+}
+
+// Initialize new functions
+document.addEventListener("DOMContentLoaded", () => {
+    resizeCondensoText();
+    initReflectionFix();
+
+    // Resize events
+    window.addEventListener("resize", resizeCondensoText);
+    if (document.fonts) {
+        document.fonts.ready.then(resizeCondensoText);
+    }
+});
