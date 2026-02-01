@@ -53,6 +53,13 @@ import Sticker from "../components/ui/Sticker.astro";
         <!-- Meta tag per il theme color -->
         <meta name="theme-color" content="#FB6068" />
 
+        <link
+            rel="preload"
+            as="image"
+            href="/daivai/images/DaiVai-Yellow.svg"
+        />
+        <link rel="preload" as="image" href="/daivai/images/chiodo.png" />
+
         <!-- CSS Imported in frontmatter -->
     </head>
     <body>
@@ -65,6 +72,8 @@ import Sticker from "../components/ui/Sticker.astro";
                         src="/daivai/images/DaiVai-Yellow.svg"
                         alt="Daivai Logo"
                         class="hero-image"
+                        loading="eager"
+                        fetchpriority="high"
                     />
                 </section>
                 <section id="hero-overlay">
@@ -72,6 +81,8 @@ import Sticker from "../components/ui/Sticker.astro";
                         src="/daivai/images/chiodo.png"
                         alt="Chiodo"
                         class="hero-image"
+                        loading="eager"
+                        fetchpriority="high"
                     />
                     <div id="unisciti-text" class="unisciti-text condenso-text">
                         UNISCITI!

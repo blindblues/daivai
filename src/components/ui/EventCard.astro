@@ -17,10 +17,10 @@ const { title, date, description } = Astro.props;
 <style>
     /* Qui il tuo grafico potrà sbizzarrirsi senza rompere il resto del sito */
     .event-card {
-        background: rgba(255, 255, 255, 0.1);
+        background: var(--glass-bg);
         padding: 1.5rem;
         border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid var(--glass-border);
         transition: transform 0.3s ease;
     }
 

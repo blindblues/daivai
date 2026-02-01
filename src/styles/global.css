@@ -2,8 +2,16 @@
 :root {
     --primary-color: #FB6068;
     --secondary-color: #f5e590;
+    --primary-rgb: 251, 96, 104;
+    --secondary-rgb: 245, 229, 144;
+
     --font-heading: 'Condenso', sans-serif;
     --font-body: 'Integral CF', sans-serif;
+
+    /* Semantic Tokens */
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --shadow-primary: 0 4px 15px rgba(var(--primary-rgb), 0.3);
 }
 
 /* Font Face per Schabo */
@@ -874,6 +882,10 @@ section {
     bottom: -30vh;
     left: 50%;
     transform: translateX(-50%) scale(0.8);
+    width: 100vw;
+    /* Ensure wide enough container */
+    text-align: center;
+    /* Center text within width */
     letter-spacing: 2px;
     color: var(--secondary-color);
     font-size: 8rem;
@@ -891,16 +903,20 @@ section {
     color: var(--secondary-color) !important;
 }
 
-/* iOS Fix for fixed background reflection */
-/* On iOS, background-attachment: fixed is disabled/buggy with clips. */
-/* We simulate it by manually positioning the background opposite to the scroll. */
-/* Logic: Position = ScrollTop - ElementTop. */
-/* This places the background's 0px at the Viewport's 0px, regardless of where the element is. */
+/* IOS/Android Fix for fixed background reflection */
+/* Disable fixed attachment on touch devices to prevent bugs */
+@media (hover: none) {
+
+    .condenso-text.shine-reflection,
+    .info-paragraph.shine-reflection {
+        background-attachment: scroll !important;
+        background-position: center !important;
+    }
+}
+
 .is-ios .shine-reflection {
+    /* Fallback if JS detection runs */
     background-attachment: scroll !important;
-    background-position-y: calc(var(--scroll-y, 0) * 1px - var(--element-top, 0) * 1px) !important;
-    will-change: background-position;
-    /* Optimize performance */
 }
 
 /* Footer Styles */
