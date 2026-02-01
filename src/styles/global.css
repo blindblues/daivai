@@ -2,16 +2,8 @@
 :root {
     --primary-color: #FB6068;
     --secondary-color: #f5e590;
-    --primary-rgb: 251, 96, 104;
-    --secondary-rgb: 245, 229, 144;
-
     --font-heading: 'Condenso', sans-serif;
     --font-body: 'Integral CF', sans-serif;
-
-    /* Semantic Tokens */
-    --glass-bg: rgba(255, 255, 255, 0.1);
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --shadow-primary: 0 4px 15px rgba(var(--primary-rgb), 0.3);
 }
 
 /* Font Face per Schabo */
@@ -882,10 +874,6 @@ section {
     bottom: -30vh;
     left: 50%;
     transform: translateX(-50%) scale(0.8);
-    width: 100vw;
-    /* Ensure wide enough container */
-    text-align: center;
-    /* Center text within width */
     letter-spacing: 2px;
     color: var(--secondary-color);
     font-size: 8rem;
@@ -903,20 +891,18 @@ section {
     color: var(--secondary-color) !important;
 }
 
-/* IOS/Android Fix for fixed background reflection */
-/* Disable fixed attachment on touch devices to prevent bugs */
-@media (hover: none) {
-
-    .condenso-text.shine-reflection,
-    .info-paragraph.shine-reflection {
-        background-attachment: scroll !important;
-        background-position: center !important;
-    }
-}
-
-.is-ios .shine-reflection {
-    /* Fallback if JS detection runs */
+/* IOS/Mobile Fix for fixed background reflection */
+/* On iOS, background-attachment: fixed is disabled/buggy with clips. */
+/* We simulate it by manually positioning the background opposite to the scroll. */
+.is-ios .shine-reflection,
+.condenso-text.shine-reflection.mobile-fix,
+.info-paragraph.shine-reflection.mobile-fix {
     background-attachment: scroll !important;
+    /* Explicitly set Center X, Calculated Y */
+    background-position: center calc(var(--scroll-y, 0px) * 1px - var(--element-top, 0px) * 1px) !important;
+    background-size: 100% 100vh !important;
+    will-change: background-position;
+    /* Optimize performance */
 }
 
 /* Footer Styles */

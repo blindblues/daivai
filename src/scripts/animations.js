@@ -169,11 +169,8 @@ function initReflectionFix() {
     if (needsReflectionFix()) {
         document.documentElement.classList.add("is-ios");
 
-        const reflectiveElements = [
-            ...document.querySelectorAll(".condenso-text"),
-            ...document.querySelectorAll(".info-paragraph"),
-            ...document.querySelectorAll(".arrow-fill-mask"),
-        ];
+        // Target all elements that have the reflection class
+        const reflectiveElements = document.querySelectorAll(".shine-reflection");
 
         if (reflectiveElements.length === 0) return;
 
@@ -193,14 +190,21 @@ function initReflectionFix() {
             document.documentElement.style.setProperty("--scroll-y", scrollY.toString());
         }
 
+        // Initial calculation
         updateElementTops();
         updateScrollY();
 
+        // Update loop
         window.addEventListener("scroll", () => {
             requestAnimationFrame(updateScrollY);
         }, { passive: true });
 
-        window.addEventListener("resize", updateElementTops);
+        // Recalculate positions on resize (address bar show/hide) and orientation change
+        window.addEventListener("resize", () => {
+            updateElementTops();
+            // Force scroll update too
+            updateScrollY();
+        });
     }
 }
 
@@ -402,11 +406,17 @@ function initColorTransition() {
             rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 0) 100%)`;
 
         textElements.forEach(el => {
-            el.style.setProperty('background', gradientValue, 'important');
-            el.style.setProperty('background-attachment', 'fixed', 'important');
-            el.style.setProperty('background-size', '100% 100vh', 'important');
-            el.style.setProperty('background-position', 'center', 'important');
-            el.style.setProperty('background-repeat', 'no-repeat', 'important');
+            // Only update the gradient image, preserve other properties
+            el.style.backgroundImage = gradientValue;
+
+            // Only enforce fixed attachment on desktop/non-mobile
+            if (!needsReflectionFix()) {
+                el.style.setProperty('background-attachment', 'fixed', 'important');
+                el.style.setProperty('background-position', 'center', 'important');
+                el.style.setProperty('background-size', '100% 100vh', 'important');
+                el.style.setProperty('background-repeat', 'no-repeat', 'important');
+            }
+
             el.style.setProperty('-webkit-background-clip', 'text', 'important');
             el.style.setProperty('background-clip', 'text', 'important');
             el.style.setProperty('color', 'transparent', 'important');
@@ -507,17 +517,8 @@ function initFooterAnimation() {
     if (!footer || !path) return;
 
     // Entry animation (fadeIn)
-    gsap.fromTo(footer,
-        { opacity: 0 },
-        {
-            opacity: 1,
-            duration: 1.5,
-            scrollTrigger: {
-                trigger: footer,
-                start: "top 95%",
-            }
-        }
-    );
+    // Entry animation (fadeIn) - REMOVED as per user request
+    // Footer is now visible immediately
 
     // Initial control point Y
     const defaultY = 156;
