@@ -11,8 +11,8 @@ import "../styles/global.css";
         <title>Accedi - Dai Vai</title>
         <link rel="icon" type="image/svg+xml" href="/daivai/favicon.svg" />
     </head>
-    <body>
-        <main class="login-page">
+    <body class="login-page-container">
+        <main class="login-content">
             <div class="back-link">
                 <!-- Usa BASE_URL per tornare alla home in modo sicuro -->
                 <a href={import.meta.env.BASE_URL}>← Torna alla Home</a>
@@ -23,39 +23,8 @@ import "../styles/global.css";
 </html>
 
 <style>
-    body {
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-    }
-
-    .login-page {
-        width: 100%;
-        max-width: 450px;
-        padding: 1rem;
-    }
-
-    .back-link {
-        margin-bottom: 2rem;
-        text-align: center;
-    }
-
-    .back-link a {
-        color: #666;
-        text-decoration: none;
-        font-weight: 500;
-        transition: color 0.3s ease;
-    }
-
-    .back-link a:hover {
-        color: #fb6068;
-    }
-
-    /* Override Auth container style for page context if needed */
-    :global(.auth-container) {
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08) !important;
+    /* Layout positioning only as per CONTRIBUTING.md */
+    .login-content {
+        animation: fadeIn 0.5s ease-out;
     }
 </style>

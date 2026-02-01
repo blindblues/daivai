@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import NavbarAuth from "../components/ui/NavbarAuth.astro";
 import ScrollArrow from "../components/ui/ScrollArrow.astro";
+import Sticker from "../components/ui/Sticker.astro";
 ---
 
 <!doctype html>
@@ -92,6 +93,8 @@ import ScrollArrow from "../components/ui/ScrollArrow.astro";
                     veronese attraverso lo sport.
                 </p>
 
+                <Sticker id="sticker-wrapper" containerId="sticker-container" />
+
                 <div class="gradient-text-group section-spacer">
                     <h2 class="condenso-text shine-reflection spaced-title">
                         COSA
@@ -104,6 +107,15 @@ import ScrollArrow from "../components/ui/ScrollArrow.astro";
                     per coinvolgere la comunità locale e promuovere uno stile di
                     vita sano e attivo.
                 </p>
+
+                <Sticker
+                    id="sticker-wrapper-left"
+                    containerId="sticker-container-left"
+                    variant="left"
+                />
+
+                <!-- Spacer to allow animation to finish -->
+                <div class="footer-spacer"></div>
             </div>
         </section>
 
@@ -160,6 +172,9 @@ import ScrollArrow from "../components/ui/ScrollArrow.astro";
             </div>
         </footer>
 
-        <script src="/daivai/js/script.js" is:inline></script>
+        <script>
+            import { initAnimations } from "../scripts/animations.js";
+            initAnimations();
+        </script>
     </body>
 </html>

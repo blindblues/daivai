@@ -806,7 +806,7 @@ section {
 .info-paragraph.shine-reflection {
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
-    width: 75%;
+    width: 90vw;
     text-align: left;
     /* remove static color, handled by gradient */
     /* color: var(--secondary-color); */
@@ -870,7 +870,7 @@ section {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 2rem;
+    gap: 3rem;
     padding: 1rem;
     padding-bottom: 4rem;
     background: transparent;
@@ -906,4 +906,167 @@ section {
 .social-icons svg {
     width: 28px;
     height: 28px;
+}
+
+/* Wrapper needs relative for absolute sticker */
+.text-gradient-wrapper {
+    position: relative;
+}
+
+/* Sticker Animation Styles */
+.sticker-wrapper {
+    position: relative;
+    width: 450px;
+    height: 450px;
+    perspective: 1200px;
+    z-index: 5;
+    pointer-events: none;
+    margin: -50px auto -150px;
+    /* Top -50 (more space), Bottom -150 (less space/overlap) */
+    /* Enlarge, rotate right, move right off-screen */
+    transform: rotate(10deg) translateX(45vw);
+}
+
+/* Mobile adjust */
+@media (max-width: 768px) {
+    .sticker-wrapper {
+        width: 300px;
+        height: 300px;
+        margin: -20px auto -80px;
+        transform: rotate(10deg) translateX(35vw);
+    }
+}
+
+/* Left Sticker Variant */
+.sticker-wrapper.sticker-left {
+    transform: rotate(-10deg) translateX(-45vw);
+}
+
+@media (max-width: 768px) {
+    .sticker-wrapper.sticker-left {
+        transform: rotate(-10deg) translateX(-35vw);
+    }
+}
+
+.sticker-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+}
+
+.slice {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    background-image: url('/daivai/images/chiodo-sticker.png');
+    background-size: 100% 450px;
+    background-repeat: no-repeat;
+    transform-origin: top center;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    will-change: transform;
+    border: none;
+    outline: 1px solid transparent;
+}
+
+@media (max-width: 768px) {
+    .slice {
+        background-size: 100% 300px;
+    }
+}
+
+.footer-spacer {
+    height: 15vh;
+}
+
+/* Auth Component Styles (Moved from Auth.astro) */
+.auth-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+#auth-form button,
+#user-profile button {
+    width: 100%;
+    padding: 1rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+
+.toggle-text {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.message {
+    margin-top: 1rem;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+}
+
+.message.success {
+    color: #28a745;
+}
+
+/* Login Page Styles */
+.login-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.login-content {
+    width: 100%;
+    max-width: 450px;
+    padding: 1rem;
+}
+
+.back-link {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.back-link a {
+    color: #666;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.back-link a:hover {
+    color: var(--primary-color);
 }
