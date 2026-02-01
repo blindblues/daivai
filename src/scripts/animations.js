@@ -368,11 +368,23 @@ function initColorTransition() {
 
     if (!trigger) return;
 
-    // Color values (yellow -> red for text gradient)
-    // Yellow: rgb(245, 229, 144) - #F5E590
-    // Red: rgb(251, 96, 104) - #FB6068
-    const yellowRGB = { r: 245, g: 229, b: 144 };
-    const redRGB = { r: 251, g: 96, b: 104 };
+    // Get colors from CSS variables for consistency
+    const rootStyle = getComputedStyle(document.documentElement);
+    const primaryColor = rootStyle.getPropertyValue('--primary-color').trim(); // Red
+    const secondaryColor = rootStyle.getPropertyValue('--secondary-color').trim(); // Yellow
+
+    // Helper to parse hex to rgb
+    function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    }
+
+    const yellowRGB = hexToRgb(secondaryColor) || { r: 245, g: 229, b: 144 };
+    const redRGB = hexToRgb(primaryColor) || { r: 251, g: 96, b: 104 };
 
     // State object for GSAP animation
     const colorState = { progress: 0 };
@@ -422,6 +434,20 @@ function initColorTransition() {
             el.style.setProperty('color', 'transparent', 'important');
             // Stroke color: yellow -> red
             el.style.setProperty('-webkit-text-stroke-color', `rgb(${textColor.r}, ${textColor.g}, ${textColor.b})`, 'important');
+        });
+
+        // Update arrow masks (fill) - they need the gradient but NOT background-clip: text
+        const arrowMasks = document.querySelectorAll('.arrow-fill-mask.shine-reflection');
+        arrowMasks.forEach(el => {
+            el.style.backgroundImage = gradientValue;
+
+            if (!needsReflectionFix()) {
+                el.style.setProperty('background-attachment', 'fixed', 'important');
+                el.style.setProperty('background-position', 'center', 'important');
+                el.style.setProperty('background-size', '100% 100vh', 'important');
+                el.style.setProperty('background-repeat', 'no-repeat', 'important');
+            }
+            // Do NOT set background-clip: text here, as it hides the div if there's no text
         });
 
         // Update arrow icons stroke
