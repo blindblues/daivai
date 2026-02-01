@@ -301,7 +301,7 @@ function createSticker(wrapperId, containerId) {
         ease: "power1.out",
         scrollTrigger: {
             trigger: `#${wrapperId}`,
-            start: "top 75%", // Starts earlier
+            start: "top 90%", // Starts much earlier
             end: "top 25%",   // Ends later (longer duration = slower)
             scrub: 1,         // Smooth scrubbing
         },
