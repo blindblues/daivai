@@ -303,6 +303,7 @@ function createSticker(wrapperId, containerId, direction = 'vertical') {
 
         for (let i = 0; i < numSlices; i++) {
             const s = setters[i];
+            const slice = slices[i];
 
             if (isHorizontal) {
                 // Horizontal peel: rotate on Y axis, move on X
@@ -319,6 +320,13 @@ function createSticker(wrapperId, containerId, direction = 'vertical') {
                 s.rotateX(cumulativeAngle);
                 s.rotateY(0);
             }
+
+            // Calculate shading based on angle - slices facing away get darker
+            // Normalize angle to 0-1 range where 0 = flat, 1 = fully tilted
+            const normalizedAngle = Math.min(Math.abs(cumulativeAngle) / 90, 1);
+            // Brightness: 1 = normal, lower = darker. More angled = darker
+            const brightness = 1 - (normalizedAngle * 0.4);
+            slice.style.filter = `brightness(${brightness})`;
 
             const rad = (cumulativeAngle * Math.PI) / 180;
             currentPos += sliceSize * Math.cos(rad);
