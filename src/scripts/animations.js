@@ -12,6 +12,9 @@ export function initAnimations() {
     initParallax();
     initUniscitiAnimation();
     initStickerAnimation();
+    initColorTransition();
+    initEventsSlider();
+    initFooterAnimation();
     resizeCondensoText();
     initReflectionFix();
 
@@ -352,3 +355,209 @@ function createSticker(wrapperId, containerId, direction = 'vertical') {
     updateSlices();
 }
 
+// ==========================================
+// COLOR TRANSITION ON SCROLL
+// ==========================================
+function initColorTransition() {
+    const trigger = document.getElementById('ultimi-eventi-title');
+    const body = document.body;
+
+    if (!trigger) return;
+
+    // Color values (yellow -> red for text gradient)
+    // Yellow: rgb(245, 229, 144) - #F5E590
+    // Red: rgb(251, 96, 104) - #FB6068
+    const yellowRGB = { r: 245, g: 229, b: 144 };
+    const redRGB = { r: 251, g: 96, b: 104 };
+
+    // State object for GSAP animation
+    const colorState = { progress: 0 };
+
+    // Get all text elements with shine-reflection
+    const textElements = document.querySelectorAll('.condenso-text.shine-reflection, .info-paragraph.shine-reflection');
+
+    // Function to interpolate between two RGB values
+    function lerpColor(from, to, t) {
+        return {
+            r: Math.round(from.r + (to.r - from.r) * t),
+            g: Math.round(from.g + (to.g - from.g) * t),
+            b: Math.round(from.b + (to.b - from.b) * t)
+        };
+    }
+
+    // Update function called on each scroll frame
+    function updateColors() {
+        const progress = colorState.progress;
+
+        // Background: red (#FB6068) -> yellow (#F5E590)
+        const bgColor = lerpColor(redRGB, yellowRGB, progress);
+        body.style.backgroundColor = `rgb(${bgColor.r}, ${bgColor.g}, ${bgColor.b})`;
+
+        // Text gradient: yellow -> red (inverse of background)
+        const textColor = lerpColor(yellowRGB, redRGB, progress);
+        const gradientValue = `linear-gradient(to bottom,
+            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 0) 20%,
+            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1) 40%,
+            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1) 80%,
+            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 0) 100%)`;
+
+        textElements.forEach(el => {
+            el.style.setProperty('background', gradientValue, 'important');
+            el.style.setProperty('background-attachment', 'fixed', 'important');
+            el.style.setProperty('background-size', '100% 100vh', 'important');
+            el.style.setProperty('background-position', 'center', 'important');
+            el.style.setProperty('background-repeat', 'no-repeat', 'important');
+            el.style.setProperty('-webkit-background-clip', 'text', 'important');
+            el.style.setProperty('background-clip', 'text', 'important');
+            el.style.setProperty('color', 'transparent', 'important');
+            // Stroke color: yellow -> red
+            el.style.setProperty('-webkit-text-stroke-color', `rgb(${textColor.r}, ${textColor.g}, ${textColor.b})`, 'important');
+        });
+
+        // Update arrow icons stroke
+        const arrowIcons = document.querySelectorAll('.arrow-icon, .arrow-icon *');
+        arrowIcons.forEach(el => {
+            el.style.setProperty('stroke', `rgb(${textColor.r}, ${textColor.g}, ${textColor.b})`, 'important');
+        });
+    }
+
+    // ScrollTrigger with scrub for smooth scroll-linked animation
+    gsap.to(colorState, {
+        progress: 1,
+        ease: "none",
+        scrollTrigger: {
+            trigger: trigger,
+            start: "top 80%",      // Start transition earlier
+            end: "top center",     // Complete when title reaches center
+            scrub: 2               // Smooth scrub with 2 second lag
+        },
+        onUpdate: updateColors
+    });
+
+    // Initial state
+    updateColors();
+}
+
+// ==========================================
+// EVENTS INFINITE SLIDER
+// ==========================================
+function initEventsSlider() {
+    const wrapper = document.querySelector('.events-slider-wrapper');
+    const slider = document.getElementById('events-slider');
+
+    if (!wrapper || !slider) return;
+
+    const cards = slider.querySelectorAll('.event-card');
+    if (cards.length === 0) return;
+
+    // Clone cards at the beginning and end for infinite effect
+    const cardsArray = Array.from(cards);
+
+    // Clone all cards and append to end
+    cardsArray.forEach(card => {
+        const clone = card.cloneNode(true);
+        slider.appendChild(clone);
+    });
+
+    // Clone all cards and prepend to beginning
+    cardsArray.reverse().forEach(card => {
+        const clone = card.cloneNode(true);
+        slider.insertBefore(clone, slider.firstChild);
+    });
+
+    // Calculate dimensions
+    const cardWidth = cards[0].offsetWidth;
+    const gap = 16; // 1rem
+    const originalSetWidth = (cardWidth + gap) * cards.length;
+
+    // Set initial scroll position to the middle (original cards)
+    wrapper.scrollLeft = originalSetWidth;
+
+    let isScrolling = false;
+
+    wrapper.addEventListener('scroll', () => {
+        if (isScrolling) return;
+
+        const scrollLeft = wrapper.scrollLeft;
+        const maxScroll = slider.scrollWidth - wrapper.clientWidth;
+
+        // If scrolled to the cloned section at the end, jump back
+        if (scrollLeft >= originalSetWidth * 2 - cardWidth) {
+            isScrolling = true;
+            wrapper.scrollLeft = originalSetWidth + (scrollLeft - originalSetWidth * 2 + cardWidth);
+            requestAnimationFrame(() => { isScrolling = false; });
+        }
+
+        // If scrolled to the cloned section at the beginning, jump forward
+        if (scrollLeft <= cardWidth) {
+            isScrolling = true;
+            wrapper.scrollLeft = originalSetWidth + scrollLeft;
+            requestAnimationFrame(() => { isScrolling = false; });
+        }
+    });
+}
+
+// ==========================================
+// FOOTER ANIMATION
+// ==========================================
+function initFooterAnimation() {
+    const footer = document.querySelector('.site-footer');
+    const path = document.querySelector('#bouncy-path');
+
+    if (!footer || !path) return;
+
+    // Entry animation (fadeIn)
+    gsap.fromTo(footer,
+        { opacity: 0 },
+        {
+            opacity: 1,
+            duration: 1.5,
+            scrollTrigger: {
+                trigger: footer,
+                start: "top 95%",
+            }
+        }
+    );
+
+    // Initial control point Y
+    const defaultY = 156;
+    const proxy = { y: defaultY };
+
+    // Function to update the path 'd' attribute
+    const updatePath = () => {
+        path.setAttribute('d', `M0-0.3C0-0.3,464,${proxy.y},1139,${proxy.y}S2278-0.3,2278-0.3V683H0V-0.3z`);
+    };
+
+    let resetTimer;
+
+    ScrollTrigger.create({
+        trigger: document.body,
+        start: "top top",
+        end: "bottom bottom",
+        onUpdate: (self) => {
+            const velocity = self.getVelocity();
+            // Distortion map: velocity -> Y offset
+            const distortion = Math.min(Math.max(velocity / 30, -100), 100);
+
+            gsap.to(proxy, {
+                y: defaultY + distortion,
+                duration: 0.1,
+                ease: "none",
+                overwrite: "auto",
+                onUpdate: updatePath
+            });
+
+            // Elastic snap-back when scroll stops/slows
+            clearTimeout(resetTimer);
+            resetTimer = setTimeout(() => {
+                gsap.to(proxy, {
+                    y: defaultY,
+                    duration: 1.5,
+                    ease: "elastic.out(1, 0.3)",
+                    overwrite: "auto",
+                    onUpdate: updatePath
+                });
+            }, 50);
+        }
+    });
+}
