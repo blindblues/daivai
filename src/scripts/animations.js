@@ -208,89 +208,121 @@ function initReflectionFix() {
 // STICKER ANIMATION
 // ==========================================
 function initStickerAnimation() {
-    // Original sticker (Right)
-    createSticker('sticker-wrapper', 'sticker-container');
+    // Original sticker (Right) - vertical peel (top to bottom)
+    createSticker('sticker-wrapper', 'sticker-container', 'vertical');
 
-    // Second sticker (Left)
-    createSticker('sticker-wrapper-left', 'sticker-container-left');
+    // Second sticker (Left) - horizontal peel (left to right)
+    createSticker('sticker-wrapper-left', 'sticker-container-left', 'horizontal');
 }
 
-function createSticker(wrapperId, containerId) {
+function createSticker(wrapperId, containerId, direction = 'vertical') {
     const wrapper = document.getElementById(wrapperId);
     const container = document.getElementById(containerId);
+    const shadow = document.getElementById(`${containerId}-shadow`);
 
     if (!wrapper || !container) return;
+
+    const isHorizontal = direction === 'horizontal';
 
     // Use fewer slices for performance
     const numSlices = 20;
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-    // CSS height is 450px or 300px on mobile
+    // CSS dimensions
     const styles = window.getComputedStyle(wrapper);
-    const containerHeight = parseInt(styles.height) || (isMobile ? 300 : 450);
-    const sliceHeight = containerHeight / numSlices;
+    const containerSize = isHorizontal
+        ? (parseInt(styles.width) || (isMobile ? 300 : 450))
+        : (parseInt(styles.height) || (isMobile ? 300 : 450));
+    const sliceSize = containerSize / numSlices;
     const slices = [];
 
     // Create slices
     for (let i = 0; i < numSlices; i++) {
-        // Create slice
         const slice = document.createElement('div');
         slice.classList.add('slice');
 
-        // Size and position
-        slice.style.height = `${sliceHeight + 1}px`; // +1 to avoid gaps
-        slice.style.top = `0px`;
-        slice.style.left = `0px`;
-        slice.style.width = `100%`;
+        if (isHorizontal) {
+            // Vertical slices for horizontal peel
+            slice.style.width = `${sliceSize + 1}px`;
+            slice.style.height = `100%`;
+            slice.style.top = `0px`;
+            slice.style.left = `0px`;
+            slice.style.backgroundPosition = `-${i * sliceSize}px 0px`;
+            slice.style.backgroundSize = `${containerSize}px 100%`;
+            slice.style.transformOrigin = 'left center';
+        } else {
+            // Horizontal slices for vertical peel
+            slice.style.height = `${sliceSize + 1}px`;
+            slice.style.width = `100%`;
+            slice.style.top = `0px`;
+            slice.style.left = `0px`;
+            slice.style.backgroundPosition = `0px -${i * sliceSize}px`;
+            slice.style.backgroundSize = `100% ${containerSize}px`;
+            slice.style.transformOrigin = 'top center';
+        }
 
-        // Background mapping
-        slice.style.backgroundPosition = `0px -${i * sliceHeight}px`;
         slice.style.zIndex = numSlices + 100 - i;
-
         container.appendChild(slice);
         slices.push(slice);
     }
 
     const animState = { progress: 0 };
 
-    // Initialize setters for each slice to optimize frequent updates
+    // Initialize setters for each slice
     const setters = slices.map(slice => ({
+        x: gsap.quickSetter(slice, "x", "px"),
         y: gsap.quickSetter(slice, "y", "px"),
         z: gsap.quickSetter(slice, "z", "px"),
-        rotateX: gsap.quickSetter(slice, "rotateX", "deg")
+        rotateX: gsap.quickSetter(slice, "rotateX", "deg"),
+        rotateY: gsap.quickSetter(slice, "rotateY", "deg")
     }));
 
     function updateSlices() {
         const progress = animState.progress;
 
-        // Scale animation: Start larger (1.5) and shrink to 1 to simulate approaching the surface
-        const currentScale = 1.5 - (0.5 * progress);
-        gsap.set(container, { scale: currentScale });
+        // Animate shadow
+        if (shadow) {
+            const shadowOpacity = progress * 0.3;
+            const shadowBlur = 30 * (1 - progress);
+            const shadowScale = 1.2 - (progress * 0.2);
+            gsap.set(shadow, {
+                opacity: shadowOpacity,
+                filter: `blur(${shadowBlur}px) brightness(0)`,
+                scale: shadowScale
+            });
+        }
 
-        // Start from 105 degrees (tucked backwards to ensure invisibility with tilt)
-        const maxCurl = 105;
-
-        let currentY = 0;
-        let currentZ = 0;
-
+        const maxCurl = 30;
         const startAngle = maxCurl * (1 - progress);
-        const totalBend = 150 * (1 - progress);
+        const totalBend = 220 * (1 - progress);
         const anglePerSlice = totalBend / numSlices;
 
+        let currentPos = 0;
+        let currentZ = 0;
         let cumulativeAngle = startAngle;
 
         for (let i = 0; i < numSlices; i++) {
             const s = setters[i];
 
-            // Efficiently set properties using quickSetter
-            s.y(currentY);
-            s.z(currentZ);
-            s.rotateX(cumulativeAngle);
+            if (isHorizontal) {
+                // Horizontal peel: rotate on Y axis, move on X
+                s.x(currentPos);
+                s.y(0);
+                s.z(currentZ);
+                s.rotateY(-cumulativeAngle); // Negative for left-to-right curl
+                s.rotateX(0);
+            } else {
+                // Vertical peel: rotate on X axis, move on Y
+                s.x(0);
+                s.y(currentPos);
+                s.z(currentZ);
+                s.rotateX(cumulativeAngle);
+                s.rotateY(0);
+            }
 
             const rad = (cumulativeAngle * Math.PI) / 180;
-            currentY += sliceHeight * Math.cos(rad);
-            currentZ += sliceHeight * Math.sin(rad);
-
+            currentPos += sliceSize * Math.cos(rad);
+            currentZ += sliceSize * Math.sin(rad);
             cumulativeAngle += anglePerSlice;
         }
     }
@@ -301,9 +333,9 @@ function createSticker(wrapperId, containerId) {
         ease: "power1.out",
         scrollTrigger: {
             trigger: `#${wrapperId}`,
-            start: "top 90%", // Starts much earlier
-            end: "top 25%",   // Ends later (longer duration = slower)
-            scrub: 1,         // Smooth scrubbing
+            start: "top bottom",
+            end: "top 25%",
+            scrub: 1
         },
         onUpdate: updateSlices
     });

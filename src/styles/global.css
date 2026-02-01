@@ -948,6 +948,25 @@ section {
     }
 }
 
+/* Sticker Shadow */
+.sticker-shadow {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    opacity: 0;
+    /* Use the sticker image and make it completely black */
+    background-image: url('/daivai/images/chiodo-sticker.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    /* Make image black using brightness(0) */
+    filter: blur(15px) brightness(0);
+}
+
 .sticker-container {
     position: relative;
     width: 100%;

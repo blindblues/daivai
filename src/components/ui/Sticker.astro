@@ -6,5 +6,6 @@ const { id, containerId, variant = "right" } = Astro.props;
     id={id}
     class:list={["sticker-wrapper", { "sticker-left": variant === "left" }]}
 >
+    <div id={`${containerId}-shadow`} class="sticker-shadow"></div>
     <div id={containerId} class="sticker-container"></div>
 </div>
