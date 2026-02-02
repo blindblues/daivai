@@ -3,6 +3,7 @@ import "../styles/global.css";
 import NavbarAuth from "../components/ui/NavbarAuth.astro";
 import ScrollArrow from "../components/ui/ScrollArrow.astro";
 import Sticker from "../components/ui/Sticker.astro";
+import EventCard from "../components/ui/EventCard.astro";
 ---
 
 <!doctype html>
@@ -58,7 +59,7 @@ import Sticker from "../components/ui/Sticker.astro";
             as="image"
             href="/daivai/images/DaiVai-Yellow.svg"
         />
-        <link rel="preload" as="image" href="/daivai/images/chiodo.png" />
+        <link rel="preload" as="image" href="/daivai/images/chiodo.webp" />
 
         <!-- CSS Imported in frontmatter -->
     </head>
@@ -78,7 +79,7 @@ import Sticker from "../components/ui/Sticker.astro";
                 </section>
                 <section id="hero-overlay">
                     <img
-                        src="/daivai/images/chiodo.png"
+                        src="/daivai/images/chiodo.webp"
                         alt="Chiodo"
                         class="hero-image"
                         loading="eager"
@@ -159,181 +160,128 @@ import Sticker from "../components/ui/Sticker.astro";
             <!-- Card Slider -->
             <div class="events-slider-wrapper">
                 <div class="events-slider" id="events-slider">
-                    <div class="event-card">
-                        <div class="event-card-image">
-                            <img
-                                src="/daivai/images/blue-sky-background-with-clouds-free-photo.jpg"
-                                alt="Evento 1"
-                            />
-                        </div>
-                        <div class="event-card-content">
-                            <h3 class="event-card-title">
-                                Torneo di Beach Volley
-                            </h3>
-                            <p class="event-card-description">
-                                Un weekend all'insegna dello sport sulla
-                                spiaggia con tornei e attività per tutti.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="event-card">
-                        <div class="event-card-image">
-                            <img
-                                src="/daivai/images/blue-sky-background-with-clouds-free-photo.jpg"
-                                alt="Evento 2"
-                            />
-                        </div>
-                        <div class="event-card-content">
-                            <h3 class="event-card-title">Corso di Yoga</h3>
-                            <p class="event-card-description">
-                                Sessioni settimanali di yoga per rilassarsi e
-                                migliorare il benessere fisico e mentale.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="event-card">
-                        <div class="event-card-image">
-                            <img
-                                src="/daivai/images/blue-sky-background-with-clouds-free-photo.jpg"
-                                alt="Evento 3"
-                            />
-                        </div>
-                        <div class="event-card-content">
-                            <h3 class="event-card-title">Maratona Cittadina</h3>
-                            <p class="event-card-description">
-                                La corsa più attesa dell'anno attraverso le vie
-                                storiche di Verona.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="event-card">
-                        <div class="event-card-image">
-                            <img
-                                src="/daivai/images/blue-sky-background-with-clouds-free-photo.jpg"
-                                alt="Evento 4"
-                            />
-                        </div>
-                        <div class="event-card-content">
-                            <h3 class="event-card-title">Torneo di Calcetto</h3>
-                            <p class="event-card-description">
-                                Sfide avvincenti tra squadre locali per
-                                conquistare il titolo di campione.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="event-card">
-                        <div class="event-card-image">
-                            <img
-                                src="/daivai/images/blue-sky-background-with-clouds-free-photo.jpg"
-                                alt="Evento 5"
-                            />
-                        </div>
-                        <div class="event-card-content">
-                            <h3 class="event-card-title">Workshop Fitness</h3>
-                            <p class="event-card-description">
-                                Allenamenti funzionali e lezioni di gruppo per
-                                restare in forma divertendosi.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="event-card">
-                        <div class="event-card-image">
-                            <img
-                                src="/daivai/images/blue-sky-background-with-clouds-free-photo.jpg"
-                                alt="Evento 6"
-                            />
-                        </div>
-                        <div class="event-card-content">
-                            <h3 class="event-card-title">
-                                Escursione in Montagna
-                            </h3>
-                            <p class="event-card-description">
-                                Una giornata immersi nella natura con trekking e
-                                attività outdoor.
-                            </p>
-                        </div>
-                    </div>
+                    <EventCard
+                        image="/daivai/images/blue-sky-background-with-clouds-free-photo.webp"
+                        imageAlt="Evento 1"
+                        title="Torneo di Beach Volley"
+                        description="Un weekend all'insegna dello sport sulla spiaggia con tornei e attività per tutti."
+                        loading="lazy"
+                    />
+                    <EventCard
+                        image="/daivai/images/blue-sky-background-with-clouds-free-photo.webp"
+                        imageAlt="Evento 2"
+                        title="Corso di Yoga"
+                        description="Sessioni settimanali di yoga per rilassarsi e migliorare il benessere fisico e mentale."
+                        loading="lazy"
+                    />
+                    <EventCard
+                        image="/daivai/images/blue-sky-background-with-clouds-free-photo.webp"
+                        imageAlt="Evento 3"
+                        title="Maratona Cittadina"
+                        description="La corsa più attesa dell'anno attraverso le vie storiche di Verona."
+                        loading="lazy"
+                    />
+                    <EventCard
+                        image="/daivai/images/blue-sky-background-with-clouds-free-photo.webp"
+                        imageAlt="Evento 4"
+                        title="Torneo di Calcetto"
+                        description="Sfide avvincenti tra squadre locali per conquistare il titolo di campione."
+                        loading="lazy"
+                    />
+                    <EventCard
+                        image="/daivai/images/blue-sky-background-with-clouds-free-photo.webp"
+                        imageAlt="Evento 5"
+                        title="Workshop Fitness"
+                        description="Allenamenti funzionali e lezioni di gruppo per restare in forma divertendosi."
+                        loading="lazy"
+                    />
+                    <EventCard
+                        image="/daivai/images/blue-sky-background-with-clouds-free-photo.webp"
+                        imageAlt="Evento 6"
+                        title="Escursione in Montagna"
+                        description="Una giornata immersi nella natura con trekking e attività outdoor."
+                        loading="lazy"
+                    />
                 </div>
             </div>
-
-            <!-- CTA Button -->
-            <div class="cta-button-wrapper">
-                <a href="#unisciti" class="cta-button">UNISCITI!</a>
-            </div>
-
-            <!-- Spacer to allow animation to finish -->
-            <div class="footer-spacer"></div>
         </section>
 
-        <footer class="site-footer">
-            <svg
-                preserveAspectRatio="none"
-                id="footer-img"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 2278 683"
-            >
-                <path
-                    class="footer-svg"
-                    id="bouncy-path"
-                    fill="var(--primary-color)"
-                    d="M0-0.3C0-0.3,464,156,1139,156S2278-0.3,2278-0.3V683H0V-0.3z"
-                ></path>
-            </svg>
-            <img
-                src="/daivai/images/DaiVai-Yellow.svg"
-                alt="Dai e Vai Logo"
-                class="footer-logo"
-            />
-            <div class="social-icons">
-                <a
-                    href="https://www.instagram.com/_dai_e_vai/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Instagram"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"
-                        ></rect>
-                        <path
-                            d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
-                        ></path>
-                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                    </svg>
-                </a>
-                <a
-                    href="https://chat.whatsapp.com/IannFn3DAzECvgNsQ5CBLi"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="WhatsApp"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                    >
-                        <path
-                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"
-                        ></path>
-                    </svg>
-                </a>
-            </div>
-        </footer>
+        <!-- CTA Button -->
+        <div class="cta-button-wrapper">
+            <a href="#unisciti" class="cta-button">UNISCITI!</a>
+        </div>
 
-        <script>
-            import { initAnimations } from "../scripts/animations.js";
-            initAnimations();
-        </script>
+        <!-- Spacer to allow animation to finish -->
+        <div class="footer-spacer"></div>
     </body>
+
+    <footer class="site-footer">
+        <svg
+            preserveAspectRatio="none"
+            id="footer-img"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 2278 683"
+        >
+            <path
+                class="footer-svg"
+                id="bouncy-path"
+                fill="var(--primary-color)"
+                d="M0-0.3C0-0.3,464,156,1139,156S2278-0.3,2278-0.3V683H0V-0.3z"
+            ></path>
+        </svg>
+        <img
+            src="/daivai/images/DaiVai-Yellow.svg"
+            alt="Dai e Vai Logo"
+            class="footer-logo"
+        />
+        <div class="social-icons">
+            <a
+                href="https://www.instagram.com/_dai_e_vai/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"
+                    ></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                    ></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+            </a>
+            <a
+                href="https://chat.whatsapp.com/IannFn3DAzECvgNsQ5CBLi"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WhatsApp"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                >
+                    <path
+                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"
+                    ></path>
+                </svg>
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        import { initAnimations } from "../scripts/animations.js";
+        initAnimations();
+    </script>
 </html>

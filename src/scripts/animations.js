@@ -17,6 +17,7 @@ export function initAnimations() {
     initFooterAnimation();
     resizeCondensoText();
     initReflectionFix();
+    initArrowAnimation();
 
     // Event listeners
     window.addEventListener("resize", () => {
@@ -159,15 +160,14 @@ function resizeCondensoText() {
 
 // MOBILE REFLECTION FIX
 function needsReflectionFix() {
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    // Check for any mobile device
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
         (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-    const isFirefoxAndroid = /Firefox/.test(navigator.userAgent) && /Android/.test(navigator.userAgent);
-    return isIOS || isFirefoxAndroid;
 }
 
 function initReflectionFix() {
     if (needsReflectionFix()) {
-        document.documentElement.classList.add("is-ios");
+        document.documentElement.classList.add("is-mobile-fix");
 
         // Target all elements that have the reflection class
         const reflectiveElements = document.querySelectorAll(".shine-reflection");
@@ -419,7 +419,7 @@ function initColorTransition() {
 
         textElements.forEach(el => {
             // Only update the gradient image, preserve other properties
-            el.style.backgroundImage = gradientValue;
+            el.style.setProperty('background-image', gradientValue, 'important');
 
             // Only enforce fixed attachment on desktop/non-mobile
             if (!needsReflectionFix()) {
@@ -439,7 +439,7 @@ function initColorTransition() {
         // Update arrow masks (fill) - they need the gradient but NOT background-clip: text
         const arrowMasks = document.querySelectorAll('.arrow-fill-mask.shine-reflection');
         arrowMasks.forEach(el => {
-            el.style.backgroundImage = gradientValue;
+            el.style.setProperty('background-image', gradientValue, 'important');
 
             if (!needsReflectionFix()) {
                 el.style.setProperty('background-attachment', 'fixed', 'important');
@@ -465,7 +465,22 @@ function initColorTransition() {
             trigger: trigger,
             start: "top 80%",      // Start transition earlier
             end: "top center",     // Complete when title reaches center
-            scrub: 2               // Smooth scrub with 2 second lag
+            scrub: 1,              // Reduced lag from 2s to 1s for better responsiveness
+            fastScrollEnd: true,   // Force completion if scrolled past quickly
+            onLeave: () => {
+                // Double safety: force final state
+                if (colorState.progress < 1) {
+                    colorState.progress = 1;
+                    updateColors();
+                }
+            },
+            onLeaveBack: () => {
+                // Double safety: force start state
+                if (colorState.progress > 0) {
+                    colorState.progress = 0;
+                    updateColors();
+                }
+            }
         },
         onUpdate: updateColors
     });
@@ -583,6 +598,63 @@ function initFooterAnimation() {
                     ease: "elastic.out(1, 0.3)",
                     overwrite: "auto",
                     onUpdate: updatePath
+                });
+            }, 50);
+        }
+    });
+}
+
+// ==========================================
+// ARROW ANIMATION (VELOCITY)
+// ==========================================
+function initArrowAnimation() {
+    const arrows = document.querySelectorAll('.arrow-icon');
+    if (arrows.length === 0) return;
+
+    // Use a proxy to tween the value smoothly
+    const proxy = { y: 0 };
+    let resetTimer;
+
+    ScrollTrigger.create({
+        trigger: "body",
+        start: "top top",
+        end: "bottom bottom",
+        onUpdate: (self) => {
+            const velocity = self.getVelocity();
+
+            // "Gravity" effect:
+            // Scroll Down (+ velocity) -> Arrows move Down (+ Y)
+            // Scroll Up (- velocity) -> Arrows move Up (- Y)
+            // User requested invert and reduce sensitivity (tuned to 80)
+            const targetY = (velocity / 80);
+            // Limit travel distance
+            const clampedY = Math.max(Math.min(targetY, 100), -100);
+
+            gsap.to(proxy, {
+                y: clampedY,
+                duration: 0.1,
+                ease: "none",
+                overwrite: "auto",
+                onUpdate: () => {
+                    arrows.forEach(arrow => {
+                        arrow.style.transform = `translateY(${proxy.y}px)`;
+                    });
+                }
+            });
+
+            // Snap back when scrolling stops
+            clearTimeout(resetTimer);
+            resetTimer = setTimeout(() => {
+                gsap.to(proxy, {
+                    y: 0,
+                    duration: 1.0,
+                    ease: "elastic.out(1, 0.4)",
+                    overwrite: "auto",
+                    onUpdate: () => {
+                        arrows.forEach(arrow => {
+                            arrow.style.transform = `translateY(${proxy.y}px)`;
+                        });
+                    }
                 });
             }, 50);
         }

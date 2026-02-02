@@ -801,11 +801,9 @@ section {
 .arrow-icon {
     width: 60px;
     height: auto;
-    margin-top: 4.5rem;
+    margin-top: 4rem;
     display: block;
     position: relative;
-    /* Needed for top animation */
-    animation: float-vertical 3s ease-in-out infinite;
 }
 
 @font-face {
@@ -894,9 +892,10 @@ section {
 }
 
 /* IOS/Mobile Fix for fixed background reflection */
-/* On iOS, background-attachment: fixed is disabled/buggy with clips. */
+/* On Mobile, background-attachment: fixed is often buggy or has performance issues with clips. */
 /* We simulate it by manually positioning the background opposite to the scroll. */
 .is-ios .shine-reflection,
+.is-mobile-fix .shine-reflection,
 .condenso-text.shine-reflection.mobile-fix,
 .info-paragraph.shine-reflection.mobile-fix,
 .arrow-fill-mask.shine-reflection {
@@ -998,11 +997,12 @@ section {
     left: 50%;
     width: 100%;
     height: 100%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateZ(-20px);
     pointer-events: none;
     opacity: 0;
+    z-index: -1;
     /* Use the sticker image and make it completely black */
-    background-image: url('/daivai/images/chiodo-sticker.png');
+    background-image: url('/daivai/images/chiodo-sticker.webp');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
