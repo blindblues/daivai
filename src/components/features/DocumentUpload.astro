@@ -1,0 +1,375 @@
+---
+interface Props {
+    userId: string;
+    currentDocumentUrl?: string | null;
+}
+
+const { userId, currentDocumentUrl } = Astro.props;
+---
+
+<div class="document-upload-container">
+    <h3>Documento Personale</h3>
+    <p class="upload-description">Carica un documento PDF (massimo 5MB)</p>
+
+    {
+        currentDocumentUrl && (
+            <div class="current-document">
+                <p class="document-label">📄 Documento caricato:</p>
+                <div class="document-actions">
+                    <a
+                        href={currentDocumentUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn-view-document"
+                    >
+                        Visualizza PDF
+                    </a>
+                    <button
+                        type="button"
+                        class="btn-delete-document"
+                        data-user-id={userId}
+                    >
+                        Elimina
+                    </button>
+                </div>
+            </div>
+        )
+    }
+
+    {
+        !currentDocumentUrl && (
+            <div class="upload-section">
+                <input
+                    type="file"
+                    id="document-upload"
+                    accept="application/pdf"
+                    class="file-input"
+                    data-user-id={userId}
+                />
+                <label for="document-upload" class="upload-label">
+                    <span class="upload-icon">📁</span>
+                    <span class="upload-text">Scegli un file PDF</span>
+                </label>
+                <p class="file-name" id="file-name" />
+                <button
+                    type="button"
+                    class="btn-upload"
+                    id="upload-btn"
+                    disabled
+                >
+                    Carica Documento
+                </button>
+            </div>
+        )
+    }
+
+    <div class="upload-status" id="upload-status"></div>
+</div>
+
+<style>
+    .document-upload-container {
+        background: transparent;
+        border: none;
+        padding: 2rem 0;
+        margin: 2rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    h3 {
+        font-family: var(--font-heading), "Condenso", sans-serif;
+        color: white;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .upload-description {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Current Document */
+    .current-document {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1.5rem;
+        border-radius: 8px;
+    }
+
+    .document-label {
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .document-actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-view-document,
+    .btn-delete-document {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        font-size: 0.95rem;
+    }
+
+    .btn-view-document {
+        background: var(--secondary-color, #f5e590);
+        color: #1a1a2e;
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+    .btn-view-document:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(245, 229, 144, 0.4);
+    }
+
+    .btn-delete-document {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .btn-delete-document:hover {
+        background: rgba(255, 0, 0, 0.3);
+    }
+
+    /* Upload Section */
+    .upload-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .file-input {
+        display: none;
+    }
+
+    .upload-label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px dashed rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .upload-label:hover {
+        border-color: var(--secondary-color, #f5e590);
+        background: rgba(245, 229, 144, 0.1);
+    }
+
+    .upload-icon {
+        font-size: 3rem;
+    }
+
+    .upload-text {
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .file-name {
+        color: var(--secondary-color, #f5e590);
+        font-weight: 600;
+        min-height: 1.5rem;
+    }
+
+    .btn-upload {
+        padding: 0.75rem 2.5rem;
+        background-color: var(--primary-color);
+        color: var(--secondary-color);
+        border: 2px solid var(--secondary-color);
+        border-radius: 50px;
+        font-family: "Condenso", sans-serif;
+        font-weight: 400;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+    }
+
+    .btn-upload:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .btn-upload:not(:disabled):hover {
+        transform: scale(1.05);
+        background-color: var(--secondary-color);
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .upload-status {
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        text-align: center;
+        min-height: 1rem;
+    }
+
+    .upload-status.success {
+        background: rgba(0, 255, 0, 0.1);
+        color: #4ade80;
+    }
+
+    .upload-status.error {
+        background: rgba(255, 0, 0, 0.1);
+        color: #ef4444;
+    }
+
+    .upload-status.loading {
+        background: rgba(251, 96, 104, 0.1);
+        color: var(--primary-color, #fb6068);
+    }
+
+    @media (max-width: 768px) {
+        .document-upload-container {
+            padding: 1.5rem;
+        }
+
+        .document-actions {
+            flex-direction: column;
+        }
+
+        .btn-view-document,
+        .btn-delete-document {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+<script>
+    import { uploadDocument, deleteDocument } from "../../lib/supabase";
+
+    // Handle file selection
+    const fileInput = document.getElementById(
+        "document-upload",
+    ) as HTMLInputElement;
+    const fileNameDisplay = document.getElementById("file-name");
+    const uploadBtn = document.getElementById(
+        "upload-btn",
+    ) as HTMLButtonElement;
+    const statusDiv = document.getElementById("upload-status");
+
+    if (fileInput) {
+        fileInput.addEventListener("change", (e) => {
+            const target = e.target as HTMLInputElement;
+            const file = target.files?.[0];
+
+            if (file) {
+                if (fileNameDisplay) {
+                    fileNameDisplay.textContent = file.name;
+                }
+                if (uploadBtn) {
+                    uploadBtn.disabled = false;
+                }
+            } else {
+                if (fileNameDisplay) {
+                    fileNameDisplay.textContent = "";
+                }
+                if (uploadBtn) {
+                    uploadBtn.disabled = true;
+                }
+            }
+        });
+    }
+
+    // Handle upload
+    if (uploadBtn) {
+        uploadBtn.addEventListener("click", async () => {
+            const file = fileInput?.files?.[0];
+            const userId = fileInput?.dataset.userId;
+
+            if (!file || !userId) return;
+
+            // Show loading state
+            if (statusDiv) {
+                statusDiv.textContent = "Caricamento in corso...";
+                statusDiv.className = "upload-status loading";
+            }
+            uploadBtn.disabled = true;
+
+            try {
+                const { data, error } = await uploadDocument(userId, file);
+
+                if (error) {
+                    throw error;
+                }
+
+                // Success
+                if (statusDiv) {
+                    statusDiv.textContent =
+                        "✓ Documento caricato con successo!";
+                    statusDiv.className = "upload-status success";
+                }
+
+                // Reload page after 1.5 seconds to show the document
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } catch (error) {
+                console.error("Upload error:", error);
+                if (statusDiv) {
+                    statusDiv.textContent = `Errore: ${error instanceof Error ? error.message : "Impossibile caricare il documento"}`;
+                    statusDiv.className = "upload-status error";
+                }
+                uploadBtn.disabled = false;
+            }
+        });
+    }
+
+    // Handle delete
+    const deleteBtn = document.querySelector(
+        ".btn-delete-document",
+    ) as HTMLButtonElement;
+
+    if (deleteBtn) {
+        deleteBtn.addEventListener("click", async () => {
+            if (!confirm("Sei sicuro di voler eliminare questo documento?")) {
+                return;
+            }
+
+            const userId = deleteBtn.dataset.userId;
+            if (!userId) return;
+
+            deleteBtn.disabled = true;
+            deleteBtn.textContent = "Eliminazione...";
+
+            try {
+                const { error } = await deleteDocument(userId);
+
+                if (error) {
+                    throw error;
+                }
+
+                // Success - reload page
+                window.location.reload();
+            } catch (error) {
+                console.error("Delete error:", error);
+                alert(
+                    `Errore: ${error instanceof Error ? error.message : "Impossibile eliminare il documento"}`,
+                );
+                deleteBtn.disabled = false;
+                deleteBtn.textContent = "Elimina";
+            }
+        });
+    }
+</script>

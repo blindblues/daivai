@@ -1,0 +1,37 @@
+---
+import { supabase } from "../lib/supabase";
+
+// This page handles the OAuth callback and redirects appropriately
+const session = await supabase.auth.getSession();
+
+if (!session.data.session) {
+    return Astro.redirect("/daivai/login");
+}
+
+// Check if profile exists and if it's completed
+const { data: profile } = await supabase
+    .from("profiles")
+    .select("profile_completed")
+    .eq("id", session.data.session.user.id)
+    .single();
+
+// If profile doesn't exist or is not completed, redirect to complete-profile
+if (!profile || profile.profile_completed === false) {
+    return Astro.redirect("/daivai/complete-profile");
+}
+
+// Otherwise redirect to profile page
+return Astro.redirect("/daivai/profile");
+---
+
+<!doctype html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Autenticazione...</title>
+    </head>
+    <body>
+        <p>Autenticazione in corso...</p>
+    </body>
+</html>

@@ -12,16 +12,18 @@ description: Linee guida rapide per modifiche di stile
 ## Regole d'Oro
 
 ### ✅ FAI
-- Lavora principalmente in `src/styles/global.css`
-- Usa CSS variables per colori e font
-- Testa in dev E in build (`npm run build && npm run preview`)
-- Lascia che le pagine ereditino da global.css
+- Lavora principalmente in `src/styles/global.css` per stili base
+- Usa CSS variables per colori (`--primary-color`, `#ff3b30` per errori/danger)
+- Per input readonly: usa `background: transparent; border: none;` (Design "Clean")
+- Per input editabili: usa background semi-trasparente e border visible
+- Usa `:global(.classe)` nei componenti Astro se devi stilare elementi generati dinamicamente via JS
 
 ### ❌ NON FARE
-- Non aggiungere `background-color` o `font-family` negli `<style>` delle pagine
-- Non hardcodare colori nei componenti
-- Non usare `font-family: inherit` sul body
-- Non toccare file in `src/components/features/` (logica del dev)
+- Non aggiungere `background-color` o `font-family` negli `<style>` delle pagine (eredita da global)
+- Non hardcodare colori (usa variabili)
+- Non toccare la logica JS in `src/components/features/`
+- Non modificare le classi funzionali (es. `editable-field`, `danger-zone`) senza coordinarsi
+
 
 ## Workflow Standard
 
@@ -53,16 +55,15 @@ description: Linee guida rapide per modifiche di stile
 
 ## File di tua Competenza
 
-- `src/styles/global.css` → Il tuo file principale
-- `src/components/ui/*.astro` → Solo stili, NO logica
-- `public/fonts/` → Font assets
-- `public/images/` → Immagini
+- `src/styles/global.css` → Il tuo file principale per variabili e reset
+- `src/components/ui/*.astro` → Componenti UI puri (Card, Bottoni generici)
+- `public/fonts/` & `public/images/` → Assets statici
 
-## File da NON Toccare
+## File da NON Toccare (o con cautela)
 
-- `src/components/features/*.astro` → Logica applicazione
-- `src/lib/*.ts` → Utilities e database
-- `src/pages/*.astro` → Solo layout positioning, mai colori/font
+- `src/components/features/*.astro` → Contengono logica complessa (Auth, Form Profilo, Upload). Modifica SOLO riferimenti CSS `:global` o wrapper esterni.
+- `src/lib/*.ts` → Utilities e database (Supabase)
+- `src/pages/profile.astro` → Contiene logica sensibile (Delete Account, RLS). Tocca solo la sezione `<style>`.
 
 ## Esempio Pagina Corretta
 

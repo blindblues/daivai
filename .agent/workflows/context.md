@@ -14,16 +14,28 @@ Questo documento serve per allineare l'AI Coding Assistant sulla struttura e le 
 ## 🛠 Tech Stack & Setup
 - **Framework**: Astro 5.
 - **Scroll**: Lenis 1.3.17+ (Attenzione all'API: usa `orientation`, `syncTouch`, `smoothWheel`).
-- **Auth & Database**: Supabase (Gestione account tramite `src/lib/supabase.ts` e componente `src/components/Auth.astro`).
-- **UI & Layout**: Navbar dinamica tramite `src/components/NavbarAuth.astro` con icona floating e modal per l'accesso.
-- **Environment**: Variabili d'ambiente in `.env` con prefisso `PUBLIC_` obbligatorio per l'uso lato client (Supabase URL e Anon Key).
+- **Auth**: Supabase Auth con Google OAuth e Row Level Security (RLS) policies.
+- **Database**: Supabase Postgres (tabelle `profiles`, `events`, `participations`).
+- **Storage**: Supabase Storage (bucket `user-documents`) per file PDF degli utenti.
+- **UI & Layout**: Navbar dinamica (`NavbarAuth.astro`) e design system basato su variabili CSS globali.
+- **Environment**: Variabili d'ambiente `.env` (PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY).
 - **Pathing**: Base URL `/daivai` attiva. Tutte le risorse devono rispettare questo prefisso.
 
 ## 📝 Decisioni Architetturali
-1. **Componentizzazione**: Ogni macro-funzione (Eventi, Auth, Navbar) ha il suo file in `src/components/`. Questo isola la logica di Michelio dallo stile del Collaboratore.
-2. **Dati Semi-Dinamici**: Eventi gestiti via Markdown in `src/content/events/` con schema TypeScript.
-3. **Autenticazione**: Sistema di login/registrazione integrato in un modal accessibile dall'icona profilo in alto a destra. Non servono tabelle manuali su Supabase per l'auth base.
-4. **Stile**: Incoraggiare l'uso di variabili CSS e mantenere il CSS nei componenti (`<style>` scoped) per evitare conflitti.
+1. **Separazione UI/Logica**:
+   - `src/components/ui/` -> Componenti puramente presentazionali (es. Card, Button).
+   - `src/components/features/` -> Componenti con logica di business (es. Auth, ProfileForm, DocumentUpload).
+2. **Profile Management**:
+   - `profile.astro` gestisce sia visualizzazione (readonly) che modifica.
+   - Design "Clean": Input trasparenti in view mode, box visible solo in edit mode.
+   - "Danger Zone" separata per azioni distruttive (es. delete account).
+3. **Autenticazione**:
+   - Google OAuth come metodo principale.
+   - Tabella `profiles` estende i dati utente (`auth.users`) tramite trigger o upsert.
+   - RLS policies proteggono i dati (ogni utente vede/modifica solo il suo).
+4. **Stile**:
+   - Uso intensivo di variabili CSS (`--primary-color`, `var(--font-heading)`).
+   - CSS Scoped nei componenti, ma con `:global()` quando si manipolano elementi dinamici (es. input creati via JS o readonly).
 
 ## 🔍 Problemi Noti & Soluzioni
 - **Errori TypeScript**: Se compaiono errori sui moduli Astro, eseguire `npx astro sync`.

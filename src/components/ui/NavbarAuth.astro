@@ -4,8 +4,13 @@
 ---
 
 <div class="nav-auth-wrapper">
-    <!-- Icona Profilo con Link Diretto -->
-    <a href="/daivai/login" class="profile-btn" aria-label="Area Personale">
+    <!-- Icona Profilo con Link Dinamico -->
+    <a
+        href="/daivai/login"
+        id="profile-link"
+        class="profile-btn"
+        aria-label="Area Personale"
+    >
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -23,6 +28,29 @@
         >
     </a>
 </div>
+
+<script>
+    import { supabase } from "../../lib/supabase";
+
+    // Update profile link based on auth status
+    async function updateProfileLink() {
+        const {
+            data: { user },
+        } = await supabase.auth.getUser();
+        const profileLink = document.getElementById("profile-link");
+
+        if (user && profileLink) {
+            profileLink.href = "/daivai/profile";
+
+            // Hide profile icon if we're on the profile page
+            if (window.location.pathname === "/daivai/profile") {
+                profileLink.style.display = "none";
+            }
+        }
+    }
+
+    updateProfileLink();
+</script>
 
 <style>
     .nav-auth-wrapper {
