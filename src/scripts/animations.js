@@ -173,9 +173,16 @@ function resizeCondensoText() {
 
 // MOBILE REFLECTION FIX
 function needsReflectionFix() {
+    // Check for Firefox (has issues with background-attachment: fixed + background-clip: text)
+    const isFirefox = /Firefox/i.test(navigator.userAgent);
+
     // Check for any mobile device
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    // Check for iPad OS (disguised as MacIntel)
+    const isPadOS = (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+    return isFirefox || isMobile || isPadOS;
 }
 
 function initReflectionFix() {
@@ -376,7 +383,7 @@ function createSticker(wrapperId, containerId, direction = 'vertical') {
 // COLOR TRANSITION ON SCROLL
 // ==========================================
 function initColorTransition() {
-    const trigger = document.getElementById('ultimi-eventi-title');
+    const trigger = document.getElementById('ultimi-eventi');
     const body = document.body;
 
     if (!trigger) return;

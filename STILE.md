@@ -27,6 +27,11 @@ I colori principali definiscono l'identità del brand:
   - Le animazioni devono avere "scrubbing" (collegate direttamente alla barra di scorrimento) o trigger precisi.
   - **Parallasse**: Effetti di sfocatura e scorrimento differenziale sugli elementi in background (es. logo).
 - **Performance**: Utilizzare `gsap.quickSetter` o proprietà `transform` per garantire i 60fps, specialmente su mobile.
+- **MCP Server**: Utilizzare il server MCP **`gsap-master`** per ottenere assistenza esperta su GSAP:
+  - `mcp_gsap-master_understand_and_create_animation` - Per creare animazioni da descrizioni natural language
+  - `mcp_gsap-master_debug_animation_issue` - Per debuggare problemi con animazioni esistenti
+  - `mcp_gsap-master_optimize_for_performance` - Per ottimizzare animazioni a 60fps
+  - `mcp_gsap-master_create_production_pattern` - Per pattern pronti (hero, scroll-system, text-effects, etc.)
 
 ## 5. Layout e Struttura
 - **Unità Viewport**: Uso estensivo di `vw` e `vh` per layout responsivi.
