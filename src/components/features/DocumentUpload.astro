@@ -257,7 +257,7 @@ const { userId, currentDocumentUrl } = Astro.props;
 </style>
 
 <script>
-    import { uploadDocument, deleteDocument } from "../../lib/supabase";
+    import { uploadDocument, deleteDocument } from "@/lib/database/storage";
 
     // Handle file selection
     const fileInput = document.getElementById(

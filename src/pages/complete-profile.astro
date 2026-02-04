@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css";
-import { supabase } from "../lib/supabase";
+import { supabase } from "@/lib/client";
 ---
 
 <!doctype html>
@@ -120,7 +120,7 @@ import { supabase } from "../lib/supabase";
         </div>
 
         <script>
-            import { supabase } from "../lib/supabase";
+            import { supabase } from "@/lib/client";
 
             async function initCompletionFlow() {
                 // Check if user is authenticated

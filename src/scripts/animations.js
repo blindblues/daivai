@@ -38,6 +38,19 @@ export function initAnimations() {
             }, 100);
         });
     }
+
+    // Ensure ScrollTrigger refreshes after everything (images, css) is fully loaded
+    // This is crucial for Firefox and sometimes Chrome on slower connections
+    window.addEventListener("load", () => {
+        console.log("Window loaded, refreshing GSAP...");
+        resizeCondensoText();
+        ScrollTrigger.refresh();
+
+        // Double check a bit later to be safe
+        setTimeout(() => {
+            ScrollTrigger.refresh();
+        }, 500);
+    });
 }
 
 // ==========================================

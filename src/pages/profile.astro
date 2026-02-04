@@ -105,8 +105,8 @@ import DocumentUpload from "../components/features/DocumentUpload.astro";
         </main>
 
         <script>
-            import { supabase } from "../lib/supabase";
-            import { getCurrentUserProfile } from "../lib/supabase";
+            import { supabase } from "@/lib/client";
+            import { getCurrentUserProfile } from "@/lib/database/profiles";
 
             async function loadProfile() {
                 const loadingEl = document.getElementById("loading-profile");
