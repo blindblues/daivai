@@ -433,8 +433,8 @@ function initColorTransition() {
         // Text gradient: yellow -> red (inverse of background)
         const textColor = lerpColor(yellowRGB, redRGB, progress);
         const gradientValue = `linear-gradient(to bottom,
-            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 0) 20%,
-            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1) 40%,
+            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 0) 0%,
+            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1) 20%,
             rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1) 80%,
             rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 0) 100%)`;
 
