@@ -1342,6 +1342,33 @@ section {
 }
 
 /* ==========================================
+   REVEAL ANIMATIONS
+   ========================================== */
+.reveal-text {
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    /* Ensure reveal-text doesn't inherit background-clip as it might clip the whole block */
+    background-clip: initial !important;
+    -webkit-background-clip: initial !important;
+}
+
+.reveal-char,
+.reveal-line {
+    display: inline-block;
+    will-change: transform, opacity;
+    /* Inherit clipping and color from parent to maintain reflection */
+    color: inherit !important;
+    background-clip: inherit !important;
+    -webkit-background-clip: inherit !important;
+    background-image: inherit !important;
+    background-attachment: inherit !important;
+    background-size: inherit !important;
+    background-position: inherit !important;
+}
+
+/* ==========================================
    FOOTER STYLES
    ========================================== */
 .site-footer {

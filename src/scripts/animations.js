@@ -9,6 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 export function initAnimations() {
     console.log("Initializing GSAP animations...");
 
+    initTextAppear();
     initParallax();
     initUniscitiAnimation();
     initStickerAnimation();
@@ -678,5 +679,83 @@ function initArrowAnimation() {
                 });
             }, 50);
         }
+    });
+}
+
+// ==========================================
+// TEXT APPEARANCE ANIMATIONS
+// ==========================================
+function initTextAppear() {
+    const charsReveal = document.querySelectorAll('.reveal-chars');
+    const linesReveal = document.querySelectorAll('.reveal-lines');
+
+    // Split text into characters
+    charsReveal.forEach(el => {
+        // Only split if not already split
+        if (el.querySelector('.reveal-char')) return;
+
+        const text = el.textContent.trim();
+        el.textContent = '';
+        el.classList.add('reveal-text');
+
+        // Capture original styles to ensure they apply to spans if needed
+        // but mostly rely on 'inherit' in CSS
+
+        [...text].forEach(char => {
+            const span = document.createElement('span');
+            span.classList.add('reveal-char');
+            // Use nbsp for spaces to maintain width
+            span.textContent = char === ' ' ? '\u00A0' : char;
+            el.appendChild(span);
+        });
+
+        const chars = el.querySelectorAll('.reveal-char');
+        gsap.from(chars, {
+            y: 50,
+            opacity: 0,
+            duration: 0.6, // Faster (from 0.8)
+            stagger: 0.02, // Faster (from 0.03)
+            ease: "back.out(1.7)",
+            scrollTrigger: {
+                trigger: el,
+                start: "top 95%",
+                toggleActions: "play none none reverse"
+            }
+        });
+    });
+
+    // Split text into words/lines
+    linesReveal.forEach(el => {
+        if (el.querySelector('.reveal-line')) return;
+
+        const text = el.textContent.trim();
+        const words = text.split(/(\s+)/); // Preserve spaces
+        el.textContent = '';
+        el.classList.add('reveal-text');
+
+        words.forEach(word => {
+            if (word.trim().length === 0) {
+                el.appendChild(document.createTextNode(word));
+                return;
+            }
+            const span = document.createElement('span');
+            span.classList.add('reveal-line');
+            span.textContent = word;
+            el.appendChild(span);
+        });
+
+        const wordSpans = el.querySelectorAll('.reveal-line');
+        gsap.from(wordSpans, {
+            y: 30,
+            opacity: 0,
+            duration: 0.6, // Faster (from 1)
+            stagger: 0.03, // Much faster (from 0.08)
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: el,
+                start: "top 95%",
+                toggleActions: "play none none reverse"
+            }
+        });
     });
 }
