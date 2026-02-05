@@ -446,7 +446,7 @@ function initColorTransition() {
             if (!needsReflectionFix()) {
                 el.style.setProperty('background-attachment', 'fixed', 'important');
                 el.style.setProperty('background-position', 'center', 'important');
-                el.style.setProperty('background-size', '100% 100vh', 'important');
+                el.style.setProperty('background-size', '100vw 100vh', 'important');
                 el.style.setProperty('background-repeat', 'no-repeat', 'important');
             }
 
@@ -465,7 +465,7 @@ function initColorTransition() {
             if (!needsReflectionFix()) {
                 el.style.setProperty('background-attachment', 'fixed', 'important');
                 el.style.setProperty('background-position', 'center', 'important');
-                el.style.setProperty('background-size', '100% 100vh', 'important');
+                el.style.setProperty('background-size', '100vw 100vh', 'important');
                 el.style.setProperty('background-repeat', 'no-repeat', 'important');
             }
             // Do NOT set background-clip: text here, as it hides the div if there's no text
