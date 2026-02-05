@@ -94,31 +94,23 @@ import Auth from "@/components/features/Auth.astro";
 </div>
 
 <!-- Menu Overlay -->
-<button id="close-menu" class="close-menu-btn" aria-label="Chiudi Menu">
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="32"
-        height="32"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        ><line x1="18" y1="6" x2="6" y2="18"></line><line
-            x1="6"
-            y1="6"
-            x2="18"
-            y2="18"></line></svg
-    >
-</button>
-<nav class="menu-nav">
-    <a href="/daivai/" class="menu-link">Home</a>
-    <a href="/daivai/#cosa-siamo" class="menu-link">Chi siamo</a>
-    <a href="/daivai/#cosa-facciamo" class="menu-link">Cosa facciamo</a>
-    <a href="/daivai/#come-funziona" class="menu-link">Come funziona</a>
-    <a href="/daivai/#ultimi-eventi" class="menu-link">Eventi</a>
-</nav>
+<div id="menu-overlay" class="menu-overlay">
+    <div class="menu-header">
+        <a href="/daivai/" aria-label="Home">
+            <img
+                src="/daivai/images/DaiVai-yellow.svg"
+                alt="DaiVai Logo"
+                class="menu-logo"
+            />
+        </a>
+    </div>
+    <nav class="menu-nav">
+        <a href="/daivai/#cosa-siamo" class="menu-link">Cosa siamo</a>
+        <a href="/daivai/#cosa-facciamo" class="menu-link">Cosa facciamo</a>
+        <a href="/daivai/#come-funziona" class="menu-link">Come funziona</a>
+        <a href="/daivai/#ultimi-eventi" class="menu-link">Eventi</a>
+    </nav>
+</div>
 
 <script>
     import { supabase } from "../../lib/supabase";
@@ -201,9 +193,6 @@ import Auth from "@/components/features/Auth.astro";
         "menu-overlay",
     ) as HTMLDivElement;
     const menuLinks = document.querySelectorAll(".menu-link");
-    const closeMenu = document.getElementById(
-        "close-menu",
-    ) as HTMLButtonElement;
     const navAuthWrapper = document.querySelector(
         ".nav-auth-wrapper",
     ) as HTMLDivElement;
@@ -213,32 +202,57 @@ import Auth from "@/components/features/Auth.astro";
     function toggleMenu() {
         isMenuOpen = !isMenuOpen;
 
+        // Kill existing animations to prevent race conditions
+        gsap.killTweensOf([
+            navAuthWrapper,
+            menuOverlay,
+            menuLinks,
+            ".menu-header",
+        ]);
+
+        // Calculate button center for the radial expansion
+        const rect = menuToggle.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
         if (isMenuOpen) {
+            // Calculate radius to cover the entire screen
+            const radius = Math.hypot(
+                Math.max(centerX, window.innerWidth - centerX),
+                Math.max(centerY, window.innerHeight - centerY),
+            );
+
             // Hide navbar buttons
             gsap.to(navAuthWrapper, {
                 opacity: 0,
                 duration: 0.3,
                 pointerEvents: "none",
+                overwrite: true,
             });
 
-            // Show overlay
-            gsap.set(menuOverlay, { display: "flex" });
-            gsap.to(menuOverlay, {
+            // Show overlay with circle expansion
+            gsap.set(menuOverlay, {
+                display: "flex",
                 opacity: 1,
-                duration: 0.4,
-                ease: "power2.out",
+                clipPath: `circle(0% at ${centerX}px ${centerY}px)`,
             });
 
-            // Simple animation for links
-            gsap.fromTo(
-                menuLinks,
-                { opacity: 0 },
-                {
-                    opacity: 1,
-                    duration: 0.4,
-                    ease: "power2.out",
-                },
-            );
+            gsap.to(menuOverlay, {
+                clipPath: `circle(${radius}px at ${centerX}px ${centerY}px)`,
+                duration: 0.5,
+                ease: "expo.inOut",
+                overwrite: true,
+            });
+
+            // Logo and links staggered entrance
+            gsap.to([".menu-header", ...menuLinks], {
+                opacity: 1,
+                duration: 0.6,
+                stagger: 0.08,
+                ease: "power2.out",
+                delay: 0.2, // Start appearing as the circle expands
+                overwrite: true,
+            });
 
             // Prevent scrolling
             document.body.style.overflow = "hidden";
@@ -246,18 +260,34 @@ import Auth from "@/components/features/Auth.astro";
             // Show navbar buttons
             gsap.to(navAuthWrapper, {
                 opacity: 1,
-                duration: 0.3,
+                duration: 0.2,
                 pointerEvents: "auto",
+                overwrite: true,
+                delay: 0.25, // Wait for the circle to shrink a bit
             });
 
-            // Hide overlay
+            // Hide overlay by shrinking the circle
             gsap.to(menuOverlay, {
-                opacity: 0,
-                duration: 0.3,
-                ease: "power2.in",
+                clipPath: `circle(0% at ${centerX}px ${centerY}px)`,
+                duration: 0.4,
+                ease: "expo.inOut",
+                overwrite: true,
                 onComplete: () => {
-                    gsap.set(menuOverlay, { display: "none" });
+                    if (!isMenuOpen) {
+                        gsap.set(menuOverlay, { display: "none" });
+                        // Reset opacity for next opening
+                        gsap.set([".menu-header", ...menuLinks], {
+                            opacity: 0,
+                        });
+                    }
                 },
+            });
+
+            // Fast fade out for elements
+            gsap.to([".menu-header", ...menuLinks], {
+                opacity: 0,
+                duration: 0.2,
+                overwrite: true,
             });
 
             // Restore scrolling
@@ -267,10 +297,6 @@ import Auth from "@/components/features/Auth.astro";
 
     if (menuToggle) {
         menuToggle.addEventListener("click", toggleMenu);
-    }
-
-    if (closeMenu) {
-        closeMenu.addEventListener("click", toggleMenu);
     }
 
     // Close menu when clicking on a link
@@ -303,18 +329,18 @@ import Auth from "@/components/features/Auth.astro";
         align-items: center;
         gap: 4px;
         padding: 6px;
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(var(--primary-rgb), 0.4);
         backdrop-filter: blur(12px) saturate(180%);
         -webkit-backdrop-filter: blur(12px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 40px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
 
     .profile-btn,
     .menu-toggle {
         background: transparent;
-        color: white;
+        color: var(--secondary-color);
         border: none;
         padding: 10px;
         border-radius: 50%;
@@ -329,7 +355,7 @@ import Auth from "@/components/features/Auth.astro";
 
     .profile-btn:hover,
     .menu-toggle:hover {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.05);
         transform: scale(1.05);
     }
 
@@ -351,7 +377,7 @@ import Auth from "@/components/features/Auth.astro";
     }
 
     .login-modal-content {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(var(--primary-rgb), 0.4);
         backdrop-filter: blur(10px) saturate(180%);
         -webkit-backdrop-filter: blur(10px) saturate(180%);
         border: 1px solid rgba(255, 255, 255, 0.2);
@@ -388,18 +414,31 @@ import Auth from "@/components/features/Auth.astro";
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: linear-gradient(
-            135deg,
-            rgba(251, 96, 104, 0.95) 0%,
-            rgba(245, 229, 144, 0.95) 100%
-        );
+        background: #fb6068;
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         display: none;
-        opacity: 0;
         z-index: 999;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+        padding: 40px;
+        /* Initial clip-path for expansion */
+        clip-path: circle(0% at top right);
+    }
+
+    .menu-header {
+        position: absolute;
+        top: 120px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        opacity: 0;
+    }
+
+    .menu-logo {
+        width: 120px;
+        height: auto;
     }
 
     .menu-nav {
@@ -407,6 +446,7 @@ import Auth from "@/components/features/Auth.astro";
         flex-direction: column;
         gap: 3.5rem;
         align-items: center;
+        margin-top: 120px;
     }
 
     .menu-link {
@@ -414,50 +454,19 @@ import Auth from "@/components/features/Auth.astro";
         font-weight: 600;
         font-size: clamp(1.4rem, 6vw, 2.6rem);
         letter-spacing: 0.05em;
-        color: white;
+        color: var(--secondary-color);
         text-decoration: none;
         text-transform: none;
-        transition: all 0.3s ease;
+        transition:
+            transform 0.3s ease,
+            text-shadow 0.3s ease;
         position: relative;
-    }
-
-    .menu-link::after {
-        content: "";
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        width: 0;
-        height: 3px;
-        background: white;
-        transition: width 0.3s ease;
+        opacity: 0;
     }
 
     .menu-link:hover {
         transform: scale(1.1);
-        text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-    }
-
-    .menu-link:hover::after {
-        width: 100%;
-    }
-
-    .close-menu-btn {
-        position: absolute;
-        top: 25px;
-        right: 25px;
-        background: transparent;
-        border: none;
-        color: white;
-        cursor: pointer;
-        padding: 10px;
-        transition: transform 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .close-menu-btn:hover {
-        transform: scale(1.1);
+        text-shadow: 0 0 20px rgba(245, 229, 144, 0.5);
     }
 
     @media (max-width: 768px) {
