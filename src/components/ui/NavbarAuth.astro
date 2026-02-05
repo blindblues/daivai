@@ -101,9 +101,6 @@ import Auth from "@/components/features/Auth.astro";
         <a href="/daivai/#cosa-facciamo" class="menu-link">Cosa facciamo</a>
         <a href="/daivai/#come-funziona" class="menu-link">Come funziona</a>
         <a href="/daivai/#ultimi-eventi" class="menu-link">Eventi</a>
-        <a href="/daivai/profile" id="menu-profile-link" class="menu-link"
-            >Il mio profilo</a
-        >
     </nav>
 </div>
 
@@ -155,26 +152,12 @@ import Auth from "@/components/features/Auth.astro";
             data: { user },
         } = await supabase.auth.getUser();
 
-        const menuProfileLink = document.getElementById(
-            "menu-profile-link",
-        ) as HTMLAnchorElement;
-
         if (user && profileLink) {
             profileLink.href = "/daivai/profile";
-            if (menuProfileLink) {
-                menuProfileLink.href = "/daivai/profile";
-            }
         } else {
             if (profileLink) {
                 profileLink.addEventListener("click", (e) => {
                     e.preventDefault();
-                    toggleLoginModal(true);
-                });
-            }
-            if (menuProfileLink) {
-                menuProfileLink.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    toggleMenu(); // Close hamburger
                     toggleLoginModal(true);
                 });
             }
