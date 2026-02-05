@@ -1,11 +1,11 @@
 ---
-// Rimosso import di Auth component perché non serve più qui
+import Auth from "@/components/features/Auth.astro";
 ---
 
 <div class="nav-auth-wrapper">
     <!-- Icona Profilo con Link Dinamico -->
     <a
-        href="/daivai/login"
+        href="#"
         id="profile-link"
         class="profile-btn"
         aria-label="Area Personale"
@@ -64,6 +64,35 @@
     </button>
 </div>
 
+<!-- Login Modal -->
+<div id="login-modal" class="login-modal">
+    <div class="login-modal-content">
+        <button
+            id="close-login"
+            class="close-modal-btn"
+            aria-label="Chiudi Login"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><line x1="18" y1="6" x2="6" y2="18"></line><line
+                    x1="6"
+                    y1="6"
+                    x2="18"
+                    y2="18"></line></svg
+            >
+        </button>
+        <Auth />
+    </div>
+</div>
+
 <!-- Menu Overlay -->
 <div id="menu-overlay" class="menu-overlay">
     <nav class="menu-nav">
@@ -82,14 +111,50 @@
     import { supabase } from "../../lib/supabase";
     import { gsap } from "gsap";
 
+    // Login Modal Toggle
+    const loginModal = document.getElementById("login-modal") as HTMLDivElement;
+    const closeLogin = document.getElementById(
+        "close-login",
+    ) as HTMLButtonElement;
+    const profileLink = document.getElementById(
+        "profile-link",
+    ) as HTMLAnchorElement;
+
+    async function toggleLoginModal(show: boolean) {
+        if (show) {
+            gsap.set(loginModal, { display: "flex" });
+            gsap.to(loginModal, {
+                opacity: 1,
+                duration: 0.5,
+                ease: "power2.out",
+            });
+            gsap.from(".login-modal-content", {
+                scale: 0.8,
+                y: 20,
+                opacity: 0,
+                duration: 0.6,
+                ease: "back.out(1.7)",
+            });
+            document.body.style.overflow = "hidden";
+        } else {
+            gsap.to(loginModal, {
+                opacity: 0,
+                duration: 0.3,
+                ease: "power2.in",
+                onComplete: () => {
+                    gsap.set(loginModal, { display: "none" });
+                },
+            });
+            document.body.style.overflow = "";
+        }
+    }
+
     // Update profile link based on auth status
     async function updateProfileLink() {
         const {
             data: { user },
         } = await supabase.auth.getUser();
-        const profileLink = document.getElementById(
-            "profile-link",
-        ) as HTMLAnchorElement;
+
         const menuProfileLink = document.getElementById(
             "menu-profile-link",
         ) as HTMLAnchorElement;
@@ -99,17 +164,35 @@
             if (menuProfileLink) {
                 menuProfileLink.href = "/daivai/profile";
             }
-
-            // Hide profile icon if we're on the profile page
-            if (window.location.pathname === "/daivai/profile") {
-                profileLink.style.display = "none";
+        } else {
+            if (profileLink) {
+                profileLink.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    toggleLoginModal(true);
+                });
             }
-        } else if (menuProfileLink) {
-            menuProfileLink.href = "/daivai/login";
+            if (menuProfileLink) {
+                menuProfileLink.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    toggleMenu(); // Close hamburger
+                    toggleLoginModal(true);
+                });
+            }
         }
     }
 
     updateProfileLink();
+
+    if (closeLogin) {
+        closeLogin.addEventListener("click", () => toggleLoginModal(false));
+    }
+
+    // Close modal when clicking outside
+    loginModal?.addEventListener("click", (e) => {
+        if (e.target === loginModal) {
+            toggleLoginModal(false);
+        }
+    });
 
     // Hamburger Menu Toggle
     const menuToggle = document.getElementById(
@@ -241,6 +324,55 @@
         transform: scale(1.05);
     }
 
+    .login-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        display: none;
+        opacity: 0;
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .login-modal-content {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px) saturate(180%);
+        -webkit-backdrop-filter: blur(10px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 24px;
+        padding: 40px;
+        width: 100%;
+        max-width: 450px;
+        position: relative;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .close-modal-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: transparent;
+        border: none;
+        color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: color 0.3s ease;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .close-modal-btn:hover {
+        color: white;
+    }
+
     .menu-overlay {
         position: fixed;
         top: 0;
@@ -305,6 +437,10 @@
 
         .menu-nav {
             gap: 1.5rem;
+        }
+
+        .login-modal-content {
+            padding: 30px 20px;
         }
     }
 </style>

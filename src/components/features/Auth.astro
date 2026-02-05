@@ -148,8 +148,10 @@
                     messageDiv.innerText =
                         "Registrazione avvenuta con successo! Accesso in corso...";
                 }
-                // Verifica immediata dello stato utente per switchare UI
-                checkUser();
+                // Redirect after success
+                setTimeout(() => {
+                    window.location.href = "/daivai/profile";
+                }, 1000);
             }
         } else {
             console.log("Tentativo di accesso per:", email);
@@ -163,7 +165,8 @@
             } else {
                 console.log("Accesso eseguito:", data);
                 if (messageDiv) messageDiv.innerText = "Accesso effettuato!";
-                checkUser();
+                // Redirect after success
+                window.location.href = "/daivai/profile";
             }
         }
     });
