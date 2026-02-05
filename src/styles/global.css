@@ -5,19 +5,9 @@
     --secondary-color: #f5e590;
     --secondary-rgb: 245, 229, 144;
     --font-heading: 'Condenso', sans-serif;
-    --font-body: 'Integral CF', sans-serif;
+    --font-body: 'Poppins', sans-serif;
 }
 
-/* Font Face per Schabo */
-@font-face {
-    font-family: 'Schabo';
-    src: url('/daivai/fonts/Schabo/SCHABO-Condensed.woff2') format('woff2'),
-        url('/daivai/fonts/Schabo/SCHABO-Condensed.woff') format('woff'),
-        url('/daivai/fonts/Schabo/SCHABO-Condensed.otf') format('opentype');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
 
 /* Font Face per Condenso */
 @font-face {
@@ -30,245 +20,8 @@
     font-style: normal;
 }
 
-@font-face {
-    font-family: 'Gotham';
-    src: url('/daivai/fonts/Gotham-Font/GothamBook.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
 
-@font-face {
-    font-family: 'Gotham';
-    src: url('/daivai/fonts/Gotham-Font/GothamMedium.ttf') format('truetype');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-}
 
-@font-face {
-    font-family: 'Gotham';
-    src: url('/daivai/fonts/Gotham-Font/GothamBold.ttf') format('truetype');
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-}
-
-/* Font Face per Integral CF */
-@font-face {
-    font-family: 'Integral CF';
-    src: url('/daivai/fonts/integral-cf/integral-cf-regular.otf') format('opentype');
-    font-weight: 400;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Integral CF';
-    src: url('/daivai/fonts/integral-cf/integral-cf-regular-oblique.otf') format('opentype');
-    font-weight: 400;
-    font-style: oblique;
-}
-
-@font-face {
-    font-family: 'Integral CF';
-    src: url('/daivai/fonts/integral-cf/integral-cf-medium.otf') format('opentype');
-    font-weight: 500;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Integral CF';
-    src: url('/daivai/fonts/integral-cf/integral-cf-medium-oblique.otf') format('opentype');
-    font-weight: 500;
-    font-style: oblique;
-}
-
-@font-face {
-    font-family: 'Integral CF';
-    src: url('/daivai/fonts/integral-cf/integral-cf-bold.otf') format('opentype');
-    font-weight: 700;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Integral CF';
-    src: url('/daivai/fonts/integral-cf/integral-cf-bold-oblique.otf') format('opentype');
-    font-weight: 700;
-    font-style: oblique;
-}
-
-@font-face {
-    font-family: 'Integral CF';
-    src: url('/daivai/fonts/integral-cf/integral-cf-heavy.otf') format('opentype');
-    font-weight: 800;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Integral CF';
-    src: url('/daivai/fonts/integral-cf/integral-cf-heavy-oblique.otf') format('opentype');
-    font-weight: 800;
-    font-style: oblique;
-}
-
-@font-face {
-    font-family: 'Integral CF';
-    src: url('/daivai/fonts/integral-cf/integral-cf-extra-bold.otf') format('opentype');
-    font-weight: 900;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Integral CF';
-    src: url('/daivai/fonts/integral-cf/integral-cf-extra-bold-oblique.otf') format('opentype');
-    font-weight: 900;
-    font-style: oblique;
-}
-
-/* Font Face per Whyte */
-@font-face {
-    font-family: 'Whyte';
-    src: url('/daivai/fonts/Whyte/Whyte-Thin.woff2') format('woff2'),
-        url('/daivai/fonts/Whyte/Whyte-Thin.woff') format('woff');
-    font-weight: 100;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Whyte';
-    src: url('/daivai/fonts/Whyte/Whyte-ThinItalic.woff2') format('woff2'),
-        url('/daivai/fonts/Whyte/Whyte-ThinItalic.woff') format('woff');
-    font-weight: 100;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: 'Whyte';
-    src: url('/daivai/fonts/Whyte/Whyte-ExtraLight.woff2') format('woff2'),
-        url('/daivai/fonts/Whyte/Whyte-ExtraLight.woff') format('woff');
-    font-weight: 200;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Whyte';
-    src: url('/daivai/fonts/Whyte/Whyte-ExtraLightItalic.woff2') format('woff2'),
-        url('/daivai/fonts/Whyte/Whyte-ExtraLightItalic.woff') format('woff');
-    font-weight: 200;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: 'Whyte';
-    src: url('/daivai/fonts/Whyte/Whyte-Light.woff2') format('woff2'),
-        url('/daivai/fonts/Whyte/Whyte-Light.woff') format('woff');
-    font-weight: 300;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Whyte';
-    src: url('/daivai/fonts/Whyte/Whyte-LightItalic.woff2') format('woff2'),
-        url('/daivai/fonts/Whyte/Whyte-LightItalic.woff') format('woff');
-    font-weight: 300;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: 'Whyte';
-    src: url('/daivai/fonts/Whyte/Whyte-Book.woff2') format('woff2'),
-        url('/daivai/fonts/Whyte/Whyte-Book.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Whyte';
-    src: url('/daivai/fonts/Whyte/Whyte-BookItalic.woff2') format('woff2'),
-        url('/daivai/fonts/Whyte/Whyte-BookItalic.woff') format('woff');
-    font-weight: 400;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: 'Whyte';
-    src: url('/daivai/fonts/Whyte/Whyte-Regular.woff2') format('woff2'),
-        url('/daivai/fonts/Whyte/Whyte-Regular.woff') format('woff');
-    font-weight: 500;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Whyte';
-    src: url('/daivai/fonts/Whyte/Whyte-Italic.woff2') format('woff2'),
-        url('/daivai/fonts/Whyte/Whyte-Italic.woff') format('woff');
-    font-weight: 500;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: 'Whyte';
-    src: url('/daivai/fonts/Whyte/Whyte-Medium.woff2') format('woff2'),
-        url('/daivai/fonts/Whyte/Whyte-Medium.woff') format('woff');
-    font-weight: 600;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Whyte';
-    src: url('/daivai/fonts/Whyte/Whyte-MediumItalic.woff2') format('woff2'),
-        url('/daivai/fonts/Whyte/Whyte-MediumItalic.woff') format('woff');
-    font-weight: 600;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: 'Whyte';
-    src: url('/daivai/fonts/Whyte/Whyte-Bold.woff2') format('woff2'),
-        url('/daivai/fonts/Whyte/Whyte-Bold.woff') format('woff');
-    font-weight: 700;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Whyte';
-    src: url('/daivai/fonts/Whyte/Whyte-BoldItalic.woff2') format('woff2'),
-        url('/daivai/fonts/Whyte/Whyte-BoldItalic.woff') format('woff');
-    font-weight: 700;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: 'Whyte';
-    src: url('/daivai/fonts/Whyte/Whyte-Black.woff2') format('woff2'),
-        url('/daivai/fonts/Whyte/Whyte-Black.woff') format('woff');
-    font-weight: 800;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Whyte';
-    src: url('/daivai/fonts/Whyte/Whyte-BlackItalic.woff2') format('woff2'),
-        url('/daivai/fonts/Whyte/Whyte-BlackItalic.woff') format('woff');
-    font-weight: 800;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: 'Whyte';
-    src: url('/daivai/fonts/Whyte/Whyte-Heavy.woff2') format('woff2'),
-        url('/daivai/fonts/Whyte/Whyte-Heavy.woff') format('woff');
-    font-weight: 900;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Whyte';
-    src: url('/daivai/fonts/Whyte/Whyte-HeavyItalic.woff2') format('woff2'),
-        url('/daivai/fonts/Whyte/Whyte-HeavyItalic.woff') format('woff');
-    font-weight: 900;
-    font-style: italic;
-}
 
 * {
     margin: 0;
@@ -286,7 +39,7 @@ body {
 }
 
 body {
-    font-family: 'Integral CF', 'Arial', sans-serif;
+    font-family: var(--font-body);
     line-height: 1.6;
     color: #333;
     margin: 0;
@@ -301,12 +54,12 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: 'Whyte', 'Arial', sans-serif;
+    font-family: var(--font-heading);
 }
 
 p {
-    font-family: 'Whyte', 'Arial', sans-serif;
-    font-weight: 600;
+    font-family: var(--font-body);
+    font-weight: 400;
 }
 
 .container {
@@ -719,7 +472,7 @@ section {
 }
 
 .condenso-text.shine-reflection {
-    font-family: 'Condenso', 'Bebas Neue', 'Anton', 'Whyte', 'Arial', sans-serif !important;
+    font-family: var(--font-heading) !important;
     /* font-size handled by JS */
     margin: 0;
     padding: 0;
