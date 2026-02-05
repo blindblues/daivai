@@ -4,7 +4,7 @@
     --primary-rgb: 251, 96, 104;
     --secondary-color: #f5e590;
     --secondary-rgb: 245, 229, 144;
-    --font-heading: 'Condenso', sans-serif;
+    --font-heading: 'Poppins', sans-serif;
     --font-body: 'Poppins', sans-serif;
 }
 
@@ -55,6 +55,7 @@ h4,
 h5,
 h6 {
     font-family: var(--font-heading);
+    font-weight: 700;
 }
 
 p {
@@ -472,7 +473,7 @@ section {
 }
 
 .condenso-text.shine-reflection {
-    font-family: var(--font-heading) !important;
+    font-family: 'Condenso', 'Poppins', sans-serif !important;
     /* font-size handled by JS */
     margin: 0;
     padding: 0;
