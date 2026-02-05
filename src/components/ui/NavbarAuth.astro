@@ -94,15 +94,31 @@ import Auth from "@/components/features/Auth.astro";
 </div>
 
 <!-- Menu Overlay -->
-<div id="menu-overlay" class="menu-overlay">
-    <nav class="menu-nav">
-        <a href="/daivai/" class="menu-link">Home</a>
-        <a href="/daivai/#cosa-siamo" class="menu-link">Chi siamo</a>
-        <a href="/daivai/#cosa-facciamo" class="menu-link">Cosa facciamo</a>
-        <a href="/daivai/#come-funziona" class="menu-link">Come funziona</a>
-        <a href="/daivai/#ultimi-eventi" class="menu-link">Eventi</a>
-    </nav>
-</div>
+<button id="close-menu" class="close-menu-btn" aria-label="Chiudi Menu">
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        ><line x1="18" y1="6" x2="6" y2="18"></line><line
+            x1="6"
+            y1="6"
+            x2="18"
+            y2="18"></line></svg
+    >
+</button>
+<nav class="menu-nav">
+    <a href="/daivai/" class="menu-link">Home</a>
+    <a href="/daivai/#cosa-siamo" class="menu-link">Chi siamo</a>
+    <a href="/daivai/#cosa-facciamo" class="menu-link">Cosa facciamo</a>
+    <a href="/daivai/#come-funziona" class="menu-link">Come funziona</a>
+    <a href="/daivai/#ultimi-eventi" class="menu-link">Eventi</a>
+</nav>
 
 <script>
     import { supabase } from "../../lib/supabase";
@@ -185,10 +201,12 @@ import Auth from "@/components/features/Auth.astro";
         "menu-overlay",
     ) as HTMLDivElement;
     const menuLinks = document.querySelectorAll(".menu-link");
-    const hamburgerIcon = document.querySelector(
-        ".hamburger-icon",
-    ) as SVGElement;
-    const closeIcon = document.querySelector(".close-icon") as SVGElement;
+    const closeMenu = document.getElementById(
+        "close-menu",
+    ) as HTMLButtonElement;
+    const navAuthWrapper = document.querySelector(
+        ".nav-auth-wrapper",
+    ) as HTMLDivElement;
 
     let isMenuOpen = false;
 
@@ -196,6 +214,13 @@ import Auth from "@/components/features/Auth.astro";
         isMenuOpen = !isMenuOpen;
 
         if (isMenuOpen) {
+            // Hide navbar buttons
+            gsap.to(navAuthWrapper, {
+                opacity: 0,
+                duration: 0.3,
+                pointerEvents: "none",
+            });
+
             // Show overlay
             gsap.set(menuOverlay, { display: "flex" });
             gsap.to(menuOverlay, {
@@ -215,13 +240,16 @@ import Auth from "@/components/features/Auth.astro";
                 },
             );
 
-            // Toggle icons
-            hamburgerIcon.style.display = "none";
-            closeIcon.style.display = "block";
-
             // Prevent scrolling
             document.body.style.overflow = "hidden";
         } else {
+            // Show navbar buttons
+            gsap.to(navAuthWrapper, {
+                opacity: 1,
+                duration: 0.3,
+                pointerEvents: "auto",
+            });
+
             // Hide overlay
             gsap.to(menuOverlay, {
                 opacity: 0,
@@ -232,10 +260,6 @@ import Auth from "@/components/features/Auth.astro";
                 },
             });
 
-            // Toggle icons
-            hamburgerIcon.style.display = "block";
-            closeIcon.style.display = "none";
-
             // Restore scrolling
             document.body.style.overflow = "";
         }
@@ -243,6 +267,10 @@ import Auth from "@/components/features/Auth.astro";
 
     if (menuToggle) {
         menuToggle.addEventListener("click", toggleMenu);
+    }
+
+    if (closeMenu) {
+        closeMenu.addEventListener("click", toggleMenu);
     }
 
     // Close menu when clicking on a link
@@ -411,6 +439,25 @@ import Auth from "@/components/features/Auth.astro";
 
     .menu-link:hover::after {
         width: 100%;
+    }
+
+    .close-menu-btn {
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        background: transparent;
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 10px;
+        transition: transform 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .close-menu-btn:hover {
+        transform: scale(1.1);
     }
 
     @media (max-width: 768px) {
