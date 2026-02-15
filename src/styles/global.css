@@ -520,13 +520,26 @@ section {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
     /* Removed background causing invisibility */
+}
+
+.gradient-text-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
 }
 
 .viewport-section h2.condenso-text {
     position: relative;
-    /* Removed absolute positioning */
-    /* Width will be set by JS logic targeting .condenso-text */
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    /* Width will be set by JS logic targeting .condenso-text if needed, but centering is primary */
 }
 
 /* Scroll Sections */
@@ -809,12 +822,21 @@ section {
 .auth-container {
     max-width: 400px;
     margin: 2rem auto;
-    padding: 2rem;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    color: #333;
+    padding: 2.5rem 2rem;
+    background: transparent;
+    border-radius: 40px;
+    box-shadow: none;
+    color: var(--secondary-color);
 }
+
+#auth-title {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: var(--secondary-color);
+}
+
 
 .form-group {
     margin-bottom: 1rem;
@@ -824,33 +846,70 @@ section {
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    font-weight: bold;
+    font-weight: 500;
+    color: var(--secondary-color);
 }
+
 
 .form-group input {
     width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ddd;
-    border-radius: 10px;
+    padding: 0.8rem 1.2rem;
+    background: white;
+    border: 2px solid var(--secondary-color);
+    border-radius: 40px;
+    color: var(--primary-color);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
 }
+
+.form-group input::placeholder {
+    color: rgba(251, 96, 104, 0.5);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    background: white !important;
+    box-shadow: 0 0 0 4px rgba(245, 229, 144, 0.3);
+}
+
 
 #auth-form button,
 #user-profile button {
     width: 100%;
     padding: 1rem;
-    background: var(--primary-color);
-    color: white;
+    background: var(--secondary-color);
+    color: var(--primary-color);
     border: none;
-    border-radius: 10px;
+    border-radius: 40px;
     cursor: pointer;
     font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1rem;
     margin-top: 1rem;
+    transition: transform 0.2s ease;
 }
 
-.toggle-text {
-    margin-top: 1rem;
-    font-size: 0.9rem;
+
+#auth-form button:hover,
+#user-profile button:hover {
+    transform: scale(1.05);
 }
+
+
+.toggle-text {
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+    color: rgba(245, 229, 144, 0.8);
+    text-align: center;
+}
+
+.toggle-text a {
+    color: var(--secondary-color);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
 
 .hidden {
     display: none;
@@ -858,9 +917,11 @@ section {
 
 .message {
     margin-top: 1rem;
-    color: var(--primary-color);
+    color: var(--secondary-color);
     font-size: 0.9rem;
+    text-align: center;
 }
+
 
 .message.success {
     color: #28a745;
@@ -872,15 +933,17 @@ section {
     align-items: center;
     text-align: center;
     margin: 1.5rem 0;
-    color: #999;
+    color: rgba(245, 229, 144, 0.6);
 }
+
 
 .auth-divider::before,
 .auth-divider::after {
     content: '';
     flex: 1;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid rgba(245, 229, 144, 0.3);
 }
+
 
 .auth-divider span {
     padding: 0 0.75rem;
@@ -889,20 +952,27 @@ section {
 
 .google-auth-btn {
     width: 100%;
-    padding: 1rem;
-    background: white;
-    color: #333;
-    border: 2px solid #ddd;
-    border-radius: 10px;
+    padding: 0.8rem 1.5rem;
+    background: var(--secondary-color);
+    color: var(--primary-color);
+    border: none;
+    border-radius: 40px;
     cursor: pointer;
     font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
-    transition: all 0.3s ease;
+    gap: 1rem;
+    transition: transform 0.2s ease;
     margin-bottom: 1rem;
 }
+
+.google-auth-btn:hover {
+    transform: scale(1.05);
+}
+
 
 .google-auth-btn:hover {
     border-color: var(--primary-color);
@@ -955,23 +1025,34 @@ section {
 .cta-button {
     background-color: var(--primary-color);
     color: var(--secondary-color);
-    padding: 0.8rem 3rem 0rem 3rem;
-    /* Push text down */
-    border-radius: 100px;
-    font-family: 'Condenso', sans-serif;
-    font-size: 5rem;
+    padding: 1rem 3.5rem;
+    border-radius: 40px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 2rem;
     text-decoration: none;
     transition: all 0.3s ease;
-    border: 2px solid var(--secondary-color);
+    border: 2px solid transparent;
     letter-spacing: 1px;
 }
+
 
 .cta-button:hover {
     transform: scale(1.05);
     background-color: var(--secondary-color);
     color: var(--primary-color);
-    border-color: var(--primary-color);
     box-shadow: none;
+}
+
+.cta-button:active,
+.cta-button:focus,
+.cta-button:focus-visible {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    transform: scale(0.98);
+    outline: none;
+    /* Hide default browser outline */
 }
 
 /* ==========================================
@@ -1020,9 +1101,9 @@ section {
     height: 75vh;
     max-height: 600px;
     background: var(--primary-color);
-    border-radius: 20px;
+    border-radius: 40px;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 2px solid var(--secondary-color);
     display: flex;
     flex-direction: column;
 }
@@ -1064,8 +1145,35 @@ section {
     font-weight: 300;
     font-size: 0.95rem;
     color: rgba(245, 229, 144, 0.8);
-    margin: 0;
+    margin: 0 0 1rem 0;
     line-height: 1.5;
+}
+
+.event-card-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.event-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.event-detail-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    width: 24px;
+}
+
+.event-detail-text {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    line-height: 1.3;
 }
 
 @media (min-width: 769px) {

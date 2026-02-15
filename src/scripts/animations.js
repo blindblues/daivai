@@ -139,21 +139,21 @@ function resizeCondensoText() {
     if (elements.length === 0) return;
 
     const viewportWidth = document.documentElement.clientWidth;
-    const isMobile = viewportWidth < 768;
     const targetPercentage = 0.9;
     const targetWidth = viewportWidth * targetPercentage;
 
     elements.forEach((el) => {
         if (!(el instanceof HTMLElement)) return;
 
+        // Backup current state
         const originalWhiteSpace = el.style.whiteSpace;
         const originalTransform = el.style.transform;
-        // const originalDisplay = el.style.display;
+        const originalWidth = el.style.width;
 
+        // Set test state for calculation
         el.style.whiteSpace = "nowrap";
         el.style.width = "auto";
         el.style.display = "inline-block";
-        el.style.transform = "none";
         el.style.fontSize = "100px";
 
         const currentWidth = el.getBoundingClientRect().width;
@@ -163,12 +163,15 @@ function resizeCondensoText() {
             const newFontSize = 100 * ratio;
 
             el.style.fontSize = `${newFontSize}px`;
-
-            el.style.whiteSpace = originalWhiteSpace;
-            el.style.width = "";
-            el.style.display = ""; // Reset to whatever it was (or css)
-            el.style.transform = originalTransform;
         }
+
+        // Restore/Set final state favoring centering
+        el.style.whiteSpace = originalWhiteSpace;
+        el.style.width = "100%"; // Force full width for text-align: center
+        el.style.display = "flex"; // Use flex for better span centering
+        el.style.justifyContent = "center";
+        el.style.textAlign = "center";
+        el.style.transform = originalTransform;
     });
 }
 

@@ -4,10 +4,26 @@ interface Props {
     description: string;
     image: string;
     imageAlt: string;
+    date: string;
+    departureTime: string;
+    returnTime: string;
+    location: string;
+    cost: string;
     loading?: "eager" | "lazy";
 }
 
-const { title, description, image, imageAlt, loading = "lazy" } = Astro.props;
+const {
+    title,
+    description,
+    image,
+    imageAlt,
+    date,
+    departureTime,
+    returnTime,
+    location,
+    cost,
+    loading = "lazy",
+} = Astro.props;
 ---
 
 <div class="event-card">
@@ -17,5 +33,29 @@ const { title, description, image, imageAlt, loading = "lazy" } = Astro.props;
     <div class="event-card-content">
         <h3 class="event-card-title">{title}</h3>
         <p class="event-card-description">{description}</p>
+
+        <div class="event-card-details">
+            <div class="event-detail-item">
+                <span class="event-detail-icon">📅</span>
+                <span class="event-detail-text">{date}</span>
+            </div>
+
+            <div class="event-detail-item">
+                <span class="event-detail-icon">🕐</span>
+                <span class="event-detail-text"
+                    >{departureTime} - {returnTime}</span
+                >
+            </div>
+
+            <div class="event-detail-item">
+                <span class="event-detail-icon">📍</span>
+                <span class="event-detail-text">{location}</span>
+            </div>
+
+            <div class="event-detail-item">
+                <span class="event-detail-icon">💰</span>
+                <span class="event-detail-text">{cost}</span>
+            </div>
+        </div>
     </div>
 </div>

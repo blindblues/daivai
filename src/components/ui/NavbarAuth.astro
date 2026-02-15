@@ -69,28 +69,6 @@ import Auth from "@/components/features/Auth.astro";
 <!-- Login Modal -->
 <div id="login-modal" class="login-modal">
     <div class="login-modal-content">
-        <button
-            id="close-login"
-            class="close-modal-btn"
-            aria-label="Chiudi Login"
-        >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                ><line x1="18" y1="6" x2="6" y2="18"></line><line
-                    x1="6"
-                    y1="6"
-                    x2="18"
-                    y2="18"></line></svg
-            >
-        </button>
         <Auth />
     </div>
 </div>
@@ -126,26 +104,46 @@ import Auth from "@/components/features/Auth.astro";
     ) as HTMLAnchorElement;
 
     async function toggleLoginModal(show: boolean) {
+        if (!loginModal || !profileLink) return;
+
+        // Calculate button center for the radial expansion
+        const rect = profileLink.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
         if (show) {
-            gsap.set(loginModal, { display: "flex" });
-            gsap.to(loginModal, {
+            // Calculate radius to cover the entire screen
+            const radius = Math.hypot(
+                Math.max(centerX, window.innerWidth - centerX),
+                Math.max(centerY, window.innerHeight - centerY),
+            );
+
+            gsap.set(loginModal, {
+                display: "flex",
                 opacity: 1,
-                duration: 0.5,
-                ease: "power2.out",
+                clipPath: `circle(0% at ${centerX}px ${centerY}px)`,
             });
+
+            gsap.to(loginModal, {
+                clipPath: `circle(${radius}px at ${centerX}px ${centerY}px)`,
+                duration: 0.6,
+                ease: "expo.inOut",
+            });
+
             gsap.from(".login-modal-content", {
                 scale: 0.8,
                 y: 20,
                 opacity: 0,
                 duration: 0.6,
+                delay: 0.2,
                 ease: "back.out(1.7)",
             });
             document.body.style.overflow = "hidden";
         } else {
             gsap.to(loginModal, {
-                opacity: 0,
-                duration: 0.3,
-                ease: "power2.in",
+                clipPath: `circle(0% at ${centerX}px ${centerY}px)`,
+                duration: 0.5,
+                ease: "expo.inOut",
                 onComplete: () => {
                     gsap.set(loginModal, { display: "none" });
                 },
@@ -174,13 +172,13 @@ import Auth from "@/components/features/Auth.astro";
 
     updateProfileLink();
 
-    if (closeLogin) {
-        closeLogin.addEventListener("click", () => toggleLoginModal(false));
-    }
-
     // Close modal when clicking outside
     loginModal?.addEventListener("click", (e) => {
-        if (e.target === loginModal) {
+        const target = e.target as HTMLElement;
+        if (
+            target === loginModal ||
+            target.classList.contains("login-modal-content")
+        ) {
             toggleLoginModal(false);
         }
     });
@@ -331,12 +329,10 @@ import Auth from "@/components/features/Auth.astro";
         display: flex;
         align-items: center;
         padding: 4px;
-        background: rgba(var(--primary-rgb), 0.4);
-        backdrop-filter: blur(12px) saturate(180%);
-        -webkit-backdrop-filter: blur(12px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background-color: var(--primary-color);
+        border: none;
         border-radius: 40px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
     }
 
     .nav-menu-wrapper {
@@ -347,6 +343,11 @@ import Auth from "@/components/features/Auth.astro";
         right: 20px;
     }
 
+    .nav-menu-wrapper:hover,
+    .nav-auth-wrapper:hover {
+        /* background-color: var(--secondary-color); - REMOVED */
+    }
+
     .profile-btn,
     .menu-toggle {
         background: transparent;
@@ -355,8 +356,7 @@ import Auth from "@/components/features/Auth.astro";
         padding: 8px;
         border-radius: 50%;
         cursor: pointer;
-        box-shadow: none;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s ease;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -364,9 +364,20 @@ import Auth from "@/components/features/Auth.astro";
     }
 
     .profile-btn:hover,
-    .menu-toggle:hover {
-        background: rgba(0, 0, 0, 0.05);
-        transform: scale(1.05);
+    .menu-toggle:hover,
+    .profile-btn:active,
+    .menu-toggle:active,
+    .profile-btn:focus,
+    .menu-toggle:focus {
+        transform: scale(1.1);
+        color: var(--secondary-color);
+        background: transparent;
+        outline: none;
+    }
+
+    .nav-menu-wrapper:hover .menu-toggle,
+    .nav-auth-wrapper:hover .profile-btn {
+        /* color: var(--primary-color); - REMOVED */
     }
 
     .login-modal {
@@ -375,47 +386,24 @@ import Auth from "@/components/features/Auth.astro";
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        background: var(--primary-color);
         display: none;
-        opacity: 0;
         z-index: 2000;
         justify-content: center;
         align-items: center;
         padding: 20px;
+        /* clip-path expansion handled by JS */
     }
 
     .login-modal-content {
-        background: rgba(var(--primary-rgb), 0.4);
-        backdrop-filter: blur(10px) saturate(180%);
-        -webkit-backdrop-filter: blur(10px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 24px;
+        background: transparent;
+        border: none;
+        border-radius: 0;
         padding: 40px;
         width: 100%;
         max-width: 450px;
         position: relative;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    }
-
-    .close-modal-btn {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background: transparent;
-        border: none;
-        color: rgba(255, 255, 255, 0.5);
-        cursor: pointer;
-        transition: color 0.3s ease;
-        padding: 5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .close-modal-btn:hover {
-        color: white;
+        box-shadow: none;
     }
 
     .menu-overlay {
@@ -425,8 +413,6 @@ import Auth from "@/components/features/Auth.astro";
         width: 100vw;
         height: 100vh;
         background: #fb6068;
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
         display: none;
         z-index: 999;
         flex-direction: column;
