@@ -2,37 +2,13 @@
 import Auth from "@/components/features/Auth.astro";
 ---
 
-<div class="nav-auth-wrapper">
-    <!-- Icona Profilo con Link Dinamico -->
-    <a
-        href="#"
-        id="profile-link"
-        class="profile-btn"
-        aria-label="Area Personale"
-    >
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            ><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle
-                cx="12"
-                cy="7"
-                r="4"></circle></svg
-        >
-    </a>
-
+<div class="nav-menu-wrapper">
     <!-- Pulsante Hamburger Menu -->
     <button id="menu-toggle" class="menu-toggle" aria-label="Apri Menu">
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width="20"
+            height="20"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -47,8 +23,8 @@ import Auth from "@/components/features/Auth.astro";
         </svg>
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width="20"
+            height="20"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -62,6 +38,32 @@ import Auth from "@/components/features/Auth.astro";
             <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
     </button>
+</div>
+
+<div class="nav-auth-wrapper">
+    <!-- Icona Profilo con Link Dinamico -->
+    <a
+        href="#"
+        id="profile-link"
+        class="profile-btn"
+        aria-label="Area Personale"
+    >
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle
+                cx="12"
+                cy="7"
+                r="4"></circle></svg
+        >
+    </a>
 </div>
 
 <!-- Login Modal -->
@@ -105,10 +107,8 @@ import Auth from "@/components/features/Auth.astro";
         </a>
     </div>
     <nav class="menu-nav">
-        <a href="/daivai/#cosa-siamo" class="menu-link">Cosa siamo</a>
-        <a href="/daivai/#cosa-facciamo" class="menu-link">Cosa facciamo</a>
-        <a href="/daivai/#come-funziona" class="menu-link">Come funziona</a>
-        <a href="/daivai/#ultimi-eventi" class="menu-link">Eventi</a>
+        <a href="/daivai/" class="menu-link">Home</a>
+        <a href="/daivai/prossimi-eventi" class="menu-link">Prossimi eventi</a>
     </nav>
 </div>
 
@@ -193,6 +193,9 @@ import Auth from "@/components/features/Auth.astro";
         "menu-overlay",
     ) as HTMLDivElement;
     const menuLinks = document.querySelectorAll(".menu-link");
+    const navMenuWrapper = document.querySelector(
+        ".nav-menu-wrapper",
+    ) as HTMLDivElement;
     const navAuthWrapper = document.querySelector(
         ".nav-auth-wrapper",
     ) as HTMLDivElement;
@@ -204,6 +207,7 @@ import Auth from "@/components/features/Auth.astro";
 
         // Kill existing animations to prevent race conditions
         gsap.killTweensOf([
+            navMenuWrapper,
             navAuthWrapper,
             menuOverlay,
             menuLinks,
@@ -223,7 +227,7 @@ import Auth from "@/components/features/Auth.astro";
             );
 
             // Hide navbar buttons
-            gsap.to(navAuthWrapper, {
+            gsap.to([navMenuWrapper, navAuthWrapper], {
                 opacity: 0,
                 duration: 0.3,
                 pointerEvents: "none",
@@ -258,7 +262,7 @@ import Auth from "@/components/features/Auth.astro";
             document.body.style.overflow = "hidden";
         } else {
             // Show navbar buttons
-            gsap.to(navAuthWrapper, {
+            gsap.to([navMenuWrapper, navAuthWrapper], {
                 opacity: 1,
                 duration: 0.2,
                 pointerEvents: "auto",
@@ -319,16 +323,14 @@ import Auth from "@/components/features/Auth.astro";
 </script>
 
 <style>
+    .nav-menu-wrapper,
     .nav-auth-wrapper {
         position: fixed;
-        top: 25px;
-        right: 25px;
+        top: 20px;
         z-index: 1000;
         display: flex;
-        flex-direction: row;
         align-items: center;
-        gap: 4px;
-        padding: 6px;
+        padding: 4px;
         background: rgba(var(--primary-rgb), 0.4);
         backdrop-filter: blur(12px) saturate(180%);
         -webkit-backdrop-filter: blur(12px) saturate(180%);
@@ -337,12 +339,20 @@ import Auth from "@/components/features/Auth.astro";
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
 
+    .nav-menu-wrapper {
+        left: 20px;
+    }
+
+    .nav-auth-wrapper {
+        right: 20px;
+    }
+
     .profile-btn,
     .menu-toggle {
         background: transparent;
         color: var(--secondary-color);
         border: none;
-        padding: 10px;
+        padding: 8px;
         border-radius: 50%;
         cursor: pointer;
         box-shadow: none;
@@ -424,7 +434,7 @@ import Auth from "@/components/features/Auth.astro";
         align-items: center;
         padding: 40px;
         /* Initial clip-path for expansion */
-        clip-path: circle(0% at top right);
+        clip-path: circle(0% at top left);
     }
 
     .menu-header {

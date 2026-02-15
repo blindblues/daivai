@@ -1,0 +1,170 @@
+---
+import "../styles/global.css";
+import NavbarAuth from "../components/ui/NavbarAuth.astro";
+import EventCard from "../components/ui/EventCard.astro";
+import ScrollArrow from "../components/ui/ScrollArrow.astro";
+---
+
+<!doctype html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Prossimi Eventi - Dai Vai</title>
+
+        <!-- Favicon -->
+        <link
+            rel="icon"
+            type="image/svg+xml"
+            href="/daivai/images/DaiVai.svg"
+        />
+        <link
+            rel="preload"
+            href="/daivai/fonts/condenso/Condenso-Regular.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin
+        />
+        <meta name="theme-color" content="#FB6068" />
+    </head>
+    <body>
+        <NavbarAuth />
+
+        <main class="page-content">
+            <section
+                class="viewport-section combined-section page-header-section"
+            >
+                <!-- Spacer rimosso per richiesta utente -->
+                <div class="text-gradient-wrapper">
+                    <div class="gradient-text-group spacing-prossimi-eventi">
+                        <h2 class="condenso-text shine-reflection reveal-chars">
+                            PROSSIMI
+                        </h2>
+                        <h2 class="condenso-text shine-reflection reveal-chars">
+                            EVENTI
+                        </h2>
+                    </div>
+                </div>
+
+                <div style="margin-top: -7rem; margin-bottom: -1rem;">
+                    <ScrollArrow class="arrow-icon" />
+                </div>
+
+                <!-- Card Slider -->
+                <div class="events-slider-wrapper" style="margin-top: 1rem;">
+                    <div class="events-slider" id="events-slider">
+                        <EventCard
+                            image="/daivai/images/blue-sky-background-with-clouds-free-photo.webp"
+                            imageAlt="Evento 1"
+                            title="Torneo Estivo"
+                            description="Preparati per il più grande torneo di beach volley dell'estate."
+                            loading="eager"
+                        />
+                        <EventCard
+                            image="/daivai/images/blue-sky-background-with-clouds-free-photo.webp"
+                            imageAlt="Evento 2"
+                            title="Padel Challenge"
+                            description="Sfida i tuoi amici nel nuovo torneo di padel aperto a tutti i livelli."
+                            loading="lazy"
+                        />
+                        <EventCard
+                            image="/daivai/images/blue-sky-background-with-clouds-free-photo.webp"
+                            imageAlt="Evento 3"
+                            title="Notte Bianca dello Sport"
+                            description="Una serata dedicata a diverse discipline sportive sotto le stelle."
+                            loading="lazy"
+                        />
+                        <EventCard
+                            image="/daivai/images/blue-sky-background-with-clouds-free-photo.webp"
+                            imageAlt="Evento 4"
+                            title="Corsa Campestre"
+                            description="Un percorso mozzafiato tra le colline veronesi per amatori e professionisti."
+                            loading="lazy"
+                        />
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <img
+                src="/daivai/images/DaiVai-yellow.svg"
+                alt="Dai e Vai Logo"
+                class="footer-logo"
+            />
+            <p
+                style="color: var(--secondary-color); font-family: 'Poppins'; margin-top: 1rem;"
+            >
+                © 2026 Dai Vai - Tutti i diritti riservati
+            </p>
+        </footer>
+
+        <script>
+            import { initAnimations } from "../scripts/animations.js";
+
+            // Inizializzazione con piccolo timeout per garantire che il layout sia stabile
+            // per il calcolo delle posizioni del riflesso (shine-reflection)
+            window.addEventListener("load", () => {
+                initAnimations();
+            });
+        </script>
+
+        <style>
+            .page-content {
+                background-color: var(--primary-color);
+                min-height: 100vh;
+                padding-top: 80px;
+            }
+
+            .page-header-section {
+                justify-content: center;
+                padding-bottom: 5rem;
+            }
+
+            .site-footer {
+                background-color: var(--primary-color);
+                padding: 4rem 2rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            /* Assicuriamoci che il titolo sia al centro e ben visibile */
+            .gradient-text-group {
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .spacing-prossimi-eventi h2.condenso-text {
+                margin-bottom: -0.45em !important;
+                line-height: 1 !important;
+            }
+
+            .spacing-prossimi-eventi h2.condenso-text:last-child {
+                margin-bottom: 0 !important;
+            }
+
+            h2.condenso-text {
+                font-size: clamp(6rem, 20vw, 15rem);
+                margin: 0;
+            }
+
+            @media (max-width: 768px) {
+                .page-content {
+                    padding-top: 60px;
+                }
+
+                h2.condenso-text {
+                    font-size: clamp(3rem, 12vw, 8rem);
+                }
+
+                .spacing-prossimi-eventi h2.condenso-text {
+                    margin-bottom: -0.44em !important;
+                }
+            }
+        </style>
+    </body>
+</html>

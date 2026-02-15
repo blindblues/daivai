@@ -384,10 +384,13 @@ function createSticker(wrapperId, containerId, direction = 'vertical') {
 // COLOR TRANSITION ON SCROLL
 // ==========================================
 function initColorTransition() {
-    const trigger = document.getElementById('ultimi-eventi');
+    // Try to find the homepage trigger, or the page header for other pages
+    const trigger = document.getElementById('ultimi-eventi') || document.querySelector('.page-header-section');
     const body = document.body;
 
-    if (!trigger) return;
+    // If no trigger at all and no reflection elements, we can skip
+    const textElements = document.querySelectorAll('.condenso-text.shine-reflection, .info-paragraph.shine-reflection');
+    if (!trigger && textElements.length === 0) return;
 
     // Get colors from CSS variables for consistency
     const rootStyle = getComputedStyle(document.documentElement);
@@ -410,9 +413,6 @@ function initColorTransition() {
     // State object for GSAP animation
     const colorState = { progress: 0 };
 
-    // Get all text elements with shine-reflection
-    const textElements = document.querySelectorAll('.condenso-text.shine-reflection, .info-paragraph.shine-reflection');
-
     // Function to interpolate between two RGB values
     function lerpColor(from, to, t) {
         return {
@@ -433,9 +433,9 @@ function initColorTransition() {
         // Text gradient: yellow -> red (inverse of background)
         const textColor = lerpColor(yellowRGB, redRGB, progress);
         const gradientValue = `linear-gradient(to bottom,
-            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 0) 10%,
-            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1) 30%,
-            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1) 80%,
+            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 0) 5%,
+            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1) 25%,
+            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1) 85%,
             rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 0) 100%)`;
 
         textElements.forEach(el => {
@@ -479,34 +479,37 @@ function initColorTransition() {
     }
 
     // ScrollTrigger with scrub for smooth scroll-linked animation
-    gsap.to(colorState, {
-        progress: 1,
-        ease: "none",
-        scrollTrigger: {
-            trigger: trigger,
-            start: "top 80%",      // Start transition earlier
-            end: "top center",     // Complete when title reaches center
-            scrub: 1,              // Reduced lag from 2s to 1s for better responsiveness
-            fastScrollEnd: true,   // Force completion if scrolled past quickly
-            onLeave: () => {
-                // Double safety: force final state
-                if (colorState.progress < 1) {
-                    colorState.progress = 1;
-                    updateColors();
+    // ONLY if the specific trigger exists (homepage behavior)
+    if (trigger && trigger.id === 'ultimi-eventi') {
+        gsap.to(colorState, {
+            progress: 1,
+            ease: "none",
+            scrollTrigger: {
+                trigger: trigger,
+                start: "top 80%",      // Start transition earlier
+                end: "top center",     // Complete when title reaches center
+                scrub: 1,              // Reduced lag from 2s to 1s for better responsiveness
+                fastScrollEnd: true,   // Force completion if scrolled past quickly
+                onLeave: () => {
+                    // Double safety: force final state
+                    if (colorState.progress < 1) {
+                        colorState.progress = 1;
+                        updateColors();
+                    }
+                },
+                onLeaveBack: () => {
+                    // Double safety: force start state
+                    if (colorState.progress > 0) {
+                        colorState.progress = 0;
+                        updateColors();
+                    }
                 }
             },
-            onLeaveBack: () => {
-                // Double safety: force start state
-                if (colorState.progress > 0) {
-                    colorState.progress = 0;
-                    updateColors();
-                }
-            }
-        },
-        onUpdate: updateColors
-    });
+            onUpdate: updateColors
+        });
+    }
 
-    // Initial state
+    // Initial state / Apply colors once for pages without transition
     updateColors();
 }
 
