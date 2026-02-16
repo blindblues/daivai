@@ -177,14 +177,22 @@ const { profile } = Astro.props;
     input[type="tel"],
     input[type="date"] {
         width: 100%;
+        max-width: 100%;
         padding: 0.875rem 1rem;
         background: rgba(255, 255, 255, 0.1);
         border: 2px solid rgba(255, 255, 255, 0.2);
         border-radius: 8px;
         color: white;
         font-size: 1rem;
-        font-family: "Gotham", sans-serif;
+        font-family: "Poppins", sans-serif;
         transition: all 0.3s ease;
+        box-sizing: border-box;
+        display: block;
+    }
+
+    input[type="date"] {
+        -webkit-appearance: none;
+        min-height: 3.125rem; /* Matches the approximate height of other inputs */
     }
 
     input:focus {

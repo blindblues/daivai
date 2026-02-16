@@ -1281,6 +1281,8 @@ import DocumentUpload from "../components/features/DocumentUpload.astro";
     }
 
     :global(.form-group input) {
+        width: 100%;
+        max-width: 100%;
         padding: 0.85rem 1rem;
         background: #f8f8f8;
         border: 1.5px solid rgba(0, 0, 0, 0.08);
@@ -1289,6 +1291,14 @@ import DocumentUpload from "../components/features/DocumentUpload.astro";
         font-size: 0.95rem;
         font-family: "Poppins", sans-serif;
         transition: all 0.3s ease;
+        box-sizing: border-box;
+        display: block;
+    }
+
+    :global(.form-group input[type="date"]) {
+        -webkit-appearance: none;
+        appearance: none;
+        min-height: 3rem; /* Match the height of other inputs */
     }
 
     :global(.form-group input:focus) {
