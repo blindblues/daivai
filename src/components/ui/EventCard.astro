@@ -1,18 +1,23 @@
 ---
 interface Props {
+    eventId: string;
     title: string;
     description: string;
-    image: string;
+    image: string | null;
     imageAlt: string;
     date: string;
-    departureTime: string;
-    returnTime: string;
-    location: string;
-    cost: string;
+    departureTime: string | null;
+    returnTime: string | null;
+    location: string | null;
+    cost: string | null;
+    participantsCount: number;
+    maxParticipants: number | null;
+    isParticipating?: boolean;
     loading?: "eager" | "lazy";
 }
 
 const {
+    eventId,
     title,
     description,
     image,
@@ -22,40 +27,286 @@ const {
     returnTime,
     location,
     cost,
+    participantsCount,
+    maxParticipants,
+    isParticipating = false,
     loading = "lazy",
 } = Astro.props;
+
+const isFull = maxParticipants !== null && participantsCount >= maxParticipants;
+const PLACEHOLDER_IMAGE =
+    "/daivai/images/blue-sky-background-with-clouds-free-photo.webp";
 ---
 
-<div class="event-card">
+<div class="event-card" data-event-id={eventId}>
     <div class="event-card-image">
-        <img src={image} alt={imageAlt} loading={loading} />
+        <img
+            src={image ?? PLACEHOLDER_IMAGE}
+            alt={imageAlt}
+            loading={loading}
+        />
+        {cost && <div class="event-cost-badge">{cost}</div>}
     </div>
     <div class="event-card-content">
         <h3 class="event-card-title">{title}</h3>
         <p class="event-card-description">{description}</p>
 
         <div class="event-card-details">
-            <div class="event-detail-item">
-                <span class="event-detail-icon">📅</span>
-                <span class="event-detail-text">{date}</span>
+            {
+                date && (
+                    <div class="event-detail-item">
+                        <span class="event-detail-icon">📅</span>
+                        <span class="event-detail-text">{date}</span>
+                    </div>
+                )
+            }
+
+            {
+                (departureTime || returnTime) && (
+                    <div class="event-detail-item">
+                        <span class="event-detail-icon">🕐</span>
+                        <span class="event-detail-text">
+                            {departureTime}
+                            {returnTime ? ` - ${returnTime}` : ""}
+                        </span>
+                    </div>
+                )
+            }
+
+            {
+                location && (
+                    <div class="event-detail-item">
+                        <span class="event-detail-icon">📍</span>
+                        <span class="event-detail-text">{location}</span>
+                    </div>
+                )
+            }
+        </div>
+
+        <div class="event-card-footer">
+            <!-- Counter partecipanti -->
+            <div class="participants-counter" data-event-id={eventId}>
+                <div class="counter-bar-wrapper">
+                    <div
+                        class="counter-bar-fill"
+                        style={`width: ${maxParticipants ? Math.min((participantsCount / maxParticipants) * 100, 100) : 0}%`}
+                    >
+                    </div>
+                </div>
+                <span class="counter-text">
+                    <span class="counter-current" data-event-id={eventId}
+                        >{participantsCount}</span
+                    >
+                    {maxParticipants ? `/${maxParticipants}` : ""} partecipanti
+                </span>
             </div>
 
-            <div class="event-detail-item">
-                <span class="event-detail-icon">🕐</span>
-                <span class="event-detail-text"
-                    >{departureTime} - {returnTime}</span
-                >
-            </div>
-
-            <div class="event-detail-item">
-                <span class="event-detail-icon">📍</span>
-                <span class="event-detail-text">{location}</span>
-            </div>
-
-            <div class="event-detail-item">
-                <span class="event-detail-icon">💰</span>
-                <span class="event-detail-text">{cost}</span>
-            </div>
+            <!-- Bottone Partecipa -->
+            <button
+                class={`btn-partecipa ${isFull ? "btn-full" : ""} ${isParticipating ? "btn-iscritto" : ""}`}
+                data-event-id={eventId}
+                data-is-participating={isParticipating.toString()}
+                disabled={isFull && !isParticipating}
+            >
+                {
+                    isFull && !isParticipating
+                        ? "Completo"
+                        : isParticipating
+                          ? "Annulla iscrizione"
+                          : "Partecipa"
+                }
+            </button>
         </div>
     </div>
 </div>
+
+<style>
+    .event-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(245, 229, 144, 0.15);
+        border-radius: 16px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        min-width: 300px;
+        max-width: 340px;
+        flex-shrink: 0;
+        transition:
+            transform 0.3s ease,
+            box-shadow 0.3s ease;
+    }
+
+    .event-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+    }
+
+    .event-card-image {
+        position: relative;
+        width: 100%;
+        height: 180px;
+        overflow: hidden;
+    }
+
+    .event-card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+    .event-card:hover .event-card-image img {
+        transform: scale(1.05);
+    }
+
+    .event-cost-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: var(--secondary-color);
+        color: var(--primary-color);
+        font-family: "Poppins", sans-serif;
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 4px 10px;
+        border-radius: 20px;
+    }
+
+    .event-card-content {
+        padding: 1.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        flex: 1;
+    }
+
+    .event-card-title {
+        font-family: "Poppins", sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: var(--secondary-color);
+        margin: 0;
+        line-height: 1.3;
+    }
+
+    .event-card-description {
+        font-family: "Poppins", sans-serif;
+        font-size: 0.85rem;
+        color: rgba(245, 229, 144, 0.7);
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    .event-card-details {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        margin-top: 0.2rem;
+    }
+
+    .event-detail-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .event-detail-icon {
+        font-size: 0.85rem;
+        flex-shrink: 0;
+    }
+
+    .event-detail-text {
+        font-family: "Poppins", sans-serif;
+        font-size: 0.82rem;
+        color: rgba(245, 229, 144, 0.85);
+    }
+
+    .event-card-footer {
+        margin-top: auto;
+        padding-top: 0.8rem;
+        border-top: 1px solid rgba(245, 229, 144, 0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+    }
+
+    /* Counter partecipanti */
+    .participants-counter {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .counter-bar-wrapper {
+        width: 100%;
+        height: 4px;
+        background: rgba(245, 229, 144, 0.15);
+        border-radius: 2px;
+        overflow: hidden;
+    }
+
+    .counter-bar-fill {
+        height: 100%;
+        background: linear-gradient(
+            to right,
+            var(--primary-color),
+            var(--secondary-color)
+        );
+        border-radius: 2px;
+        transition: width 0.4s ease;
+    }
+
+    .counter-text {
+        font-family: "Poppins", sans-serif;
+        font-size: 0.75rem;
+        color: rgba(245, 229, 144, 0.6);
+    }
+
+    .counter-current {
+        font-weight: 600;
+        color: var(--secondary-color);
+    }
+
+    /* Bottone Partecipa */
+    .btn-partecipa {
+        width: 100%;
+        padding: 0.65rem 1rem;
+        border: none;
+        border-radius: 10px;
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        background: var(--secondary-color);
+        color: var(--primary-color);
+    }
+
+    .btn-partecipa:hover:not(:disabled) {
+        background: #fff;
+        transform: translateY(-1px);
+    }
+
+    .btn-partecipa.btn-iscritto {
+        background: transparent;
+        border: 1.5px solid rgba(245, 229, 144, 0.4);
+        color: rgba(245, 229, 144, 0.7);
+    }
+
+    .btn-partecipa.btn-iscritto:hover {
+        border-color: rgba(251, 96, 104, 0.6);
+        color: rgba(251, 96, 104, 0.8);
+        background: rgba(251, 96, 104, 0.08);
+    }
+
+    .btn-partecipa.btn-full {
+        background: rgba(245, 229, 144, 0.1);
+        color: rgba(245, 229, 144, 0.35);
+        cursor: not-allowed;
+    }
+
+    .btn-partecipa:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+</style>

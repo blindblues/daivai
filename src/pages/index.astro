@@ -3,7 +3,6 @@ import "../styles/global.css";
 import NavbarAuth from "../components/ui/NavbarAuth.astro";
 import ScrollArrow from "../components/ui/ScrollArrow.astro";
 import Sticker from "../components/ui/Sticker.astro";
-import PastEventCard from "../components/ui/PastEventCard.astro";
 ---
 
 <!doctype html>
@@ -171,51 +170,16 @@ import PastEventCard from "../components/ui/PastEventCard.astro";
                 </div>
             </div>
 
-            <!-- Card Slider -->
+            <!-- Card Slider — popolato dinamicamente -->
             <div class="events-slider-wrapper">
                 <div class="events-slider" id="events-slider">
-                    <PastEventCard
-                        image="/daivai/images/blue-sky-background-with-clouds-free-photo.webp"
-                        imageAlt="Evento 1"
-                        title="Torneo di Beach Volley"
-                        description="Un weekend all'insegna dello sport sulla spiaggia con tornei e attività per tutti."
-                        loading="lazy"
-                    />
-                    <PastEventCard
-                        image="/daivai/images/blue-sky-background-with-clouds-free-photo.webp"
-                        imageAlt="Evento 2"
-                        title="Corso di Yoga"
-                        description="Sessioni settimanali di yoga per rilassarsi e migliorare il benessere fisico e mentale."
-                        loading="lazy"
-                    />
-                    <PastEventCard
-                        image="/daivai/images/blue-sky-background-with-clouds-free-photo.webp"
-                        imageAlt="Evento 3"
-                        title="Maratona Cittadina"
-                        description="La corsa più attesa dell'anno attraverso le vie storiche di Verona."
-                        loading="lazy"
-                    />
-                    <PastEventCard
-                        image="/daivai/images/blue-sky-background-with-clouds-free-photo.webp"
-                        imageAlt="Evento 4"
-                        title="Torneo di Calcetto"
-                        description="Sfide avvincenti tra squadre locali per conquistare il titolo di campione."
-                        loading="lazy"
-                    />
-                    <PastEventCard
-                        image="/daivai/images/blue-sky-background-with-clouds-free-photo.webp"
-                        imageAlt="Evento 5"
-                        title="Workshop Fitness"
-                        description="Allenamenti funzionali e lezioni di gruppo per restare in forma divertendosi."
-                        loading="lazy"
-                    />
-                    <PastEventCard
-                        image="/daivai/images/blue-sky-background-with-clouds-free-photo.webp"
-                        imageAlt="Evento 6"
-                        title="Escursione in Montagna"
-                        description="Una giornata immersi nella natura con trekking e attività outdoor."
-                        loading="lazy"
-                    />
+                    <!-- Skeleton loader -->
+                    <div class="past-event-skeleton"></div>
+                    <div class="past-event-skeleton"></div>
+                    <div class="past-event-skeleton"></div>
+                    <div class="past-event-skeleton"></div>
+                    <div class="past-event-skeleton"></div>
+                    <div class="past-event-skeleton"></div>
                 </div>
             </div>
         </section>
@@ -296,6 +260,79 @@ import PastEventCard from "../components/ui/PastEventCard.astro";
 
     <script>
         import { initAnimations } from "../scripts/animations.js";
+        import { getPastEvents } from "@/lib/database/events";
+
         initAnimations();
+
+        // ─── Caricamento eventi passati ────────────────────────────────────────
+        async function loadPastEvents() {
+            const slider = document.getElementById("events-slider");
+            if (!slider) return;
+
+            const { data: events, error } = await getPastEvents();
+
+            slider.innerHTML = "";
+
+            if (error || !events || events.length === 0) return;
+
+            const PLACEHOLDER =
+                "/daivai/images/blue-sky-background-with-clouds-free-photo.webp";
+
+            slider.innerHTML = events
+                .map(
+                    (ev: any) => `
+                <div class="event-card" data-event-id="${ev.id}">
+                    <div class="event-card-image">
+                        <img src="${ev.image_url ?? PLACEHOLDER}" alt="${ev.title}" loading="lazy" />
+                    </div>
+                    <div class="event-card-content">
+                        <h3 class="event-card-title">${ev.title}</h3>
+                        <p class="event-card-description">${ev.description ?? ""}</p>
+                    </div>
+                </div>
+            `,
+                )
+                .join("");
+        }
+
+        loadPastEvents();
     </script>
+
+    <style>
+        /* Skeleton per eventi passati — stesse dimensioni di .event-card */
+        .past-event-skeleton {
+            flex-shrink: 0;
+            scroll-snap-align: center;
+            width: 85vw;
+            max-width: 400px;
+            height: 75vh;
+            max-height: 600px;
+            border-radius: 40px;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.04) 25%,
+                rgba(255, 255, 255, 0.09) 50%,
+                rgba(255, 255, 255, 0.04) 75%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border: 2px solid rgba(245, 229, 144, 0.15);
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .past-event-skeleton {
+                width: 350px;
+                height: 450px;
+            }
+        }
+    </style>
 </html>
