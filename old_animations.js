@@ -10,6 +10,8 @@ export function initAnimations() {
     console.log("Initializing GSAP animations...");
 
     initTextAppear();
+    initParallax();
+    initUniscitiAnimation();
     initStickerAnimation();
     initColorTransition();
     initEventsSlider();
@@ -17,8 +19,6 @@ export function initAnimations() {
     resizeCondensoText();
     initReflectionFix();
     initArrowAnimation();
-    initLogoBounce();
-    initLogoExplosion();
 
     // Event listeners
     window.addEventListener("resize", () => {
@@ -57,10 +57,75 @@ export function initAnimations() {
 // ==========================================
 // PARALLAX EFFECT
 // ==========================================
+function initParallax() {
+    const logoOverlay = document.getElementById('logo-overlay');
 
+    if (!logoOverlay) return;
 
+    // Detect mobile device for tuning
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
+    // Using quickSetter for better performance on frequent updates
+    const setY = gsap.quickSetter(logoOverlay, "y", "px");
 
+    ScrollTrigger.create({
+        trigger: "body",
+        start: "top top",
+        end: "bottom bottom",
+        onUpdate: (self) => {
+            const scrolled = self.scroll();
+
+            // Calculate values based on scroll
+            const rate = scrolled * (isMobile ? 0.4 : 0.3);
+            const blurAmount = Math.min(scrolled * (isMobile ? 0.01 : 0.015), isMobile ? 6 : 8);
+
+            // Apply values
+            setY(rate);
+            gsap.set(logoOverlay, {
+                filter: `blur(${blurAmount}px)`,
+                force3D: true, // Force hardware acceleration
+                overwrite: "auto" // Prevent conflicts
+            });
+        }
+    });
+}
+
+// ==========================================
+// UNISCITI ANIMATION
+// ==========================================
+function initUniscitiAnimation() {
+    const uniscitiText = document.getElementById('unisciti-text');
+    const heroSection = document.getElementById('hero');
+
+    if (!uniscitiText || !heroSection) return;
+
+    // Detect mobile
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    gsap.timeline({
+        scrollTrigger: {
+            trigger: "#hero",
+            start: "top top",
+            end: "80% top",
+            scrub: 0.1, // Faster response
+        }
+    })
+        .to(uniscitiText, {
+            bottom: "-5vh", // From -30vh to -5vh
+            scale: 1, // From 0.8 (set in CSS or initial) to 1
+            xPercent: -50, // Maintain centering
+            left: "50%",
+            ease: "none" // Linear mapping to scroll
+        });
+
+    // Ensure initial state match (if not set in CSS correctly)
+    gsap.set(uniscitiText, {
+        bottom: "-30vh",
+        scale: 0.8,
+        xPercent: -50,
+        left: "50%"
+    });
+}
 
 
 // ==========================================
@@ -307,8 +372,8 @@ function createSticker(wrapperId, containerId, direction = 'vertical') {
         ease: "power1.out",
         scrollTrigger: {
             trigger: `#${wrapperId}`,
-            start: "top 80%", // Delayed start (was top bottom)
-            end: "top 20%",   // Slightly shifted end
+            start: "top bottom",
+            end: "top 25%",
             scrub: 1
         },
         onUpdate: updateSlices
@@ -624,142 +689,6 @@ function initArrowAnimation() {
 }
 
 // ==========================================
-// LOGO BOUNCE ANIMATION
-// ==========================================
-function initLogoBounce() {
-    const logo = document.getElementById('logo-svg');
-    if (!logo) return;
-
-    // Start way above screen and smaller (0.2 scale)
-    gsap.set(logo, {
-        y: -800,
-        scale: 0.2,
-        transformOrigin: "50% 100%"
-    });
-
-
-
-    const tl = gsap.timeline({
-        delay: 0.2
-    });
-
-    // 1. Initial High Drop + Scale Up
-    tl.to(logo, {
-        y: 0,
-        scale: 1, // Grow to full size
-        scaleY: 1.2, // Maintain the wind stretch
-        scaleX: 0.8,
-        duration: 0.35,
-        ease: "power2.in"
-    })
-        // 2. Heavy Squash 1
-        .to(logo, {
-            scaleY: 0.45,
-            scaleX: 1.55,
-            duration: 0.08,
-            ease: "power3.out"
-        })
-        // 3. Bounce 1 (Up)
-        .to(logo, {
-            y: -300,
-            scaleY: 1.25,
-            scaleX: 0.75,
-            duration: 0.3,
-            ease: "power2.out"
-        })
-        // 4. Drop 2 (Down)
-        .to(logo, {
-            y: 0,
-            scaleY: 1,
-            scaleX: 1,
-            duration: 0.3,
-            ease: "power2.in"
-        })
-        // 5. Medium Squash 2
-        .to(logo, {
-            scaleY: 0.7,
-            scaleX: 1.3,
-            duration: 0.07,
-            ease: "power2.out"
-        })
-        // 6. Bounce 2 (Up)
-        .to(logo, {
-            y: -100,
-            scaleY: 1.1,
-            scaleX: 0.9,
-            duration: 0.2,
-            ease: "power2.out"
-        })
-        // 7. Drop 3 (Down)
-        .to(logo, {
-            y: 0,
-            scaleY: 1,
-            scaleX: 1,
-            duration: 0.2,
-            ease: "power2.in"
-        })
-        // 8. Light Squash 3
-        .to(logo, {
-            scaleY: 0.9,
-            scaleX: 1.1,
-            duration: 0.06,
-            ease: "power1.out"
-        })
-        // 9. Final Settle
-        .to(logo, {
-            scaleY: 1,
-            scaleX: 1,
-            duration: 0.5,
-            ease: "elastic.out(1, 0.4)"
-        });
-
-
-}
-
-// ==========================================
-// LOGO EXPLOSION (SCROLL TRIGGERED)
-// ==========================================
-function initLogoExplosion() {
-    const pieces = document.querySelectorAll('.logo-piece');
-    const hero = document.getElementById('hero');
-    if (!pieces.length || !hero) return;
-
-    const tl = gsap.timeline({
-        scrollTrigger: {
-            trigger: "#hero",
-            start: "top top",
-            end: "100% top",
-            scrub: 1,
-        }
-    });
-
-
-
-    pieces.forEach((piece, i) => {
-        // Calculate explosion vector from center
-        const bbox = piece.getBBox();
-        const centerX = 1000;
-        const centerY = 558.5;
-        const pX = bbox.x + bbox.width / 2;
-        const pY = bbox.y + bbox.height / 2;
-
-        const dirX = pX - centerX;
-        const dirY = pY - centerY;
-
-        // Large multiplier to ensure they go far outside the window
-        const multiplier = 20 + Math.random() * 15;
-
-        tl.to(piece, {
-            x: dirX * multiplier,
-            y: dirY * multiplier,
-            rotation: Math.random() * 1080 - 540,
-            duration: 1,
-            ease: "power2.in"
-        }, 0);
-    });
-}
-
-// ==========================================
 // TEXT APPEARANCE ANIMATIONS
 // ==========================================
 function initTextAppear() {
@@ -795,7 +724,7 @@ function initTextAppear() {
             ease: "back.out(1.7)",
             scrollTrigger: {
                 trigger: el,
-                start: "top 80%", // Delayed start (was 95%)
+                start: "top 95%",
                 toggleActions: "play none none reverse"
             }
         });
@@ -830,7 +759,7 @@ function initTextAppear() {
             ease: "power3.out",
             scrollTrigger: {
                 trigger: el,
-                start: "top 80%", // Delayed start (was 95%)
+                start: "top 95%",
                 toggleActions: "play none none reverse"
             }
         });
