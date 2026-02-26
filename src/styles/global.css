@@ -229,80 +229,160 @@ footer {
     position: relative;
 }
 
-/* Stili per la homepage */
-#hero {
+/* Parallax Hero Styles */
+.parallax-container {
+    position: relative;
     height: 100vh;
     width: 100%;
-    /* Changed from 100vw to prevent scrollbar overflow */
-    background: var(--primary-color);
-    overflow: visible;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    border-bottom-left-radius: 50px;
-    border-bottom-right-radius: 50px;
-    /* Removed clip-path to avoid cutting off fragments */
+    overflow: hidden;
+    background-color: #fb6068;
+    /* Sfondo base rosso */
 }
 
-#hero-overlay {
-    height: 100vh;
+.parallax-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    /* Changed from 100vw */
-    overflow: hidden;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 3;
-    border-bottom-left-radius: 50px;
-    border-bottom-right-radius: 50px;
-    clip-path: inset(0 0 0 0 round(0 0 50px 50px));
-    transform: none !important;
-    will-change: auto;
-}
-
-#logo-overlay {
-    height: 100vh;
-    width: 100%;
-    /* Allow overflow so pieces can fly out */
-    overflow: visible;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 2;
-    /* Removed clip-path to prevent fragment cropping */
+    /* Default for mountains/trees */
+    pointer-events: none;
     will-change: transform;
-    backface-visibility: hidden;
-    transform: translateZ(0);
+    overflow: visible !important;
+    /* Ensure children can overflow without clipping */
 }
 
-#logo-svg {
+/* Layers that must be centered to match the logo */
+.layer-1,
+.layer-2,
+.layer-logo {
+    align-items: center !important;
+    height: 100vh !important;
+}
+
+.layer-2 img,
+.layer-logo img {
+    position: relative;
+    top: 0;
+}
+
+.parallax-layer:not(.layer-logo) img {
+    height: 100vh !important;
+    width: auto !important;
+    min-width: 100vw !important;
+    max-width: none !important;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Z-indexing layers */
+.layer-1 {
+    z-index: 1;
+}
+
+.parallax-container .parallax-layer.layer-1 img {
+    transform: rotate(-90deg);
+    width: 100vh !important;
+    height: 100vw !important;
+    object-fit: cover !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+}
+
+.layer-2 {
+    z-index: 2;
+}
+
+.layer-2 img {
+    transform: scale(1.5);
+    transform-origin: center;
+}
+
+.layer-logo {
+    z-index: 3;
+}
+
+.layer-3 {
+    z-index: 4;
+}
+
+.layer-4 {
+    z-index: 5;
     overflow: visible !important;
 }
 
-#hero-overlay .hero-image {
-    max-width: 140vw;
-    max-height: 60vh;
-    object-fit: contain;
-    width: auto;
-    height: auto;
+.layer-4 img {
+    height: 100vh !important;
+    width: auto !important;
+    min-width: 100vw !important;
+    object-fit: cover !important;
+    object-position: center bottom !important;
+    max-width: none !important;
 }
 
+/* Special handling for the logo */
+#hero-logo-yellow,
+#hero-logo-wrapper {
+    overflow: visible !important;
+}
 
-
-#logo-overlay .hero-image {
-    max-width: 40vw;
-    /* Reduced from 80vw for desktop */
-    max-height: 40vw;
-    object-fit: contain;
-    width: auto;
+#hero-logo-yellow {
     height: auto;
+    width: 25vw;
+    max-width: 400px;
+    display: block;
+    margin: 0 auto;
+    z-index: 10;
+}
+
+.logo-piece {
+    will-change: transform;
+}
+
+@media (max-width: 768px) {
+    #hero-logo-yellow {
+        width: 50vw;
+    }
+
+    /* Reduce mountains on mobile while keeping them at the bottom */
+    .parallax-container .parallax-layer.layer-3 img {
+        height: 60vh !important;
+        width: auto !important;
+        min-width: 150vw !important;
+        /* Extra width for mobile safety */
+        object-fit: cover;
+    }
+
+    /* Make the glow much larger on mobile and prevent any masking */
+    .parallax-container .parallax-layer.layer-1 {
+        overflow: visible !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    .parallax-container .parallax-layer.layer-1 img {
+        transform: rotate(-90deg) scale(4) !important;
+        width: 100vh !important;
+        height: 100vw !important;
+        object-fit: cover !important;
+        max-width: none !important;
+        max-height: none !important;
+    }
+
+    /* Slightly shift trees to the left on mobile while keeping full height and reduced size */
+    .parallax-container .parallax-layer.layer-4 img {
+        height: 100vh !important;
+        width: auto !important;
+        min-width: 180vw !important;
+        object-fit: cover !important;
+        object-position: 50% bottom !important;
+        max-width: none !important;
+    }
 }
 
 

@@ -1,0 +1,167 @@
+---
+import "../styles/global.css";
+import NavbarAuth from "../components/ui/NavbarAuth.astro";
+import ScrollArrow from "../components/ui/ScrollArrow.astro";
+import Sticker from "../components/ui/Sticker.astro";
+---
+
+<!doctype html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Cosa Siamo - Dai Vai</title>
+
+        <!-- Favicon -->
+        <link
+            rel="icon"
+            type="image/svg+xml"
+            href="/daivai/images/DaiVai.svg"
+        />
+        <link
+            rel="preload"
+            href="/daivai/fonts/condenso/Condenso-Regular.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin
+        />
+        <meta name="theme-color" content="#FB6068" />
+        <meta
+            name="description"
+            content="Scopri chi siamo e cosa facciamo: Dai Vai è un'associazione culturale no-profit di giovani veronesi."
+        />
+    </head>
+    <body>
+        <NavbarAuth />
+
+        <main class="page-content">
+            <section
+                class="viewport-section combined-section page-header-section"
+            >
+                <div class="text-gradient-wrapper">
+                    <div id="cosa-siamo" class="gradient-text-group">
+                        <h2
+                            class="condenso-text shine-reflection spacing-cosa-siamo reveal-chars"
+                        >
+                            COSA
+                        </h2>
+                        <h2 class="condenso-text shine-reflection reveal-chars">
+                            SIAMO?
+                        </h2>
+                    </div>
+                    <ScrollArrow class="arrow-icon" />
+                    <p class="info-paragraph shine-reflection reveal-lines">
+                        Siamo un'associazione culturale no-profit di giovani
+                        intenzionati a creare un impatto positivo sul territorio
+                        veronese attraverso lo sport.
+                    </p>
+
+                    <Sticker
+                        id="sticker-wrapper"
+                        containerId="sticker-container"
+                    />
+
+                    <div
+                        id="cosa-facciamo"
+                        class="gradient-text-group section-spacer"
+                    >
+                        <h2
+                            class="condenso-text shine-reflection spacing-cosa-facciamo reveal-chars"
+                        >
+                            COSA
+                        </h2>
+                        <h2 class="condenso-text shine-reflection reveal-chars">
+                            FACCIAMO?
+                        </h2>
+                    </div>
+                    <ScrollArrow class="arrow-icon" />
+                    <p class="info-paragraph shine-reflection reveal-lines">
+                        Organizziamo eventi sportivi, tornei e attività
+                        ricreative per coinvolgere la comunità locale e
+                        promuovere uno stile di vita sano e attivo.
+                    </p>
+
+                    <Sticker
+                        id="sticker-wrapper-left"
+                        containerId="sticker-container-left"
+                        variant="left"
+                    />
+
+                    <div
+                        id="come-funziona"
+                        class="gradient-text-group section-spacer"
+                    >
+                        <h2
+                            class="condenso-text shine-reflection spacing-come-funziona reveal-chars"
+                        >
+                            COME
+                        </h2>
+                        <h2 class="condenso-text shine-reflection reveal-chars">
+                            FUNZIONA?
+                        </h2>
+                    </div>
+                    <ScrollArrow class="arrow-icon" />
+                    <p class="info-paragraph shine-reflection reveal-lines">
+                        Con eventi singoli e corsi continuativi, non saprei che
+                        altro dire nel come funziona.
+                    </p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <img
+                src="/daivai/images/DaiVai-yellow.svg"
+                alt="Dai e Vai Logo"
+                class="footer-logo"
+            />
+            <p
+                style="color: var(--secondary-color); font-family: 'Poppins'; margin-top: 1rem;"
+            >
+                © 2026 Dai Vai - Tutti i diritti riservati
+            </p>
+        </footer>
+
+        <script>
+            import { initAnimations } from "../scripts/animations.js";
+
+            window.addEventListener("load", () => {
+                initAnimations();
+            });
+        </script>
+
+        <style>
+            .page-content {
+                background-color: var(--primary-color);
+                min-height: 100vh;
+                padding-top: 80px;
+            }
+
+            .site-footer {
+                background-color: var(--secondary-color);
+                padding: 4rem 2rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                border-top: none;
+            }
+
+            /* Forziamo un colore di background diverso per il footer su questa pagina per contrasto col corpo */
+            .site-footer .footer-logo {
+                filter: brightness(0) saturate(100%) invert(48%) sepia(87%)
+                    deg(355deg) saturate(3195%) hue-rotate(334deg)
+                    brightness(101%) contrast(97%); /* Rosso primary */
+            }
+
+            .site-footer p {
+                color: var(--primary-color) !important;
+            }
+
+            @media (max-width: 768px) {
+                .page-content {
+                    padding-top: 60px;
+                }
+            }
+        </style>
+    </body>
+</html>

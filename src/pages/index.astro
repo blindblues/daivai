@@ -65,14 +65,29 @@ import Sticker from "../components/ui/Sticker.astro";
         <NavbarAuth />
         <main>
             <div class="container">
-                <div
-                    id="hero-wrapper"
-                    style="position: relative; height: 100vh; width: 100%; overflow: visible;"
-                >
-                    <section id="hero"></section>
-                    <section id="logo-overlay">
+                <div id="hero-parallax" class="parallax-container">
+                    <!-- Layer 1: Bagliore (Sfondo) -->
+                    <div class="parallax-layer layer-1">
+                        <img
+                            src="/daivai/images/Parallasse/1_bagliore.svg"
+                            alt=""
+                        />
+                    </div>
+                    <!-- Layer 2: Sole -->
+                    <div class="parallax-layer layer-2">
+                        <img
+                            id="parallax-sun"
+                            src="/daivai/images/Parallasse/2_sole.svg"
+                            alt=""
+                        />
+                    </div>
+                    <!-- Layer Logo (Inizialmente tra sole e montagne) -->
+                    <div
+                        id="hero-logo-wrapper"
+                        class="parallax-layer layer-logo"
+                    >
                         <svg
-                            id="logo-svg"
+                            id="hero-logo-yellow"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 2000 1117"
                             class="hero-image"
@@ -103,79 +118,28 @@ import Sticker from "../components/ui/Sticker.astro";
                                 d="M1099.11,151.31 L1114.46,91.23 L1129.15,151.31 L1236.62,513.08 L1382.79,513.08 L1205.24,.45 L1024.36,.45 L854.14,513.08 L993.65,513.08 Z"
                                 fill="var(--secondary-color)"></path>
                         </svg>
-                    </section>
+                    </div>
+                    <!-- Layer 3: Montagne -->
+                    <div class="parallax-layer layer-3">
+                        <img
+                            id="parallax-mountains"
+                            src="/daivai/images/Parallasse/3_montagne.svg"
+                            alt=""
+                        />
+                    </div>
+                    <!-- Layer 4: Alberi -->
+                    <div class="parallax-layer layer-4">
+                        <img
+                            id="parallax-trees"
+                            src="/daivai/images/Parallasse/4_alberi.svg"
+                            alt=""
+                        />
+                    </div>
                 </div>
             </div>
 
             <section class="viewport-section combined-section">
                 <div class="text-gradient-wrapper">
-                    <div id="cosa-siamo" class="gradient-text-group">
-                        <h2
-                            class="condenso-text shine-reflection spacing-cosa-siamo reveal-chars"
-                        >
-                            COSA
-                        </h2>
-                        <h2 class="condenso-text shine-reflection reveal-chars">
-                            SIAMO?
-                        </h2>
-                    </div>
-                    <ScrollArrow class="arrow-icon" />
-                    <p class="info-paragraph shine-reflection reveal-lines">
-                        Siamo un'associazione culturale no-profit di giovani
-                        intenzionati a creare un impatto positivo sul territorio
-                        veronese attraverso lo sport.
-                    </p>
-
-                    <Sticker
-                        id="sticker-wrapper"
-                        containerId="sticker-container"
-                    />
-
-                    <div
-                        id="cosa-facciamo"
-                        class="gradient-text-group section-spacer"
-                    >
-                        <h2
-                            class="condenso-text shine-reflection spacing-cosa-facciamo reveal-chars"
-                        >
-                            COSA
-                        </h2>
-                        <h2 class="condenso-text shine-reflection reveal-chars">
-                            FACCIAMO?
-                        </h2>
-                    </div>
-                    <ScrollArrow class="arrow-icon" />
-                    <p class="info-paragraph shine-reflection reveal-lines">
-                        Organizziamo eventi sportivi, tornei e attività
-                        ricreative per coinvolgere la comunità locale e
-                        promuovere uno stile di vita sano e attivo.
-                    </p>
-
-                    <Sticker
-                        id="sticker-wrapper-left"
-                        containerId="sticker-container-left"
-                        variant="left"
-                    />
-
-                    <div
-                        id="come-funziona"
-                        class="gradient-text-group section-spacer"
-                    >
-                        <h2
-                            class="condenso-text shine-reflection spacing-come-funziona reveal-chars"
-                        >
-                            COME
-                        </h2>
-                        <h2 class="condenso-text shine-reflection reveal-chars">
-                            FUNZIONA?
-                        </h2>
-                    </div>
-                    <ScrollArrow class="arrow-icon" />
-                    <p class="info-paragraph shine-reflection reveal-lines">
-                        Con eventi singoli e corsi continuativi, non saprei che
-                        altro dire nel come funziona.
-                    </p>
-
                     <div
                         id="ultimi-eventi"
                         class="gradient-text-group section-spacer"

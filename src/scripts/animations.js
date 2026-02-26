@@ -17,7 +17,7 @@ export function initAnimations() {
     resizeCondensoText();
     initReflectionFix();
     initArrowAnimation();
-    initLogoBounce();
+    initParallaxHero();
     initLogoExplosion();
 
     // Event listeners
@@ -624,96 +624,72 @@ function initArrowAnimation() {
 }
 
 // ==========================================
-// LOGO BOUNCE ANIMATION
+// PARALLAX HERO ANIMATION
 // ==========================================
-function initLogoBounce() {
-    const logo = document.getElementById('logo-svg');
-    if (!logo) return;
+function initParallaxHero() {
+    const mountains = document.getElementById('parallax-mountains');
+    const trees = document.getElementById('parallax-trees');
+    const sun = document.getElementById('parallax-sun');
+    const logo = document.getElementById('hero-logo-yellow');
+    const logoWrapper = document.getElementById('hero-logo-wrapper');
 
-    // Start way above screen and smaller (0.2 scale)
-    gsap.set(logo, {
-        y: -800,
-        scale: 0.2,
-        transformOrigin: "50% 100%"
-    });
+    if (!mountains || !trees || !sun || !logo) return;
 
+    // Stato iniziale: tutto fuori schermo in basso
+    const isMobile = window.innerWidth <= 768;
+    gsap.set([mountains, trees], { y: '110vh' });
+    gsap.set([sun, logo], { y: '150vh', opacity: 0 });
+    gsap.set(".layer-1", { opacity: 0 });
 
+    // Su mobile applichiamo la scala agli alberi tramite JS per non rompere l'animazione CSS
+    if (isMobile) {
+        gsap.set(trees, { scale: 0.8, transformOrigin: 'bottom center' });
+    }
 
     const tl = gsap.timeline({
-        delay: 0.2
+        delay: 0.8
     });
 
-    // 1. Initial High Drop + Scale Up
-    tl.to(logo, {
-        y: 0,
-        scale: 1, // Grow to full size
-        scaleY: 1.2, // Maintain the wind stretch
-        scaleX: 0.8,
-        duration: 0.35,
-        ease: "power2.in"
-    })
-        // 2. Heavy Squash 1
-        .to(logo, {
-            scaleY: 0.45,
-            scaleX: 1.55,
-            duration: 0.08,
+    // 0. Il bagliore appare gradualmente
+    tl.to(".layer-1", {
+        opacity: isMobile ? 0.6 : 1,
+        duration: 2.5,
+        ease: "power1.inOut"
+    }, 0);
+
+    // 1. Le montagne salgono dal basso
+    tl.to(mountains, {
+        y: '0vh',
+        duration: 2.8,
+        ease: "expo.out"
+    }, 0.5)
+        // 2. Gli alberi salgono con un leggero ritardo (effetto parallasse)
+        .to(trees, {
+            y: '0vh',
+            duration: 2.4,
             ease: "power3.out"
-        })
-        // 3. Bounce 1 (Up)
-        .to(logo, {
-            y: -300,
-            scaleY: 1.25,
-            scaleX: 0.75,
-            duration: 0.3,
-            ease: "power2.out"
-        })
-        // 4. Drop 2 (Down)
-        .to(logo, {
-            y: 0,
-            scaleY: 1,
-            scaleX: 1,
-            duration: 0.3,
-            ease: "power2.in"
-        })
-        // 5. Medium Squash 2
-        .to(logo, {
-            scaleY: 0.7,
-            scaleX: 1.3,
-            duration: 0.07,
-            ease: "power2.out"
-        })
-        // 6. Bounce 2 (Up)
-        .to(logo, {
-            y: -100,
-            scaleY: 1.1,
-            scaleX: 0.9,
-            duration: 0.2,
-            ease: "power2.out"
-        })
-        // 7. Drop 3 (Down)
-        .to(logo, {
-            y: 0,
-            scaleY: 1,
-            scaleX: 1,
-            duration: 0.2,
-            ease: "power2.in"
-        })
-        // 8. Light Squash 3
-        .to(logo, {
-            scaleY: 0.9,
-            scaleX: 1.1,
-            duration: 0.06,
-            ease: "power1.out"
-        })
-        // 9. Final Settle
-        .to(logo, {
-            scaleY: 1,
-            scaleX: 1,
-            duration: 0.5,
-            ease: "elastic.out(1, 0.4)"
+        }, "-=2.2")
+        // 3. Il sole e il logo sorgono da dietro e si fermano nella posizione finale
+        .to([sun, logo], {
+            y: '-20vh', // Leggermente abbassato rispetto a prima
+            opacity: 1,
+            duration: 4,
+            ease: "expo.out"
+        }, "-=2.5")
+        // 4. Il logo passa in primo piano
+        .set(logoWrapper, {
+            zIndex: 100
+        }, "-=1.0")
+        // 5. Avvio fluttuazione continua solo a fine timeline
+        .add(() => {
+            gsap.to([sun, logo], {
+                y: "-=15",
+                duration: 3,
+                ease: "sine.inOut",
+                repeat: -1,
+                yoyo: true
+            });
         });
-
-
 }
 
 // ==========================================
@@ -721,22 +697,20 @@ function initLogoBounce() {
 // ==========================================
 function initLogoExplosion() {
     const pieces = document.querySelectorAll('.logo-piece');
-    const hero = document.getElementById('hero');
-    if (!pieces.length || !hero) return;
+    const container = document.getElementById('hero-parallax');
+    if (!pieces.length || !container) return;
 
     const tl = gsap.timeline({
         scrollTrigger: {
-            trigger: "#hero",
+            trigger: "#hero-parallax",
             start: "top top",
             end: "100% top",
             scrub: 1,
         }
     });
 
-
-
     pieces.forEach((piece, i) => {
-        // Calculate explosion vector from center
+        // Calcola il vettore di esplosione dal centro
         const bbox = piece.getBBox();
         const centerX = 1000;
         const centerY = 558.5;
@@ -746,7 +720,7 @@ function initLogoExplosion() {
         const dirX = pX - centerX;
         const dirY = pY - centerY;
 
-        // Large multiplier to ensure they go far outside the window
+        // Moltiplicatore grande per assicurarci che escano dalla finestra
         const multiplier = 20 + Math.random() * 15;
 
         tl.to(piece, {
