@@ -693,24 +693,65 @@ function initParallaxHero() {
 }
 
 // ==========================================
-// LOGO EXPLOSION (SCROLL TRIGGERED)
+// LOGO EXPLOSION & PARALLAX (SCROLL TRIGGERED)
 // ==========================================
 function initLogoExplosion() {
     const pieces = document.querySelectorAll('.logo-piece');
+    const mountainsLayer = document.querySelector('.parallax-layer.layer-3');
+    const sunLayer = document.querySelector('.parallax-layer.layer-2');
+    const treesLayer = document.querySelector('.parallax-layer.layer-4');
+    const logoWrapper = document.getElementById('hero-logo-wrapper');
     const container = document.getElementById('hero-parallax');
-    if (!pieces.length || !container) return;
+
+    if (!container) return;
 
     const tl = gsap.timeline({
         scrollTrigger: {
             trigger: "#hero-parallax",
             start: "top top",
             end: "100% top",
-            scrub: 1,
+            scrub: 1.5,
+            invalidateOnRefresh: true
         }
     });
 
-    pieces.forEach((piece, i) => {
-        // Calcola il vettore di esplosione dal centro
+    // 1. Parallasse Alberi (Layer in primo piano)
+    if (treesLayer) {
+        tl.to(treesLayer, {
+            y: '5vh',
+            filter: 'blur(3px)', // Sfocatura leggera per gli alberi
+            ease: "none"
+        }, 0);
+    }
+
+    // 2. Parallasse Montagne
+    if (mountainsLayer) {
+        tl.to(mountainsLayer, {
+            y: '25vh',
+            filter: 'blur(4px)', // Sfocatura leggera per le montagne
+            ease: "none"
+        }, 0);
+    }
+
+    // 3. Parallasse Sole e Logo Wrapper
+    if (sunLayer) {
+        tl.to(sunLayer, {
+            y: '60vh',
+            filter: 'blur(10px)', // Sfocatura intensa per il sole
+            ease: "none"
+        }, 0);
+    }
+
+    if (logoWrapper) {
+        tl.to(logoWrapper, {
+            y: '60vh',
+            filter: 'blur(10px)', // Sfocatura intensa per il logo
+            ease: "none"
+        }, 0);
+    }
+
+    // 3. Esplosione Pezzi del Logo
+    pieces.forEach((piece) => {
         const bbox = piece.getBBox();
         const centerX = 1000;
         const centerY = 558.5;
@@ -720,15 +761,13 @@ function initLogoExplosion() {
         const dirX = pX - centerX;
         const dirY = pY - centerY;
 
-        // Moltiplicatore grande per assicurarci che escano dalla finestra
-        const multiplier = 20 + Math.random() * 15;
+        const multiplier = 40 + Math.random() * 30; // Più dispersione (era 25)
 
         tl.to(piece, {
             x: dirX * multiplier,
             y: dirY * multiplier,
             rotation: Math.random() * 1080 - 540,
-            duration: 1,
-            ease: "power2.in"
+            ease: "sine.out"
         }, 0);
     });
 }
