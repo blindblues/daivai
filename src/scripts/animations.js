@@ -709,8 +709,8 @@ function initLogoExplosion() {
         scrollTrigger: {
             trigger: "#hero-parallax",
             start: "top top",
-            end: "100% top",
-            scrub: 1.5,
+            end: "250% top",
+            scrub: 2.5,
             invalidateOnRefresh: true
         }
     });
@@ -719,7 +719,6 @@ function initLogoExplosion() {
     if (treesLayer) {
         tl.to(treesLayer, {
             y: '5vh',
-            filter: 'blur(3px)', // Sfocatura leggera per gli alberi
             ease: "none"
         }, 0);
     }
@@ -728,7 +727,6 @@ function initLogoExplosion() {
     if (mountainsLayer) {
         tl.to(mountainsLayer, {
             y: '25vh',
-            filter: 'blur(4px)', // Sfocatura leggera per le montagne
             ease: "none"
         }, 0);
     }
@@ -737,7 +735,6 @@ function initLogoExplosion() {
     if (sunLayer) {
         tl.to(sunLayer, {
             y: '60vh',
-            filter: 'blur(10px)', // Sfocatura intensa per il sole
             ease: "none"
         }, 0);
     }
@@ -745,7 +742,6 @@ function initLogoExplosion() {
     if (logoWrapper) {
         tl.to(logoWrapper, {
             y: '60vh',
-            filter: 'blur(10px)', // Sfocatura intensa per il logo
             ease: "none"
         }, 0);
     }
@@ -761,7 +757,7 @@ function initLogoExplosion() {
         const dirX = pX - centerX;
         const dirY = pY - centerY;
 
-        const multiplier = 40 + Math.random() * 30; // Più dispersione (era 25)
+        const multiplier = 30 + Math.random() * 20;
 
         tl.to(piece, {
             x: dirX * multiplier,
