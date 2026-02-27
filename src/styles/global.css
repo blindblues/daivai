@@ -35,7 +35,6 @@ body {
     overflow-x: hidden;
     /* Prevent horizontal scroll handled by width: 100% now */
     width: 100%;
-    max-width: 100%;
 }
 
 body {
@@ -145,6 +144,19 @@ footer {
     #logo-overlay .hero-image {
         max-width: 70vw !important;
         max-height: 70vw !important;
+    }
+}
+
+/* Utility classes for responsive display */
+@media (min-width: 769px) {
+    .desktop-hidden {
+        display: none !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-hidden {
+        display: none !important;
     }
 }
 
@@ -510,6 +522,13 @@ section {
     padding-right: 1rem;
 }
 
+@media (min-width: 769px) {
+    .viewport-section.combined-section>*:not(.events-slider-wrapper) {
+        padding-left: 10vw;
+        padding-right: 10vw;
+    }
+}
+
 .section-spacer {
     margin-top: 8rem;
 }
@@ -550,16 +569,20 @@ section {
     padding-top: 0.1em;
     white-space: nowrap;
 
-    /* Fixed viewport gradient reflection - Raised noticeably */
+    /* Fixed viewport gradient reflection - with 25% safety top/bottom */
     background: linear-gradient(to bottom,
-            rgba(245, 229, 144, 0) 10%,
-            rgba(245, 229, 144, 1) 30%,
-            rgba(245, 229, 144, 1) 80%,
-            rgba(245, 229, 144, 0) 100%) !important;
-    background-attachment: fixed !important;
-    background-size: 100vw 100vh !important;
-    background-position: center !important;
+            transparent 0%,
+            rgba(245, 229, 144, 0.05) 25%,
+            rgba(245, 229, 144, 1) 40%,
+            rgba(245, 229, 144, 1) 60%,
+            rgba(245, 229, 144, 0.05) 75%,
+            transparent 100%) !important;
+    /* Using calculated fix for all browsers now for better robustness */
+    background-attachment: scroll !important;
+    background-size: 100vw 200vh !important;
+    background-position: center calc(var(--scroll-y, 0px) * 1px - var(--element-top, 0px) * 1px - 50vh) !important;
     background-repeat: no-repeat !important;
+    will-change: background-position;
 
     -webkit-background-clip: text !important;
     background-clip: text !important;
@@ -567,7 +590,8 @@ section {
 
     font-weight: 400;
     font-style: normal;
-    -webkit-text-stroke: 0.6px var(--secondary-color);
+    -webkit-text-stroke: 1.2px var(--secondary-color);
+    letter-spacing: 0.01em;
 }
 
 /* Spaziatura individuale per ogni sezione titolo */
@@ -598,6 +622,41 @@ section {
     justify-content: center;
     text-align: center;
     width: 100%;
+}
+
+@media (min-width: 769px) {
+    .gradient-text-group {
+        flex-direction: row;
+        gap: 0.75em;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .gradient-text-group h2.condenso-text,
+    .gradient-text-group .condenso-text.shine-reflection {
+        margin-bottom: 0 !important;
+        /* Matches mobile characteristics */
+        color: transparent !important;
+        -webkit-background-clip: text !important;
+        background-clip: text !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        -webkit-text-stroke: 1.2px var(--secondary-color);
+        background-repeat: no-repeat !important;
+        background-attachment: scroll !important;
+        background-size: 100vw 200vh !important;
+        background-position: center calc(var(--scroll-y, 0px) * 1px - var(--element-top, 0px) * 1px - 50vh) !important;
+        will-change: background-position;
+    }
+
+    .condenso-text.spacing-cosa-siamo,
+    .condenso-text.spacing-cosa-facciamo,
+    .condenso-text.spacing-come-funziona,
+    .spacing-prossimi-eventi {
+        margin-bottom: 0 !important;
+    }
 }
 
 .viewport-section h2.condenso-text {
@@ -635,7 +694,8 @@ section {
 .arrow-icon {
     width: 60px;
     height: auto;
-    margin-top: 4rem;
+    margin: 3rem auto;
+    /* Centered horizontally and balanced vertically */
     display: block;
     position: relative;
 }
@@ -679,6 +739,7 @@ section {
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
     width: 90vw;
+    max-width: 100%;
     text-align: left;
     /* remove static color, handled by gradient */
     /* color: var(--secondary-color); */
@@ -686,16 +747,27 @@ section {
     font-size: 1.6rem;
     line-height: 1.4;
 
-    /* Fixed viewport gradient reflection (Matches .condenso-text) */
+    @media (min-width: 769px) {
+        font-size: 3.2rem;
+        max-width: 1400px;
+        line-height: 1.2;
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Fixed viewport gradient reflection - with 25% safety top/bottom */
     background: linear-gradient(to bottom,
-            rgba(245, 229, 144, 0) 20%,
-            rgba(245, 229, 144, 1) 40%,
-            rgba(245, 229, 144, 1) 80%,
-            rgba(245, 229, 144, 0) 100%) !important;
-    background-attachment: fixed !important;
-    background-size: 100vw 100vh !important;
-    background-position: center !important;
+        transparent 0%,
+        rgba(245, 229, 144, 0.05) 25%,
+        rgba(245, 229, 144, 1) 40%,
+        rgba(245, 229, 144, 1) 60%,
+        rgba(245, 229, 144, 0.05) 75%,
+        transparent 100%) !important;
+    background-attachment: scroll !important;
+    background-size: 100vw 200vh !important;
+    background-position: center calc(var(--scroll-y, 0px) * 1px - var(--element-top, 0px) * 1px - 50vh) !important;
     background-repeat: no-repeat !important;
+    will-change: background-position;
 
     -webkit-background-clip: text !important;
     background-clip: text !important;
@@ -713,11 +785,12 @@ section {
 .info-paragraph.shine-reflection.mobile-fix,
 .arrow-fill-mask.shine-reflection {
     background-attachment: scroll !important;
-    /* Explicitly set Center X, Calculated Y */
-    background-position: center calc(var(--scroll-y, 0px) * 1px - var(--element-top, 0px) * 1px) !important;
-    background-size: 100vw 100vh !important;
+    /* Simulate fixed background with a taller safety area (200vh) */
+    background-size: 100vw 200vh !important;
+    /* Center the 100vh viewport gradient within the 200vh total height */
+    background-position: center calc(var(--scroll-y, 0px) * 1px - var(--element-top, 0px) * 1px - 50vh) !important;
+    background-repeat: no-repeat !important;
     will-change: background-position;
-    /* Optimize performance */
 }
 
 /* Footer Styles */

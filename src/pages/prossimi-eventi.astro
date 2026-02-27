@@ -39,10 +39,14 @@ import ScrollArrow from "../components/ui/ScrollArrow.astro";
             >
                 <div class="text-gradient-wrapper">
                     <div class="gradient-text-group spacing-prossimi-eventi">
-                        <h2 class="condenso-text shine-reflection reveal-chars">
+                        <h2
+                            class="condenso-text shine-reflection reveal-chars main-section-title"
+                        >
                             PROSSIMI
                         </h2>
-                        <h2 class="condenso-text shine-reflection reveal-chars">
+                        <h2
+                            class="condenso-text shine-reflection reveal-chars main-section-title"
+                        >
                             EVENTI
                         </h2>
                     </div>
@@ -286,20 +290,24 @@ import ScrollArrow from "../components/ui/ScrollArrow.astro";
                 border-top: 1px solid rgba(255, 255, 255, 0.1);
             }
 
-            .gradient-text-group {
-                text-align: center;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
+            @media (max-width: 768px) {
+                .gradient-text-group {
+                    text-align: center;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                }
             }
 
-            .spacing-prossimi-eventi h2.condenso-text {
-                margin-bottom: -0.45em !important;
-                line-height: 1 !important;
-            }
+            @media (max-width: 768px) {
+                .spacing-prossimi-eventi h2.condenso-text {
+                    margin-bottom: -0.45em !important;
+                    line-height: 1 !important;
+                }
 
-            .spacing-prossimi-eventi h2.condenso-text:last-child {
-                margin-bottom: 0 !important;
+                .spacing-prossimi-eventi h2.condenso-text:last-child {
+                    margin-bottom: 0 !important;
+                }
             }
 
             h2.condenso-text {

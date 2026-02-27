@@ -69,23 +69,116 @@ export function initAnimations() {
 
 // RESIZE CONDENSO TEXT
 function resizeCondensoText() {
-    const elements = document.querySelectorAll(".condenso-text");
-
-    if (elements.length === 0) return;
-
+    const groups = document.querySelectorAll('.gradient-text-group');
     const viewportWidth = document.documentElement.clientWidth;
-    const targetPercentage = 0.9;
-    const targetWidth = viewportWidth * targetPercentage;
+    const isDesktop = viewportWidth >= 769;
+    const desktopTargetPercentage = 0.98;
+    const mobileTargetPercentage = 0.9;
+    const targetWidth = viewportWidth * (isDesktop ? desktopTargetPercentage : mobileTargetPercentage);
 
-    elements.forEach((el) => {
-        if (!(el instanceof HTMLElement)) return;
+    if (groups.length > 0) {
+        if (isDesktop) {
+            // Desktop: We want consistency across pages for certain titles
+            // We define a reference ratio based on the longest title ("I NOSTRI ULTIMI EVENTI")
+            // so that shorter titles on other pages match its height.
+            const REFERENCE_WIDTH_AT_100PX = 800; // Significantly reduced to make titles much bigger
+            const systemGlobalRatio = targetWidth / REFERENCE_WIDTH_AT_100PX;
+            const systemGlobalFontSize = 100 * systemGlobalRatio;
 
-        // Backup current state
-        const originalWhiteSpace = el.style.whiteSpace;
-        const originalTransform = el.style.transform;
-        const originalWidth = el.style.width;
+            const otherGroupData = [];
 
-        // Set test state for calculation
+            groups.forEach(group => {
+                const elements = Array.from(group.querySelectorAll(".condenso-text"));
+                if (elements.length === 0) return;
+
+                // Check if this group contains "main-section-title"
+                const isMainTitle = elements.some(el => el.classList.contains('main-section-title'));
+
+                if (isMainTitle) {
+                    // Apply the system-wide uniform font size
+                    elements.forEach(el => {
+                        el.style.whiteSpace = "nowrap";
+                        el.style.width = "auto";
+                        el.style.display = "flex";
+                        el.style.justifyContent = "center";
+                        el.style.alignItems = "center";
+                        el.style.textAlign = "center";
+                        el.style.fontSize = `${systemGlobalFontSize}px`;
+                    });
+                } else {
+                    // Other groups (like Admin) still fit to their own width
+                    elements.forEach(el => {
+                        el.style.whiteSpace = "nowrap";
+                        el.style.width = "auto";
+                        el.style.display = "inline-block";
+                        el.style.fontSize = "100px";
+                    });
+
+                    const computedGap = parseFloat(window.getComputedStyle(group).gap) || 0;
+                    // If computedGap is 0 but we are on desktop, we use a fallback that matches CSS (0.75em = 75px relative to 100px font-size)
+                    const totalGapWidth = (computedGap > 0 ? computedGap : 75) * (elements.length - 1);
+
+                    let totalWidthAt100px = totalGapWidth;
+                    elements.forEach(el => {
+                        totalWidthAt100px += el.getBoundingClientRect().width;
+                    });
+
+                    if (totalWidthAt100px > 0) {
+                        otherGroupData.push({
+                            elements,
+                            ratio: targetWidth / totalWidthAt100px
+                        });
+                    }
+                }
+            });
+
+            // Apply specific min-ratio only for the non-main titles on the current page
+            if (otherGroupData.length > 0) {
+                const minRatio = Math.min(...otherGroupData.map(d => d.ratio));
+                const finalFontSize = 100 * minRatio;
+
+                otherGroupData.forEach(data => {
+                    data.elements.forEach(el => {
+                        el.style.fontSize = `${finalFontSize}px`;
+                        el.style.width = "auto";
+                        el.style.display = "flex";
+                        el.style.justifyContent = "center";
+                        el.style.alignItems = "center";
+                        el.style.textAlign = "center";
+                    });
+                });
+            }
+        } else {
+            // ... (rest of mobile logic)
+            // Mobile: Size groups individually as they are stacked
+            groups.forEach(group => {
+                const elements = Array.from(group.querySelectorAll(".condenso-text"));
+                elements.forEach((el) => {
+                    el.style.whiteSpace = "nowrap";
+                    el.style.width = "auto";
+                    el.style.display = "inline-block";
+                    el.style.fontSize = "100px";
+
+                    const currentWidth = el.getBoundingClientRect().width;
+
+                    if (currentWidth > 0) {
+                        const ratio = targetWidth / currentWidth;
+                        const newFontSize = 100 * ratio;
+                        el.style.fontSize = `${newFontSize}px`;
+                    }
+
+                    el.style.width = "100%";
+                    el.style.display = "flex";
+                    el.style.justifyContent = "center";
+                    el.style.textAlign = "center";
+                });
+            });
+        }
+    }
+
+    // Process any independent condenso-text not in a group (if any)
+    const independentElements = document.querySelectorAll(".condenso-text:not(.gradient-text-group .condenso-text)");
+    independentElements.forEach((el) => {
         el.style.whiteSpace = "nowrap";
         el.style.width = "auto";
         el.style.display = "inline-block";
@@ -96,32 +189,21 @@ function resizeCondensoText() {
         if (currentWidth > 0) {
             const ratio = targetWidth / currentWidth;
             const newFontSize = 100 * ratio;
-
             el.style.fontSize = `${newFontSize}px`;
         }
 
-        // Restore/Set final state favoring centering
-        el.style.whiteSpace = originalWhiteSpace;
-        el.style.width = "100%"; // Force full width for text-align: center
-        el.style.display = "flex"; // Use flex for better span centering
+        el.style.width = "100%";
+        el.style.display = "flex";
         el.style.justifyContent = "center";
         el.style.textAlign = "center";
-        el.style.transform = originalTransform;
     });
 }
 
 // MOBILE REFLECTION FIX
 function needsReflectionFix() {
-    // Check for Firefox (has issues with background-attachment: fixed + background-clip: text)
-    const isFirefox = /Firefox/i.test(navigator.userAgent);
-
-    // Check for any mobile device
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-    // Check for iPad OS (disguised as MacIntel)
-    const isPadOS = (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-
-    return isFirefox || isMobile || isPadOS;
+    // We now use the calculated fix for all browsers to ensure robustness
+    // across different rendering engines and when transforms are present.
+    return true;
 }
 
 function initReflectionFix() {
@@ -322,8 +404,8 @@ function createSticker(wrapperId, containerId, direction = 'vertical') {
 // COLOR TRANSITION ON SCROLL
 // ==========================================
 function initColorTransition() {
-    // Try to find the homepage trigger, or the page header for other pages
-    const trigger = document.getElementById('ultimi-eventi') || document.querySelector('.page-header-section');
+    // Only trigger the color transition on the homepage where #ultimi-eventi exists
+    const trigger = document.getElementById('ultimi-eventi');
     const body = document.body;
 
     // If no trigger at all and no reflection elements, we can skip
@@ -371,22 +453,20 @@ function initColorTransition() {
         // Text gradient: yellow -> red (inverse of background)
         const textColor = lerpColor(yellowRGB, redRGB, progress);
         const gradientValue = `linear-gradient(to bottom,
-            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 0) 5%,
-            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1) 25%,
-            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1) 85%,
-            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 0) 100%)`;
+            transparent 0%,
+            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 0.05) 25%,
+            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1) 40%,
+            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1) 60%,
+            rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 0.05) 75%,
+            transparent 100%)`;
 
         textElements.forEach(el => {
             // Only update the gradient image, preserve other properties
             el.style.setProperty('background-image', gradientValue, 'important');
 
-            // Only enforce fixed attachment on desktop/non-mobile
-            if (!needsReflectionFix()) {
-                el.style.setProperty('background-attachment', 'fixed', 'important');
-                el.style.setProperty('background-position', 'center', 'important');
-                el.style.setProperty('background-size', '100vw 100vh', 'important');
-                el.style.setProperty('background-repeat', 'no-repeat', 'important');
-            }
+            // Force the calculated fix behavior for all browsers
+            // (The .is-mobile-fix class and its CSS handle this)
+            el.style.setProperty('background-attachment', 'scroll', 'important');
 
             el.style.setProperty('-webkit-background-clip', 'text', 'important');
             el.style.setProperty('background-clip', 'text', 'important');
@@ -399,13 +479,7 @@ function initColorTransition() {
         const arrowMasks = document.querySelectorAll('.arrow-fill-mask.shine-reflection');
         arrowMasks.forEach(el => {
             el.style.setProperty('background-image', gradientValue, 'important');
-
-            if (!needsReflectionFix()) {
-                el.style.setProperty('background-attachment', 'fixed', 'important');
-                el.style.setProperty('background-position', 'center', 'important');
-                el.style.setProperty('background-size', '100vw 100vh', 'important');
-                el.style.setProperty('background-repeat', 'no-repeat', 'important');
-            }
+            el.style.setProperty('background-attachment', 'scroll', 'important');
             // Do NOT set background-clip: text here, as it hides the div if there's no text
         });
 
