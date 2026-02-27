@@ -3,9 +3,6 @@ import Auth from "@/components/features/Auth.astro";
 ---
 
 <div class="nav-menu-wrapper">
-    <!-- Backdrop trasparente per chiudere il menù cliccando fuori -->
-    <div id="menu-backdrop" class="menu-backdrop" style="display: none;"></div>
-
     <!-- Pulsante Hamburger Menu / Logo -->
     <button id="menu-toggle" class="menu-toggle" aria-label="Menu">
         <div class="icon-container">
@@ -66,6 +63,9 @@ import Auth from "@/components/features/Auth.astro";
     </div>
 </div>
 
+<!-- Backdrop trasparente per chiudere il menù cliccando fuori -->
+<div id="menu-backdrop" class="menu-backdrop" style="display: none;"></div>
+
 <!-- Menu Overlay Radiale -->
 <div id="menu-overlay" class="menu-overlay">
     <div class="radial-menu-container">
@@ -75,17 +75,19 @@ import Auth from "@/components/features/Auth.astro";
                 <path
                     id="path-ring-1"
                     d="M 500, 500 m -380, 0 a 380,380 0 1,0 760,0 a 380,380 0 1,0 -760,0"
-                    fill="transparent"></path>
-                <text class="menu-item-text">
-                    <textPath
-                        href="#path-ring-1"
-                        class="menu-text-path"
-                        data-href="/daivai/prossimi-eventi"
-                        >PROSSIMI EVENTI•PROSSIMI EVENTI•PROSSIMI
-                        EVENTI•PROSSIMI EVENTI•PROSSIMI EVENTI•PROSSIMI
-                        EVENTI•PROSSIMI EVENTI•PROSSIMI EVENTI•</textPath
-                    >
-                </text>
+                    fill="transparent"
+                    style="pointer-events: none;"></path>
+                <a href="/daivai/prossimi-eventi" class="menu-link">
+                    <text class="menu-item-text">
+                        <textPath
+                            href="#path-ring-1"
+                            class="menu-text-path"
+                            data-href="/daivai/prossimi-eventi"
+                            >PROSSIMI EVENTI • PROSSIMI EVENTI • PROSSIMI EVENTI
+                            • PROSSIMI EVENTI •
+                        </textPath>
+                    </text>
+                </a>
             </svg>
         </div>
 
@@ -95,16 +97,18 @@ import Auth from "@/components/features/Auth.astro";
                 <path
                     id="path-ring-2"
                     d="M 500, 500 m -270, 0 a 270,270 0 1,0 540,0 a 270,270 0 1,0 -540,0"
-                    fill="transparent"></path>
-                <text class="menu-item-text">
-                    <textPath
-                        href="#path-ring-2"
-                        class="menu-text-path"
-                        data-href="/daivai/cosa-siamo"
-                        >COSA SIAMO•COSA SIAMO•COSA SIAMO•COSA SIAMO•COSA
-                        SIAMO•COSA SIAMO•</textPath
-                    >
-                </text>
+                    fill="transparent"
+                    style="pointer-events: none;"></path>
+                <a href="/daivai/cosa-siamo" class="menu-link">
+                    <text class="menu-item-text">
+                        <textPath
+                            href="#path-ring-2"
+                            class="menu-text-path"
+                            data-href="/daivai/cosa-siamo"
+                            >COSA SIAMO • COSA SIAMO • COSA SIAMO • COSA SIAMO •
+                        </textPath>
+                    </text>
+                </a>
             </svg>
         </div>
 
@@ -114,22 +118,25 @@ import Auth from "@/components/features/Auth.astro";
                 <path
                     id="path-ring-3"
                     d="M 500, 500 m -160, 0 a 160,160 0 1,0 320,0 a 160,160 0 1,0 -320,0"
-                    fill="transparent"></path>
-                <text class="menu-item-text">
-                    <textPath
-                        href="#path-ring-3"
-                        class="menu-text-path"
-                        data-href="/daivai/"
-                        >HOME•HOME•HOME•HOME•HOME•HOME•HOME•HOME•HOME•</textPath
-                    >
-                </text>
+                    fill="transparent"
+                    style="pointer-events: none;"></path>
+                <a href="/daivai/" class="menu-link">
+                    <text class="menu-item-text">
+                        <textPath
+                            href="#path-ring-3"
+                            class="menu-text-path"
+                            data-href="/daivai/"
+                            >HOME • HOME • HOME • HOME •
+                        </textPath>
+                    </text>
+                </a>
             </svg>
         </div>
     </div>
 </div>
 
 <script>
-    import { supabase } from "../../lib/supabase";
+    import { supabase } from "@/lib/supabase";
     import { gsap } from "gsap";
 
     // Login Modal Toggle
@@ -273,11 +280,15 @@ import Auth from "@/components/features/Auth.astro";
         const centerY = rect.top + rect.height / 2;
 
         if (isMenuOpen) {
+            // Posizionamento dinamico del centro del menu basato sul pulsante
+            gsap.set(".radial-menu-container", {
+                left: centerX,
+                top: centerY,
+            });
+
             // Expansion radius: covers only the menu area
-            const radius =
-                window.innerWidth > 768
-                    ? window.innerWidth * 0.42
-                    : window.innerWidth * 0.8;
+            // Raggio enorme per coprire TUTTO lo schermo (non solo 42%)
+            const radius = Math.max(window.innerWidth, window.innerHeight) * 2;
 
             // 0. Show backdrop
             gsap.set(menuBackdrop, { display: "block" });
@@ -311,6 +322,14 @@ import Auth from "@/components/features/Auth.astro";
                 clipPath: `circle(${radius}px at ${centerX}px ${centerY}px)`,
                 duration: 0.8,
                 ease: "expo.inOut",
+                onComplete: () => {
+                    // Rimuoviamo il clipPath per non interferire con il rendering o gli eventi
+                    gsap.set(menuOverlay, { clipPath: "none" });
+
+                    // IMPORTANTE: L'overlay deve restare 'auto' per catturare i click di chiusura,
+                    // ma i figli hanno la priorità se hanno pointer-events: auto.
+                    gsap.set(menuOverlay, { pointerEvents: "auto" });
+                },
             });
 
             // 3. Rings Entrance
@@ -350,13 +369,13 @@ import Auth from "@/components/features/Auth.astro";
                 delay: 0.1,
             });
 
-            // 2. Close Overlay without "bounce" or expansion
+            // 2. Close Overlay
             gsap.to(menuOverlay, {
-                clipPath: `circle(0% at ${centerX}px ${centerY}px)`,
-                duration: 0.4, // Più veloce
-                ease: "power2.in", // Ease lineare verso l'interno, senza overshoot
+                opacity: 0, // Aggiungiamo un fade per sicurezza nell'uscita
+                duration: 0.4,
+                ease: "power2.inOut",
                 onComplete: () => {
-                    gsap.set(menuOverlay, { display: "none" });
+                    gsap.set(menuOverlay, { display: "none", opacity: 1 });
                     rotationTimelines.forEach((tl) => tl.pause());
                 },
             });
@@ -375,29 +394,57 @@ import Auth from "@/components/features/Auth.astro";
         menuToggle.addEventListener("click", toggleMenu);
     }
 
-    // 1. Gestione click sulle voci del menù (NAVIGAZIONE)
-    document.querySelectorAll(".menu-text-path").forEach((path) => {
-        path.addEventListener("click", (e) => {
-            e.preventDefault();
-            e.stopPropagation(); // Importante: impedisce al click di arrivare allo sfondo e chiudere il menù
-
-            const href = path.getAttribute("data-href");
-            if (href) {
-                window.location.href = href;
-            }
-        });
-    });
-
-    // 2. Gestione click sullo sfondo bordeaux (CHIUSURA)
+    // Gestione click sul menu overlay (NAVIGAZIONE + CHIUSURA)
     if (menuOverlay) {
         menuOverlay.addEventListener("click", (e) => {
-            if (isMenuOpen) {
-                toggleMenu();
+            if (!isMenuOpen) return;
+
+            const target = e.target as HTMLElement;
+
+            // 1. Cerchiamo se abbiamo cliccato un link del menu
+            // Usiamo target e closest per identificare l'elemento SVG o il link
+            const menuLink =
+                target.closest(".menu-link") ||
+                target.closest(".menu-text-path");
+
+            if (menuLink) {
+                const href =
+                    menuLink.getAttribute("href") ||
+                    menuLink.getAttribute("data-href");
+                console.log("Navigating to:", href);
+                if (href) {
+                    window.location.href = href;
+                    return;
+                }
             }
+
+            // 2. Fallback per mobile/touch: controlliamo elementi sotto il punto di pressione
+            const x = (e as MouseEvent).clientX;
+            const y = (e as MouseEvent).clientY;
+            const elements = document.elementsFromPoint(x, y);
+            const foundLink = elements.find(
+                (el) =>
+                    el.classList.contains("menu-text-path") ||
+                    el.classList.contains("menu-link"),
+            );
+
+            if (foundLink) {
+                const href =
+                    foundLink.getAttribute("data-href") ||
+                    foundLink.getAttribute("href");
+                if (href) {
+                    window.location.href = href;
+                    return;
+                }
+            }
+
+            // 3. Se non è un link, chiudiamo il menu
+            console.log("Overlay clicked, but no link found. Closing.");
+            toggleMenu();
         });
     }
 
-    // 3. Gestione click sul backdrop (CHIUSURA)
+    // Gestione click sul backdrop (CHIUSURA)
     if (menuBackdrop) {
         menuBackdrop.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -467,7 +514,8 @@ import Auth from "@/components/features/Auth.astro";
         width: 100vw;
         height: 100vh;
         background: transparent;
-        z-index: 1400; /* Sotto l'overlay radiale */
+        z-index: 1400; /* Sotto l'overlay radiale (1500) */
+        pointer-events: auto;
     }
 
     .menu-overlay {
@@ -480,7 +528,7 @@ import Auth from "@/components/features/Auth.astro";
         display: none;
         z-index: 1500;
         overflow: hidden;
-        pointer-events: auto; /* Deve intercettare per permettere i click figli e lo stopPropagation */
+        pointer-events: auto; /* Base per l'apertura */
     }
 
     .radial-menu-container {
@@ -500,55 +548,31 @@ import Auth from "@/components/features/Auth.astro";
         position: absolute;
         width: 100vw;
         height: 100vw;
-        pointer-events: none;
+        pointer-events: none; /* Non blocca il centro */
     }
 
     .menu-ring svg {
         width: 100%;
         height: 100%;
         overflow: visible;
-        pointer-events: none;
+        pointer-events: none; /* Cruciale: non deve bloccare il resto del menu */
+    }
+
+    .menu-link {
+        pointer-events: auto !important;
+        cursor: pointer !important;
     }
 
     .menu-text-path {
         font-family: var(--font-heading);
         font-weight: 800;
-        font-size: 48px;
-        fill: #f5e590;
+        font-size: 52px;
         text-transform: uppercase;
         letter-spacing: 0.15em;
         transition: fill 0.3s ease;
-        pointer-events: auto;
-        cursor: pointer;
-    }
-
-    .menu-text-path:hover {
-        fill: #ffffff;
-    }
-
-    .ring-1 {
-        width: 100vw;
-        height: 100vw;
-    }
-    .ring-2 {
-        width: 100vw;
-        height: 100vw;
-    }
-    .ring-3 {
-        width: 100vw;
-        height: 100vw;
-    }
-
-    .menu-text-path {
-        font-family: var(--font-heading);
-        font-weight: 800;
-        font-size: 48px;
+        pointer-events: auto !important;
+        cursor: pointer !important;
         fill: #f5e590;
-        text-transform: uppercase;
-        letter-spacing: 0.15em;
-        transition: fill 0.3s ease;
-        pointer-events: auto; /* Necessario per elementsFromPoint */
-        cursor: pointer;
     }
 
     .menu-text-path:hover {
@@ -582,16 +606,16 @@ import Auth from "@/components/features/Auth.astro";
         }
 
         .ring-1 {
-            width: 180vw;
-            height: 180vw;
+            width: 200vw;
+            height: 200vw;
         }
         .ring-2 {
-            width: 130vw;
-            height: 130vw;
+            width: 150vw;
+            height: 150vw;
         }
         .ring-3 {
-            width: 80vw;
-            height: 80vw;
+            width: 100vw;
+            height: 100vw;
         }
 
         .radial-menu-container {
