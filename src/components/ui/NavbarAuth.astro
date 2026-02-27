@@ -82,7 +82,12 @@ import Auth from "@/components/features/Auth.astro";
                         <textPath
                             href="#path-ring-1"
                             class="menu-text-path"
-                            data-href="/daivai/prossimi-eventi"></textPath>
+                            data-href="/daivai/prossimi-eventi"
+                            textLength="2387"
+                            lengthAdjust="spacing"
+                            >PROSSIMI EVENTI • PROSSIMI EVENTI • PROSSIMI EVENTI
+                            •
+                        </textPath>
                     </text>
                 </a>
             </svg>
@@ -101,7 +106,11 @@ import Auth from "@/components/features/Auth.astro";
                         <textPath
                             href="#path-ring-2"
                             class="menu-text-path"
-                            data-href="/daivai/cosa-siamo"></textPath>
+                            data-href="/daivai/cosa-siamo"
+                            textLength="1696"
+                            lengthAdjust="spacing"
+                            >COSA SIAMO • COSA SIAMO • COSA SIAMO •
+                        </textPath>
                     </text>
                 </a>
             </svg>
@@ -120,7 +129,11 @@ import Auth from "@/components/features/Auth.astro";
                         <textPath
                             href="#path-ring-3"
                             class="menu-text-path"
-                            data-href="/daivai/"></textPath>
+                            data-href="/daivai/"
+                            textLength="1005"
+                            lengthAdjust="spacing"
+                            >HOME • HOME • HOME •
+                        </textPath>
                     </text>
                 </a>
             </svg>
@@ -247,91 +260,12 @@ import Auth from "@/components/features/Auth.astro";
     let isMenuOpen = false;
     let rotationTimelines: gsap.core.Timeline[] = [];
 
-    // --- SISTEMA DINAMICO TESTO RADIALE ---
-    async function setupRadialText() {
-        try {
-            // Assicuriamoci che i font premium (Whyte/Integral) siano pronti per la misura
-            if (document.fonts) {
-                await document.fonts.ready;
-            }
+    // Testo radiale pre-calcolato magicamente nell'HTML (3 ripetizioni perfette)
 
-            const ringConfigs = [
-                { pathId: "path-ring-1", text: "PROSSIMI EVENTI" },
-                { pathId: "path-ring-2", text: "COSA SIAMO" },
-                { pathId: "path-ring-3", text: "HOME" },
-            ];
-
-            ringConfigs.forEach((config) => {
-                const path = document.getElementById(
-                    config.pathId,
-                ) as SVGPathElement | null;
-                const textPath = document.querySelector(
-                    `textPath[href="#${config.pathId}"]`,
-                ) as SVGTextPathElement | null;
-
-                if (!path || !textPath) return;
-
-                // 1. Circonferenza reale dell'anello
-                const pathLength = path.getTotalLength();
-                if (pathLength <= 0) return;
-
-                const separator = " • ";
-                const fullText = config.text + separator;
-
-                // 2. Misura precisa della larghezza del testo
-                const svg = path.ownerSVGElement;
-                if (!svg) return;
-
-                const tempText = document.createElementNS(
-                    "http://www.w3.org/2000/svg",
-                    "text",
-                );
-                // Applichiamo la classe reale per prendere TUTTI gli stili (font, spacing, weight)
-                tempText.setAttribute("class", "menu-text-path");
-                tempText.style.visibility = "hidden";
-                tempText.style.display = "block";
-                tempText.textContent = fullText;
-
-                // IMPORTANTE: Lo aggiungiamo all'SVG per catturare il CSS scoped di Astro
-                svg.appendChild(tempText);
-                const textWidth = tempText.getComputedTextLength();
-                svg.removeChild(tempText);
-
-                // 3. Calcolo ripetizioni con margine di sicurezza
-                // Evitiamo divisione per zero
-                if (textWidth <= 50) return;
-
-                // Calcoliamo quante volte entra il testo.
-                // Se pathLength / textWidth = 4.8, vogliamo 4 ripetizioni.
-                let repetitions = Math.floor(pathLength / textWidth);
-                if (repetitions < 1) repetitions = 1;
-
-                // 4. Generazione e distribuzione
-                const finalString = fullText.repeat(repetitions);
-                textPath.textContent = finalString;
-
-                // Allineiamo perfettamente il testo lungo tutto il cerchio
-                textPath.setAttribute("textLength", pathLength.toFixed(2));
-                textPath.setAttribute("lengthAdjust", "spacing");
-            });
-        } catch (err) {
-            console.error("Error in setupRadialText:", err);
-        }
-    }
-
-    // Colleghiamo PRIMA il pulsante hamburger per evitare che errori nel testo lo blocchino
+    // Colleghiamo PRIMA il pulsante hamburger per evitare che errori lo blocchino
     if (menuToggle) {
         menuToggle.addEventListener("click", toggleMenu);
     }
-
-    // Inizializza testi
-    setupRadialText();
-
-    // Ricalcola al resize
-    window.addEventListener("resize", setupRadialText);
-
-    // Gestiamo il resize con un piccolo delay per assicurarci che i font siano calcolati
-    window.addEventListener("load", setupRadialText);
 
     function initRingRotations() {
         rings.forEach((ring, i) => {
@@ -358,9 +292,6 @@ import Auth from "@/components/features/Auth.astro";
         const centerY = rect.top + rect.height / 2;
 
         if (isMenuOpen) {
-            // Aggiorna i testi all'apertura per essere sicuri della misura
-            setupRadialText();
-
             // Posizionamento dinamico del centro del menu basato sul pulsante
             gsap.set(".radial-menu-container", {
                 left: centerX,
