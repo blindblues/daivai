@@ -652,25 +652,25 @@ import Auth from "@/components/features/Auth.astro";
 
     @media (max-width: 768px) {
         .menu-text-path {
-            font-size: 50px;
+            font-size: 55px !important;
         }
 
         .ring-1 {
-            width: 180vw;
-            height: 180vw;
+            width: 280vw !important;
+            height: 280vw !important;
         }
         .ring-2 {
-            width: 140vw;
-            height: 140vw;
+            width: 210vw !important;
+            height: 210vw !important;
         }
         .ring-3 {
-            width: 100vw;
-            height: 100vw;
+            width: 140vw !important;
+            height: 140vw !important;
         }
 
         .radial-menu-container {
-            top: 40px;
-            left: 40px;
+            /* Handled by JS to stay centered on button */
+            transform: translate(-50%, -50%) !important;
         }
     }
 </style>
