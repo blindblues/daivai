@@ -76,7 +76,7 @@ import Auth from "@/components/features/Auth.astro";
             <svg viewBox="0 0 1000 1000">
                 <path
                     id="path-ring-1"
-                    d="M 500, 500 m -380, 0 a 380,380 0 1,0 760,0 a 380,380 0 1,0 -760,0"
+                    d="M 120, 500 A 380, 380 0 1, 1 880, 500 A 380, 380 0 1, 1 120, 500"
                     fill="transparent"
                     style="pointer-events: none;"></path>
                 <a href="/daivai/prossimi-eventi" class="menu-link">
@@ -101,7 +101,7 @@ import Auth from "@/components/features/Auth.astro";
             <svg viewBox="0 0 1000 1000">
                 <path
                     id="path-ring-2"
-                    d="M 500, 500 m -270, 0 a 270,270 0 1,0 540,0 a 270,270 0 1,0 -540,0"
+                    d="M 230, 500 A 270, 270 0 1, 1 770, 500 A 270, 270 0 1, 1 230, 500"
                     fill="transparent"
                     style="pointer-events: none;"></path>
                 <a href="/daivai/cosa-siamo" class="menu-link">
@@ -126,7 +126,7 @@ import Auth from "@/components/features/Auth.astro";
             <svg viewBox="0 0 1000 1000">
                 <path
                     id="path-ring-3"
-                    d="M 500, 500 m -160, 0 a 160,160 0 1,0 320,0 a 160,160 0 1,0 -320,0"
+                    d="M 340, 500 A 160, 160 0 1, 1 660, 500 A 160, 160 0 1, 1 340, 500"
                     fill="transparent"
                     style="pointer-events: none;"></path>
                 <a href="/daivai/" class="menu-link">
@@ -616,13 +616,14 @@ import Auth from "@/components/features/Auth.astro";
     .menu-text-path {
         font-family: var(--font-heading);
         font-weight: 800;
-        font-size: 52px;
+        font-size: 38px;
         text-transform: uppercase;
-        letter-spacing: 0.02em; /* Spaziatura ridotta e naturale */
+        letter-spacing: normal; /* Disabilitato per evitare sovrapposizioni con textLength su mobile */
         transition: fill 0.3s ease;
         pointer-events: auto !important;
         cursor: pointer !important;
         fill: #f5e590;
+        text-rendering: optimizeLegibility;
     }
 
     .menu-text-path:hover {
@@ -652,17 +653,11 @@ import Auth from "@/components/features/Auth.astro";
 
     @media (max-width: 768px) {
         .menu-text-path {
-            font-size: 50px;
+            font-size: 38px;
         }
 
-        .ring-1 {
-            width: 200vw;
-            height: 200vw;
-        }
-        .ring-2 {
-            width: 150vw;
-            height: 150vw;
-        }
+        .ring-1,
+        .ring-2,
         .ring-3 {
             width: 100vw;
             height: 100vw;
