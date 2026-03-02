@@ -50,7 +50,7 @@ export function initAnimations() {
         // Double check a bit later to be safe
         setTimeout(() => {
             ScrollTrigger.refresh();
-        }, 500);
+        }, 300); // Reduced from 500
     });
 }
 
@@ -721,35 +721,35 @@ function initParallaxHero() {
     }
 
     const tl = gsap.timeline({
-        delay: 0.8
+        delay: 0.1 // Reduced from 0.8
     });
 
     // 0. Il bagliore appare gradualmente
     tl.to(".layer-1", {
         opacity: isMobile ? 0.6 : 1,
-        duration: 2.5,
-        ease: "power1.inOut"
+        duration: 1.2, // Reduced from 2.5
+        ease: "power2.inOut"
     }, 0);
 
     // 1. Le montagne salgono dal basso
     tl.to(mountains, {
         y: '0vh',
-        duration: 2.8,
+        duration: 1.5, // Reduced from 2.8
         ease: "expo.out"
-    }, 0.5)
+    }, 0.2) // Reduced delay
         // 2. Gli alberi salgono con un leggero ritardo (effetto parallasse)
         .to(trees, {
             y: '0vh',
-            duration: 2.4,
+            duration: 1.2, // Reduced from 2.4
             ease: "power3.out"
-        }, "-=2.2")
+        }, "-=1.1") // Adjusted offset
         // 3. Il sole e il logo sorgono da dietro e si fermano nella posizione finale
         .to([sun, logo], {
-            y: '-20vh', // Leggermente abbassato rispetto a prima
+            y: '-20vh',
             opacity: 1,
-            duration: 4,
+            duration: 2.5, // Reduced from 4
             ease: "expo.out"
-        }, "-=2.5")
+        }, "-=1.3") // Adjusted offset
         // 4. Il logo passa in primo piano
         .set(logoWrapper, {
             zIndex: 100
