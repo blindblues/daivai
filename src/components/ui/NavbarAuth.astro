@@ -289,6 +289,15 @@ import Auth from "@/components/features/Auth.astro";
     initRingRotations();
 
     function toggleMenu() {
+        // Interrompiamo le animazioni degli elementi strutturali, ma NON dei rings
+        // per non uccidere le loro timeline di rotazione infinita.
+        gsap.killTweensOf([
+            menuOverlay,
+            hamburgerIcon,
+            menuLogoToggle,
+            menuBackdrop,
+        ]);
+
         isMenuOpen = !isMenuOpen;
 
         const rect = menuToggle.getBoundingClientRect();
@@ -302,35 +311,37 @@ import Auth from "@/components/features/Auth.astro";
                 top: centerY,
             });
 
-            // Expansion radius: covers only the menu area
-            // Raggio enorme per coprire TUTTO lo schermo (non solo 42%)
             const radius = Math.max(window.innerWidth, window.innerHeight) * 2;
 
-            // 0. Show backdrop
-            gsap.set(menuBackdrop, { display: "block" });
+            // 0. Mostra backdrop e reset overlay
+            gsap.set(menuBackdrop, { display: "block", opacity: 1 });
+            gsap.set(menuOverlay, { display: "block", opacity: 1 });
 
             // 1. Icon Transformation
             gsap.to(hamburgerIcon, {
                 opacity: 0,
                 scale: 0.5,
                 duration: 0.3,
+                overwrite: true,
                 onComplete: () => {
-                    gsap.set(hamburgerIcon, { display: "none" });
+                    if (isMenuOpen)
+                        gsap.set(hamburgerIcon, { display: "none" });
                 },
             });
+
             gsap.set(menuLogoToggle, { display: "block" });
             gsap.to(menuLogoToggle, {
                 opacity: 1,
-                scale: 2.5, // Si ingrandisce molto all'apertura
+                scale: 2.5,
                 rotation: -45,
                 duration: 0.5,
                 ease: "back.out(1.7)",
                 delay: 0.1,
+                overwrite: true,
             });
 
             // 2. Radial Expansion
             gsap.set(menuOverlay, {
-                display: "block",
                 clipPath: `circle(0% at ${centerX}px ${centerY}px)`,
             });
 
@@ -338,29 +349,34 @@ import Auth from "@/components/features/Auth.astro";
                 clipPath: `circle(${radius}px at ${centerX}px ${centerY}px)`,
                 duration: 0.8,
                 ease: "expo.inOut",
+                overwrite: true,
                 onComplete: () => {
-                    // Rimuoviamo il clipPath per non interferire con il rendering o gli eventi
-                    gsap.set(menuOverlay, { clipPath: "none" });
-
-                    // IMPORTANTE: L'overlay deve restare 'auto' per catturare i click di chiusura,
-                    // ma i figli hanno la priorità se hanno pointer-events: auto.
-                    gsap.set(menuOverlay, { pointerEvents: "auto" });
+                    if (isMenuOpen) {
+                        gsap.set(menuOverlay, {
+                            clipPath: "none",
+                            pointerEvents: "auto",
+                        });
+                    }
                 },
             });
 
             // 3. Rings Entrance
-            gsap.fromTo(
-                rings,
-                { scale: 0, opacity: 0 },
-                {
-                    scale: 1,
-                    opacity: 1,
-                    duration: 1,
-                    stagger: 0.1,
-                    ease: "back.out(1.2)",
-                    delay: 0.2,
+            // Usiamo overwrite: "auto" per intercettare solo scala/opacità senza toccare la rotazione
+            gsap.set(rings, { scale: 0, opacity: 0 });
+            gsap.to(rings, {
+                scale: 1,
+                opacity: 1,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: "back.out(1.2)",
+                delay: 0.2,
+                overwrite: "auto",
+                onStart: () => {
+                    if (isMenuOpen) {
+                        gsap.set(rings, { visibility: "visible" });
+                    }
                 },
-            );
+            });
 
             // Start rotations
             rotationTimelines.forEach((tl) => tl.play());
@@ -368,39 +384,59 @@ import Auth from "@/components/features/Auth.astro";
             document.body.style.overflow = "hidden";
         } else {
             // 1. Icon Transformation Back
-            gsap.to(menuLogoToggle, {
-                opacity: 0,
-                scale: 0.5, // Torna piccolo
-                rotation: 0,
-                duration: 0.3,
-                onComplete: () => {
-                    gsap.set(menuLogoToggle, { display: "none" });
-                },
-            });
             gsap.set(hamburgerIcon, { display: "block" });
             gsap.to(hamburgerIcon, {
                 opacity: 1,
                 scale: 1,
                 duration: 0.4,
                 delay: 0.1,
+                overwrite: true,
+            });
+
+            gsap.to(menuLogoToggle, {
+                opacity: 0,
+                scale: 0.5,
+                rotation: 0,
+                duration: 0.3,
+                overwrite: true,
+                onComplete: () => {
+                    if (!isMenuOpen)
+                        gsap.set(menuLogoToggle, { display: "none" });
+                },
             });
 
             // 2. Close Overlay
             gsap.to(menuOverlay, {
-                opacity: 0, // Aggiungiamo un fade per sicurezza nell'uscita
+                opacity: 0,
                 duration: 0.4,
                 ease: "power2.inOut",
+                overwrite: true,
                 onComplete: () => {
-                    gsap.set(menuOverlay, { display: "none", opacity: 1 });
-                    rotationTimelines.forEach((tl) => tl.pause());
+                    if (!isMenuOpen) {
+                        gsap.set(menuOverlay, { display: "none", opacity: 1 });
+                        rotationTimelines.forEach((tl) => tl.pause());
+                    }
                 },
             });
 
             // Fade out rings
-            gsap.to(rings, { opacity: 0, scale: 0.8, duration: 0.4 });
+            gsap.to(rings, {
+                opacity: 0,
+                scale: 0.8,
+                duration: 0.4,
+                overwrite: "auto",
+            });
 
             // Hide backdrop
-            gsap.set(menuBackdrop, { display: "none" });
+            gsap.to(menuBackdrop, {
+                opacity: 0,
+                duration: 0.4,
+                overwrite: true,
+                onComplete: () => {
+                    if (!isMenuOpen)
+                        gsap.set(menuBackdrop, { display: "none" });
+                },
+            });
 
             document.body.style.overflow = "";
         }
