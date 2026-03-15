@@ -609,9 +609,10 @@ section {
     margin-bottom: -0.30em;
 }
 
-.condenso-text.spacing-ultimi-eventi {
-    margin-bottom: -0.35em;
-    /* Distanza verticale leggermente aumentata (meno negativo = più spazio) */
+.condenso-text.spacing-ultimi-eventi,
+.condenso-text.spacing-prossimi-eventi,
+.condenso-text.spacing-archivio-eventi {
+    margin-bottom: -0.32em;
 }
 
 .text-gradient-wrapper {
@@ -661,7 +662,8 @@ section {
     .condenso-text.spacing-cosa-siamo,
     .condenso-text.spacing-cosa-facciamo,
     .condenso-text.spacing-come-funziona,
-    .spacing-prossimi-eventi {
+    .spacing-prossimi-eventi,
+    .spacing-archivio-eventi {
         margin-bottom: 0 !important;
     }
 }
@@ -1185,27 +1187,24 @@ section {
 /* ==========================================
    EVENTS CARD SLIDER
    ========================================== */
+.slider-outer-container {
+    position: relative;
+    width: 100%;
+    margin-top: 2rem;
+}
+
 .events-slider-wrapper {
     width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-    left: auto;
-    right: auto;
     overflow-x: auto;
     overflow-y: hidden;
     padding: 2rem 0;
-    margin-top: 2rem;
     /* Hide scrollbar but keep functionality */
     -ms-overflow-style: none;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
-    /* Smooth scroll on iOS */
     box-sizing: border-box;
-    /* Ensure padding is included */
     scroll-snap-type: x mandatory;
 }
-
-
 
 .events-slider-wrapper::-webkit-scrollbar {
     display: none;
@@ -1217,7 +1216,6 @@ section {
     width: fit-content;
     min-width: min-content;
     padding: 0 1rem;
-    /* Inner padding to offset cards from edge initially */
 }
 
 .event-card {
@@ -1237,10 +1235,9 @@ section {
 
 .event-card-image {
     width: 100%;
-    flex: 1;
-    min-height: 0;
+    height: 240px;
+    flex-shrink: 0;
     overflow: hidden;
-    /* Curved bottom edge */
     border-radius: 0 0 50% 50% / 0 0 40px 40px;
     transform: translateZ(0);
 }
@@ -1250,12 +1247,14 @@ section {
     height: 100%;
     object-fit: cover;
     border-radius: inherit;
-    /* Ensure image follows the curve */
 }
 
 .event-card-content {
     padding: 1.25rem;
-    flex-shrink: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 .event-card-title {
@@ -1304,33 +1303,44 @@ section {
 }
 
 @media (min-width: 769px) {
+    .events-slider-wrapper {
+        scroll-snap-type: x proximity; 
+        padding: 3rem 0;
+    }
     .event-card {
-        width: 350px;
-        height: 450px;
+        width: 40vw;
+        height: 60vh;
+        max-width: 500px;
+        max-height: 650px;
+        border-radius: 40px;
+    }
+    .event-card-image {
+        height: 25vh;
+    }
+    .event-card-title {
+        font-size: 1.4rem;
+    }
+    .event-card-description {
+        font-size: 0.9rem;
     }
 }
 
 @media (max-width: 768px) {
     .event-card {
         width: 85vw;
-        height: 75vh;
-        max-height: 600px;
+        height: 80vh;
+        max-height: 700px;
     }
-
+    .event-card-image {
+        height: 30vh;
+    }
     .event-card-title {
         font-size: 1.1rem;
     }
-
-    .event-card-description {
-        font-size: 0.9rem;
-    }
-
     .event-card-description {
         font-size: 0.9rem;
     }
 }
-
-/* ── Event card extras (badge, footer, counter, btn) ── */
 
 .event-cost-badge {
     position: absolute;
@@ -1427,6 +1437,81 @@ section {
     background: rgba(245, 229, 144, 0.1);
     color: rgba(245, 229, 144, 0.35);
     cursor: not-allowed;
+}
+
+.slider-nav-btn {
+    display: none; /* Hidden by default (mobile) */
+}
+
+@media (min-width: 769px) {
+    .slider-outer-container {
+        position: relative;
+        width: 100%;
+        padding: 0 100px; /* Space for arrows */
+        box-sizing: border-box;
+    }
+
+    .events-slider-wrapper {
+        scroll-snap-type: x mandatory; 
+        padding: 4rem 0;
+        overflow-x: auto;
+        width: 100%;
+    }
+
+    .event-card {
+        width: 42vw;
+        height: 65vh;
+        max-width: 650px;
+        max-height: 750px;
+        border-radius: 40px;
+        flex-shrink: 0;
+    }
+
+    .event-card-image {
+        height: 30vh;
+    }
+
+    .event-card-title {
+        font-size: 1.6rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .event-card-description {
+        font-size: 1rem;
+        line-height: 1.4;
+    }
+
+    .slider-nav-btn {
+        display: flex;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 60px;
+        height: 60px;
+        background: var(--primary-color);
+        color: var(--secondary-color);
+        border: 2px solid white;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 100;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .slider-nav-btn:hover {
+        transform: translateY(-50%) scale(1.1);
+        background: var(--secondary-color);
+        color: var(--primary-color);
+    }
+
+    .slider-nav-btn.prev {
+        left: 20px;
+    }
+    
+    .slider-nav-btn.next {
+        right: 20px;
+    }
 }
 
 .btn-partecipa:disabled {

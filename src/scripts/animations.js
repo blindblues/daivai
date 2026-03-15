@@ -404,8 +404,8 @@ function createSticker(wrapperId, containerId, direction = 'vertical') {
 // COLOR TRANSITION ON SCROLL
 // ==========================================
 function initColorTransition() {
-    // Only trigger the color transition on the homepage where #ultimi-eventi exists
-    const trigger = document.getElementById('ultimi-eventi');
+    // Only trigger the color transition on the homepage where #ultimi-eventi or #prossimi-eventi exists
+    const trigger = document.getElementById('ultimi-eventi') || document.getElementById('prossimi-eventi');
     const body = document.body;
 
     // If no trigger at all and no reflection elements, we can skip
@@ -492,7 +492,7 @@ function initColorTransition() {
 
     // ScrollTrigger with scrub for smooth scroll-linked animation
     // ONLY if the specific trigger exists (homepage behavior)
-    if (trigger && trigger.id === 'ultimi-eventi') {
+    if (trigger && (trigger.id === 'ultimi-eventi' || trigger.id === 'prossimi-eventi')) {
         gsap.to(colorState, {
             progress: 1,
             ease: "none",
@@ -528,60 +528,189 @@ function initColorTransition() {
 // ==========================================
 // EVENTS INFINITE SLIDER
 // ==========================================
-function initEventsSlider() {
+// ==========================================
+// EVENTS CENTERED SLIDER (3 CARDS FOCUS)
+// ==========================================
+export function initEventsSlider() {
     const wrapper = document.querySelector('.events-slider-wrapper');
     const slider = document.getElementById('events-slider');
 
     if (!wrapper || !slider) return;
 
-    const cards = slider.querySelectorAll('.event-card');
-    if (cards.length === 0) return;
+    // Wait for loadEvents to populate the slider if needed
+    // But since this is called on window.load, cards should be there.
+    const originalCards = Array.from(slider.querySelectorAll('.event-card'));
+    if (originalCards.length === 0) return;
 
-    // Clone cards at the beginning and end for infinite effect
-    const cardsArray = Array.from(cards);
-
-    // Clone all cards and append to end
-    cardsArray.forEach(card => {
-        const clone = card.cloneNode(true);
-        slider.appendChild(clone);
+    // Clear and rebuild for infinite loop (needed for Card 0 to have Card 2 on its left)
+    slider.innerHTML = '';
+    
+    // For 3 cards, typical loop: [C2] [C0] [C1] [C2] [C0]
+    // We clone them once to ensure we always have neighbors
+    const loopItems = [...originalCards, ...originalCards, ...originalCards];
+    loopItems.forEach(card => {
+        slider.appendChild(card.cloneNode(true));
     });
 
-    // Clone all cards and prepend to beginning
-    cardsArray.reverse().forEach(card => {
-        const clone = card.cloneNode(true);
-        slider.insertBefore(clone, slider.firstChild);
+    const cards = gsap.utils.toArray('.event-card', slider);
+    let totalSetWidth = 0;
+    let cardWidth = 0;
+
+    function setupLayout() {
+        const wrapperWidth = wrapper.offsetWidth;
+        const isDesktop = wrapperWidth >= 769;
+        const cardsCurrent = Array.from(slider.querySelectorAll('.event-card'));
+        if (cardsCurrent.length === 0) return;
+        
+        const cardWidth = cardsCurrent[0].offsetWidth;
+        // Padding for desktop: center the card to make it look like a pricing template
+        const sidePadding = (wrapperWidth - cardWidth) / 2;
+        
+        slider.style.paddingLeft = `${sidePadding}px`;
+        slider.style.paddingRight = `${sidePadding}px`;
+        slider.style.gap = isDesktop ? "4vw" : "1rem";
+        
+        // Final total width for jump logic
+        const finalGap = isDesktop ? (wrapperWidth * 0.04) : 16;
+        totalSetWidth = (cardWidth + finalGap) * originalCards.length;
+
+        // Target index: first card of the second set (originalCards.length)
+        const targetIndex = originalCards.length;
+        const targetCard = cardsCurrent[targetIndex];
+        
+        if (targetCard) {
+            setTimeout(() => {
+                // Scroll to center the most recent card
+                const scrollTarget = targetCard.offsetLeft - (wrapperWidth / 2) + (cardWidth / 2);
+                wrapper.scrollTo({
+                    left: scrollTarget,
+                    behavior: 'auto'
+                });
+            }, 300);
+        }
+    }
+
+    setupLayout();
+    window.addEventListener('resize', setupLayout);
+
+    // Navigation Arrows Logic
+    const nextBtn = document.getElementById('slider-next');
+    const prevBtn = document.getElementById('slider-prev');
+
+    if (nextBtn && prevBtn) {
+        nextBtn.addEventListener('click', () => {
+            const currentCards = slider.querySelectorAll('.event-card');
+            if (currentCards.length === 0) return;
+            const singleCardWidth = currentCards[0].offsetWidth;
+            const currentGap = window.innerWidth >= 769 ? (wrapper.offsetWidth * 0.04) : 16;
+            // Scroll by exactly one card width + gap to center next card
+            wrapper.scrollBy({ left: singleCardWidth + currentGap, behavior: 'smooth' });
+        });
+
+        prevBtn.addEventListener('click', () => {
+            const currentCards = slider.querySelectorAll('.event-card');
+            if (currentCards.length === 0) return;
+            const singleCardWidth = currentCards[0].offsetWidth;
+            const currentGap = window.innerWidth >= 769 ? (wrapper.offsetWidth * 0.04) : 16;
+            wrapper.scrollBy({ left: -(singleCardWidth + currentGap), behavior: 'smooth' });
+        });
+    }
+
+    // Scaling Animation
+    cards.forEach((card) => {
+        const isDesktop = window.innerWidth >= 769;
+        
+        if (isDesktop) {
+            // Initial state: slightly smaller and translucent
+            gsap.set(card, { scale: 0.85, opacity: 0.7, zIndex: 1, transformOrigin: "center center" });
+            
+            // Focus when reaching the center of the viewport
+            gsap.to(card, {
+                scale: 1.15,
+                opacity: 1,
+                zIndex: 10,
+                scrollTrigger: {
+                    trigger: card,
+                    scroller: wrapper,
+                    horizontal: true,
+                    start: "left 95%",
+                    end: "center center",
+                    scrub: true,
+                    invalidateOnRefresh: true
+                }
+            });
+            
+            gsap.to(card, {
+                scale: 0.85,
+                opacity: 0.7,
+                zIndex: 1,
+                scrollTrigger: {
+                    trigger: card,
+                    scroller: wrapper,
+                    horizontal: true,
+                    start: "center center",
+                    end: "right 5%",
+                    scrub: true,
+                    invalidateOnRefresh: true
+                }
+            });
+        } else {
+            // Mobile: Keep original more pronounced scaling
+            gsap.set(card, { scale: 0.8, opacity: 0.6, zIndex: 1, transformOrigin: "center center" });
+
+            gsap.to(card, {
+                scale: 1.1,
+                opacity: 1,
+                zIndex: 10,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: card,
+                    scroller: wrapper,
+                    horizontal: true,
+                    start: "left 95%",
+                    end: "center center",
+                    scrub: true
+                }
+            });
+
+            gsap.to(card, {
+                scale: 0.8,
+                opacity: 0.6,
+                zIndex: 1,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: card,
+                    scroller: wrapper,
+                    horizontal: true,
+                    start: "center center",
+                    end: "right 5%",
+                    scrub: true
+                }
+            });
+        }
     });
 
-    // Calculate dimensions
-    const cardWidth = cards[0].offsetWidth;
-    const gap = 16; // 1rem
-    const originalSetWidth = (cardWidth + gap) * cards.length;
-
-    // Set initial scroll position to the middle (original cards)
-    wrapper.scrollLeft = originalSetWidth;
-
-    let isScrolling = false;
-
+    // Infinite Jump logic
+    let isJumping = false;
     wrapper.addEventListener('scroll', () => {
-        if (isScrolling) return;
-
+        if (isJumping || totalSetWidth === 0) return;
+        
         const scrollLeft = wrapper.scrollLeft;
-        const maxScroll = slider.scrollWidth - wrapper.clientWidth;
+        const jumpThreshold = totalSetWidth - (cardWidth * 0.5); // Use half card as buffer
 
-        // If scrolled to the cloned section at the end, jump back
-        if (scrollLeft >= originalSetWidth * 2 - cardWidth) {
-            isScrolling = true;
-            wrapper.scrollLeft = originalSetWidth + (scrollLeft - originalSetWidth * 2 + cardWidth);
-            requestAnimationFrame(() => { isScrolling = false; });
+        // If we move too far left (towards the first set)
+        if (scrollLeft < jumpThreshold) {
+            isJumping = true;
+            wrapper.scrollLeft = scrollLeft + totalSetWidth;
+            requestAnimationFrame(() => isJumping = false);
         }
-
-        // If scrolled to the cloned section at the beginning, jump forward
-        if (scrollLeft <= cardWidth) {
-            isScrolling = true;
-            wrapper.scrollLeft = originalSetWidth + scrollLeft;
-            requestAnimationFrame(() => { isScrolling = false; });
+        // If we move too far right (towards the third set)
+        else if (scrollLeft > totalSetWidth * 2) {
+            isJumping = true;
+            wrapper.scrollLeft = scrollLeft - totalSetWidth;
+            requestAnimationFrame(() => isJumping = false);
         }
-    });
+    }, { passive: true });
 }
 
 // ==========================================
