@@ -1,7 +1,8 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Draggable } from "gsap/draggable";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, Draggable);
 
 // ==========================================
 // INITIALIZATION
@@ -537,180 +538,168 @@ export function initEventsSlider() {
 
     if (!wrapper || !slider) return;
 
-    // Wait for loadEvents to populate the slider if needed
-    // But since this is called on window.load, cards should be there.
-    const originalCards = Array.from(slider.querySelectorAll('.event-card'));
-    if (originalCards.length === 0) return;
+    // Prevent multiple initializations
+    if (wrapper.getAttribute('data-slider-initialized') === 'true') {
+        // Cleanup previous Draggable instances
+        const existingDrags = Draggable.get(wrapper);
+        if (existingDrags) existingDrags.kill();
+    }
+    wrapper.setAttribute('data-slider-initialized', 'true');
 
-    // Clear and rebuild for infinite loop (needed for Card 0 to have Card 2 on its left)
-    slider.innerHTML = '';
-    
-    // For 3 cards, typical loop: [C2] [C0] [C1] [C2] [C0]
-    // We clone them once to ensure we always have neighbors
-    const loopItems = [...originalCards, ...originalCards, ...originalCards];
-    loopItems.forEach(card => {
-        slider.appendChild(card.cloneNode(true));
+    // Clean up previous ScrollTriggers for event cards to avoid memory leaks
+    ScrollTrigger.getAll().forEach(t => {
+        if (t.vars.scroller === wrapper || (t.trigger && t.trigger.classList.contains('event-card'))) {
+            t.kill();
+        }
     });
 
-    const cards = gsap.utils.toArray('.event-card', slider);
-    let totalSetWidth = 0;
-    let cardWidth = 0;
+    // Get all cards
+    const cards = Array.from(slider.querySelectorAll('.event-card'));
+    if (cards.length === 0) return;
 
     function setupLayout() {
         const wrapperWidth = wrapper.offsetWidth;
         const isDesktop = wrapperWidth >= 769;
-        const cardsCurrent = Array.from(slider.querySelectorAll('.event-card'));
-        if (cardsCurrent.length === 0) return;
         
-        const cardWidth = cardsCurrent[0].offsetWidth;
-        // Padding for desktop: center the card to make it look like a pricing template
+        const cardWidth = cards[0].offsetWidth;
         const sidePadding = (wrapperWidth - cardWidth) / 2;
         
         slider.style.paddingLeft = `${sidePadding}px`;
         slider.style.paddingRight = `${sidePadding}px`;
-        slider.style.gap = isDesktop ? "4vw" : "1rem";
+        slider.style.gap = isDesktop ? "6vw" : "1rem";
         
-        // Final total width for jump logic
-        const finalGap = isDesktop ? (wrapperWidth * 0.04) : 16;
-        totalSetWidth = (cardWidth + finalGap) * originalCards.length;
-
-        // Target index: first card of the second set (originalCards.length)
-        const targetIndex = originalCards.length;
-        const targetCard = cardsCurrent[targetIndex];
+        ScrollTrigger.refresh();
         
-        if (targetCard) {
-            setTimeout(() => {
-                // Scroll to center the most recent card
-                const scrollTarget = targetCard.offsetLeft - (wrapperWidth / 2) + (cardWidth / 2);
-                wrapper.scrollTo({
-                    left: scrollTarget,
-                    behavior: 'auto'
-                });
-            }, 300);
-        }
+        setTimeout(() => {
+            wrapper.scrollTo({ left: 0, behavior: 'instant' });
+            updateArrows?.();
+        }, 100);
     }
 
     setupLayout();
+    if (wrapper._resizer) {
+        window.removeEventListener('resize', wrapper._resizer);
+    }
+    wrapper._resizer = setupLayout;
     window.addEventListener('resize', setupLayout);
 
-    // Navigation Arrows Logic
-    const nextBtn = document.getElementById('slider-next');
-    const prevBtn = document.getElementById('slider-prev');
+    // Navigation State
+    let currentIdx = 0;
 
-    if (nextBtn && prevBtn) {
-        nextBtn.addEventListener('click', () => {
-            const currentCards = slider.querySelectorAll('.event-card');
-            if (currentCards.length === 0) return;
-            const singleCardWidth = currentCards[0].offsetWidth;
-            const currentGap = window.innerWidth >= 769 ? (wrapper.offsetWidth * 0.04) : 16;
-            // Scroll by exactly one card width + gap to center next card
-            wrapper.scrollBy({ left: singleCardWidth + currentGap, behavior: 'smooth' });
-        });
-
-        prevBtn.addEventListener('click', () => {
-            const currentCards = slider.querySelectorAll('.event-card');
-            if (currentCards.length === 0) return;
-            const singleCardWidth = currentCards[0].offsetWidth;
-            const currentGap = window.innerWidth >= 769 ? (wrapper.offsetWidth * 0.04) : 16;
-            wrapper.scrollBy({ left: -(singleCardWidth + currentGap), behavior: 'smooth' });
-        });
-    }
-
-    // Scaling Animation
-    cards.forEach((card) => {
+    // Unified Scroll/Focus Function (Declared early to be used below)
+    const onScroll = () => {
+        if (!wrapper || !cards.length) return;
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const wrapperCenter = wrapperRect.left + (wrapperRect.width / 2);
         const isDesktop = window.innerWidth >= 769;
-        
-        if (isDesktop) {
-            // Initial state: slightly smaller and translucent
-            gsap.set(card, { scale: 0.85, opacity: 0.7, zIndex: 1, transformOrigin: "center center" });
-            
-            // Focus when reaching the center of the viewport
-            gsap.to(card, {
-                scale: 1.15,
-                opacity: 1,
-                zIndex: 10,
-                scrollTrigger: {
-                    trigger: card,
-                    scroller: wrapper,
-                    horizontal: true,
-                    start: "left 95%",
-                    end: "center center",
-                    scrub: true,
-                    invalidateOnRefresh: true
-                }
-            });
-            
-            gsap.to(card, {
-                scale: 0.85,
-                opacity: 0.7,
-                zIndex: 1,
-                scrollTrigger: {
-                    trigger: card,
-                    scroller: wrapper,
-                    horizontal: true,
-                    start: "center center",
-                    end: "right 5%",
-                    scrub: true,
-                    invalidateOnRefresh: true
-                }
-            });
-        } else {
-            // Mobile: Keep original more pronounced scaling
-            gsap.set(card, { scale: 0.8, opacity: 0.6, zIndex: 1, transformOrigin: "center center" });
 
-            gsap.to(card, {
-                scale: 1.1,
-                opacity: 1,
-                zIndex: 10,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: card,
-                    scroller: wrapper,
-                    horizontal: true,
-                    start: "left 95%",
-                    end: "center center",
-                    scrub: true
-                }
+        let closestIdx = currentIdx;
+        let minDiff = Infinity;
+
+        cards.forEach((card, i) => {
+            const cardRect = card.getBoundingClientRect();
+            const cardCenter = cardRect.left + (cardRect.width / 2);
+            
+            // Scaling Logic
+            const distance = Math.abs(wrapperCenter - cardCenter);
+            const maxDistance = wrapperRect.width / 1.5;
+            const normalized = Math.min(1, distance / maxDistance);
+            
+            const scale = isDesktop 
+                ? 1.15 - (normalized * 0.3)
+                : 1.1 - (normalized * 0.3);
+            
+            const opacity = 1 - (normalized * 0.5);
+            const zIndex = Math.round((1 - normalized) * 10);
+            
+            gsap.set(card, { 
+                scale: scale, 
+                opacity: opacity, 
+                zIndex: zIndex,
+                transformOrigin: "center center"
             });
 
-            gsap.to(card, {
-                scale: 0.8,
-                opacity: 0.6,
-                zIndex: 1,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: card,
-                    scroller: wrapper,
-                    horizontal: true,
-                    start: "center center",
-                    end: "right 5%",
-                    scrub: true
+            // Index Tracking
+            if (distance < minDiff) {
+                minDiff = distance;
+                closestIdx = i;
+            }
+        });
+
+        if (closestIdx !== currentIdx) {
+            currentIdx = closestIdx;
+        }
+    };
+
+    // Create Draggable instance
+    Draggable.create(wrapper, {
+        type: "scrollLeft",
+        edgeResistance: 0.5,
+        dragClickables: true,
+        allowEventDefault: true,
+        onPress: () => gsap.killTweensOf(wrapper), // Stop any active center-scrolling immediately
+        onDrag: onScroll,
+        onClick: function(e) {
+            const clickedCard = e.target.closest('.event-card');
+            const isButton = e.target.closest('.btn-partecipa');
+            
+            if (clickedCard && !isButton) {
+                const index = cards.indexOf(clickedCard);
+                if (index !== -1) {
+                    scrollToCard(index);
+                }
+            }
+        },
+        onDragEnd: function() {
+            const scrollLeft = wrapper.scrollLeft;
+            const centerX = scrollLeft + (wrapper.offsetWidth / 2);
+            
+            let closestIdx = 0;
+            let minDiff = Infinity;
+            
+            cards.forEach((card, i) => {
+                const cardCenter = card.offsetLeft + (card.offsetWidth / 2);
+                const diff = Math.abs(centerX - cardCenter);
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    closestIdx = i;
                 }
             });
+            
+            scrollToCard(closestIdx);
         }
     });
 
-    // Infinite Jump logic
-    let isJumping = false;
-    wrapper.addEventListener('scroll', () => {
-        if (isJumping || totalSetWidth === 0) return;
+    const scrollToCard = (index) => {
+        if (index < 0 || index >= cards.length) return;
         
-        const scrollLeft = wrapper.scrollLeft;
-        const jumpThreshold = totalSetWidth - (cardWidth * 0.5); // Use half card as buffer
+        gsap.killTweensOf(wrapper);
+        
+        currentIdx = index;
+        const card = cards[index];
+        const scrollTarget = card.offsetLeft - (wrapper.offsetWidth / 2) + (card.offsetWidth / 2);
+        
+        gsap.to(wrapper, {
+            scrollLeft: scrollTarget,
+            duration: 0.5,
+            ease: "power3.out",
+            overwrite: true,
+            onUpdate: onScroll
+        });
+    };
 
-        // If we move too far left (towards the first set)
-        if (scrollLeft < jumpThreshold) {
-            isJumping = true;
-            wrapper.scrollLeft = scrollLeft + totalSetWidth;
-            requestAnimationFrame(() => isJumping = false);
-        }
-        // If we move too far right (towards the third set)
-        else if (scrollLeft > totalSetWidth * 2) {
-            isJumping = true;
-            wrapper.scrollLeft = scrollLeft - totalSetWidth;
-            requestAnimationFrame(() => isJumping = false);
-        }
-    }, { passive: true });
+    wrapper.addEventListener('scroll', onScroll, { passive: true });
+    
+    // Update on resize too
+    if (wrapper._resizer) window.removeEventListener('resize', wrapper._resizer);
+    wrapper._resizer = () => {
+        setupLayout();
+        onScroll();
+    };
+    window.addEventListener('resize', wrapper._resizer);
+
+    // Initial state
+    onScroll();
 }
 
 // ==========================================

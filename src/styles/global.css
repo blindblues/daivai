@@ -519,13 +519,13 @@ section {
 }
 
 /* Apply padding to all children except slider */
-.viewport-section.combined-section>*:not(.events-slider-wrapper) {
+.viewport-section.combined-section>*:not(.events-slider-wrapper):not(.slider-outer-container) {
     padding-left: 1rem;
     padding-right: 1rem;
 }
 
 @media (min-width: 769px) {
-    .viewport-section.combined-section>*:not(.events-slider-wrapper) {
+    .viewport-section.combined-section>*:not(.events-slider-wrapper):not(.slider-outer-container) {
         padding-left: 10vw;
         padding-right: 10vw;
     }
@@ -1447,15 +1447,26 @@ section {
     .slider-outer-container {
         position: relative;
         width: 100%;
-        padding: 0 100px; /* Space for arrows */
         box-sizing: border-box;
     }
 
     .events-slider-wrapper {
-        scroll-snap-type: x mandatory; 
+        scroll-snap-type: none; 
         padding: 4rem 0;
         overflow-x: auto;
         width: 100%;
+        cursor: grab;
+        user-select: none;
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+
+    .events-slider-wrapper::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
+    }
+
+    .events-slider-wrapper:active {
+        cursor: grabbing;
     }
 
     .event-card {
