@@ -92,9 +92,7 @@ import ScrollArrow from "../components/ui/ScrollArrow.astro";
 
         <script>
             import { initAnimations } from "../scripts/animations.js";
-            import {
-                getPastEvents,
-            } from "@/lib/database/events";
+            import { getPastEvents } from "@/lib/database/events";
             import { supabase } from "@/lib/client";
 
             window.addEventListener("load", () => {
@@ -154,9 +152,19 @@ import ScrollArrow from "../components/ui/ScrollArrow.astro";
                 slider.innerHTML = events
                     .map((ev: any) => buildEventCard(ev))
                     .join("");
+                
+                // Refresh reflection positions for new cards
+                // @ts-ignore
+                window.refreshReflection?.();
             }
 
             loadEvents();
+            
+            window.addEventListener("load", () => {
+                initAnimations();
+                // @ts-ignore
+                window.refreshReflection?.();
+            });
         </script>
 
         <style>
@@ -167,8 +175,18 @@ import ScrollArrow from "../components/ui/ScrollArrow.astro";
             }
 
             .page-header-section {
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
                 justify-content: center;
-                padding-bottom: 5rem;
+                padding-bottom: 0;
+                margin-top: -80px;
+            }
+
+            @media (max-width: 768px) {
+                .page-header-section {
+                    margin-top: -60px;
+                }
             }
 
             .site-footer {
@@ -203,8 +221,12 @@ import ScrollArrow from "../components/ui/ScrollArrow.astro";
             }
 
             @keyframes shimmer {
-                0% { background-position: 200% 0; }
-                100% { background-position: -200% 0; }
+                0% {
+                    background-position: 200% 0;
+                }
+                100% {
+                    background-position: -200% 0;
+                }
             }
 
             /* No events message */
@@ -231,6 +253,12 @@ import ScrollArrow from "../components/ui/ScrollArrow.astro";
                 }
                 h2.condenso-text {
                     font-size: clamp(3rem, 12vw, 8rem);
+                    line-height: 1.0;
+                    margin-top: -5rem;
+                    padding: 0.1rem 0;
+                }
+                h2.condenso-text:first-child {
+                    margin-top: 0;
                 }
             }
         </style>

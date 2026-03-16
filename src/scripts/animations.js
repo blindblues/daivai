@@ -211,18 +211,29 @@ function initReflectionFix() {
     if (needsReflectionFix()) {
         document.documentElement.classList.add("is-mobile-fix");
 
-        // Target all elements that have the reflection class
-        const reflectiveElements = document.querySelectorAll(".shine-reflection");
-
-        if (reflectiveElements.length === 0) return;
+        let reflectiveElements = [];
 
         function updateElementTops() {
+            // Re-query elements each time to handle dynamic content
+            reflectiveElements = document.querySelectorAll(".shine-reflection");
+            
             reflectiveElements.forEach((el) => {
                 if (el instanceof HTMLElement) {
                     const rect = el.getBoundingClientRect();
                     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                     const elementTop = rect.top + scrollTop;
+                    // Set top on parent
                     el.style.setProperty("--element-top", elementTop.toString());
+                    
+                    // Update children (spans) with their ACTUAL individual tops
+                    const children = el.querySelectorAll('.reveal-char, .reveal-line');
+                    children.forEach(child => {
+                        if (child instanceof HTMLElement) {
+                            const childRect = child.getBoundingClientRect();
+                            const childTop = childRect.top + scrollTop;
+                            child.style.setProperty("--element-top", childTop.toString());
+                        }
+                    });
                 }
             });
         }
@@ -232,21 +243,38 @@ function initReflectionFix() {
             document.documentElement.style.setProperty("--scroll-y", scrollY.toString());
         }
 
-        // Initial calculation
-        updateElementTops();
-        updateScrollY();
+        // Delay initial calculation to ensure DOM/Layout is stable and fonts are loaded
+        setTimeout(() => {
+            updateElementTops();
+            updateScrollY();
+        }, 100);
+
+        // Secondary check to catch late-loading fonts or layout shifts
+        setTimeout(updateElementTops, 1000);
 
         // Update loop
+        let isScrolling = false;
         window.addEventListener("scroll", () => {
-            requestAnimationFrame(updateScrollY);
+            if (!isScrolling) {
+                window.requestAnimationFrame(() => {
+                    updateScrollY();
+                    isScrolling = false;
+                });
+                isScrolling = true;
+            }
         }, { passive: true });
 
-        // Recalculate positions on resize (address bar show/hide) and orientation change
+        // Recalculate positions on resize and orientation change
         window.addEventListener("resize", () => {
-            updateElementTops();
-            // Force scroll update too
-            updateScrollY();
+            // Use requestAnimationFrame to ensure we read after browser layout
+            requestAnimationFrame(() => {
+                updateElementTops();
+                updateScrollY();
+            });
         });
+        
+        // Expose it globally so it can be called after dynamic loads (like loadEvents)
+        window.refreshReflection = updateElementTops;
     }
 }
 

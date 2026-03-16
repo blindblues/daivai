@@ -573,12 +573,11 @@ section {
 
     /* Fixed viewport gradient reflection - with 25% safety top/bottom */
     background: linear-gradient(to bottom,
-            transparent 0%,
-            rgba(245, 229, 144, 0.05) 25%,
-            rgba(245, 229, 144, 1) 40%,
-            rgba(245, 229, 144, 1) 60%,
-            rgba(245, 229, 144, 0.05) 75%,
-            transparent 100%) !important;
+            rgba(245, 229, 144, 1) 0%,
+            rgba(245, 229, 144, 1) 35%,
+            rgba(255, 255, 255, 1) 50%,
+            rgba(245, 229, 144, 1) 65%,
+            rgba(245, 229, 144, 1) 100%) !important;
     /* Using calculated fix for all browsers now for better robustness */
     background-attachment: scroll !important;
     background-size: 100vw 200vh !important;
@@ -796,7 +795,7 @@ section {
     background-attachment: scroll !important;
     /* Simulate fixed background with a taller safety area (200vh) */
     background-size: 100vw 200vh !important;
-    /* Center the 100vh viewport gradient within the 200vh total height */
+    /* Current formula: scroll position - element position - vertical offset */
     background-position: center calc(var(--scroll-y, 0px) * 1px - var(--element-top, 0px) * 1px - 50vh) !important;
     background-repeat: no-repeat !important;
     will-change: background-position;
@@ -1534,13 +1533,11 @@ section {
    REVEAL ANIMATIONS
    ========================================== */
 .reveal-text {
-    overflow: hidden;
+    overflow: visible; /* Prevent clipping during tight line-heights */
     position: relative;
     display: inline-block;
     vertical-align: top;
-    /* Ensure reveal-text doesn't inherit background-clip as it might clip the whole block */
-    background-clip: initial !important;
-    -webkit-background-clip: initial !important;
+    /* Removed background-clip initial to allow shine-reflection to work */
 }
 
 .reveal-char,
