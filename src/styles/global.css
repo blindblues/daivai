@@ -709,7 +709,7 @@ section {
 
 @media (max-width: 768px) {
     .arrow-icon {
-        margin: 4rem auto 1rem;
+        margin: 4.5rem auto 0.5rem;
     }
 }
 
