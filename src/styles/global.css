@@ -6,8 +6,8 @@
     --secondary-rgb: 245, 229, 144;
     --font-heading: 'Poppins', sans-serif;
     --font-body: 'Poppins', sans-serif;
-    --menu-bg-color: #992c3a;
-    --menu-bg-rgb: 153, 44, 58;
+    --menu-bg-color: #ce414e;
+    --menu-bg-rgb: 206, 65, 78;
 }
 
 
@@ -709,7 +709,7 @@ section {
 
 @media (max-width: 768px) {
     .arrow-icon {
-        margin: 5.5rem auto 3.5rem;
+        margin: 4.5rem auto 0.5rem;
     }
 }
 
